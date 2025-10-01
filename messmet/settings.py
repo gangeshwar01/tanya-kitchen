@@ -27,7 +27,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'dev-secret-please-change')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(',')
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'https://tanya-kitchen.onrender.com').split(',')
 
 
 # Application definition
