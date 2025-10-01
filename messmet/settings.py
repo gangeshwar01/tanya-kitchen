@@ -27,8 +27,12 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'dev-secret-please-change')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'True') == 'True'
 
-# Include Render domain by default plus local dev
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS')
+## Hosts are provided by Render via env or your own domain (comma-separated)
+ALLOWED_HOSTS = [h for h in os.environ.get('ALLOWED_HOSTS', '*').split(',') if h]
+# Ensure Render hostname is included
+if 'tanya-kitchen.onrender.com' not in ALLOWED_HOSTS and '*' not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append('tanya-kitchen.onrender.com')
+
 
 
 # Application definition
