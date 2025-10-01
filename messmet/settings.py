@@ -28,7 +28,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'dev-secret-please-change')
 DEBUG = os.getenv('DEBUG', 'True') == 'True'
 
 # Include Render domain by default plus local dev
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1,.onrender.com').split(',')
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS')
 
 
 # Application definition
