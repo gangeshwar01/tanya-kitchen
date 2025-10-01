@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h3 class="mb-0">Pending Payments</h3>
+  <a class="btn btn-outline-secondary btn-sm" href="/lms/">Back to Dashboard</a>
+  </div>
+{% if payments %}
+  <div class="table-responsive">
+    <table class="table align-middle">
+      <thead><tr><th>User</th><th>Plan</th><th>Submitted</th><th>Proof</th><th>Action</th></tr></thead>
+      <tbody>
+        {% for p in payments %}
+        <tr>
+          <td>{{ p.user.username }}</td>
+          <td>{{ p.subscription_plan.title }}</td>
+          <td>{{ p.submitted_at }}</td>
+          <td>{% if p.screenshot %}<a href="{{ p.screenshot.url }}" target="_blank">View</a>{% endif %}</td>
+          <td>
+            <form method="post" class="d-inline">{% csrf_token %}
+              <input type="hidden" name="payment_id" value="{{ p.id }}">
+              <button class="btn btn-success btn-sm" name="action" value="approve">Approve</button>
+            </form>
+            <form method="post" class="d-inline">{% csrf_token %}
+              <input type="hidden" name="payment_id" value="{{ p.id }}">
+              <button class="btn btn-outline-danger btn-sm" name="action" value="reject">Reject</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% else %}
+  <div class="text-muted">Nothing pending.</div>
+{% endif %}
+{% endblock %}
+

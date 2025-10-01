@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row justify-content-center py-4">
+  <div class="col-lg-7">
+    <div class="card border-0 shadow" style="background: linear-gradient(135deg,#e8fff3,#f6fff9);">
+      <div class="card-body p-4">
+        <div class="text-center mb-3">
+          <div class="rounded-circle d-inline-flex align-items-center justify-content-center" style="width:56px;height:56px;background:#1987541a;color:#198754;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-person-plus" viewBox="0 0 16 16"><path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M11 5.5a.5.5 0 0 1 .5-.5H13V4a.5.5 0 0 1 1 0v1h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V6h-1.5a.5.5 0 0 1-.5-.5z"/><path d="M1 14s1-4 5-4 5 4 5 4H1z"/></svg>
+          </div>
+          <h4 class="mt-2 mb-0">Create your account</h4>
+          <div class="text-muted">Join MessMate to manage your meals</div>
+        </div>
+        <form method="post" enctype="multipart/form-data" class="auth-form needs-validation" novalidate>{% csrf_token %}
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Username</label>
+              {{ form.username }}
+              {% if form.username.errors %}<div class="text-danger small">{{ form.username.errors|join:', ' }}</div>{% endif %}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Full name</label>
+              {{ form.full_name }}
+              {% if form.full_name.errors %}<div class="text-danger small">{{ form.full_name.errors|join:', ' }}</div>{% endif %}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Mobile no</label>
+              {{ form.mobile_no }}
+              {% if form.mobile_no.errors %}<div class="text-danger small">{{ form.mobile_no.errors|join:', ' }}</div>{% endif %}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Profile image</label>
+              {{ form.profile_image }}
+              {% if form.profile_image.errors %}<div class="text-danger small">{{ form.profile_image.errors|join:', ' }}</div>{% endif %}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Hostel status</label>
+              {{ form.hostel_status }}
+              {% if form.hostel_status.errors %}<div class="text-danger small">{{ form.hostel_status.errors|join:', ' }}</div>{% endif %}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Password</label>
+              {{ form.password1 }}
+              {% if form.password1.errors %}<div class="text-danger small">{{ form.password1.errors|join:', ' }}</div>{% endif %}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Confirm password</label>
+              {{ form.password2 }}
+              {% if form.password2.errors %}<div class="text-danger small">{{ form.password2.errors|join:', ' }}</div>{% endif %}
+            </div>
+          </div>
+          {% if form.non_field_errors %}
+            <div class="alert alert-danger mt-2">{{ form.non_field_errors|join:', ' }}</div>
+          {% endif %}
+          <button class="btn btn-success btn-submit mt-2" type="submit">Register</button>
+        </form>
+        <div class="text-center mt-3 small">Already have an account? <a href="/login/">Login</a></div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+

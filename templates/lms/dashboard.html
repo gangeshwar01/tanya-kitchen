@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row g-4">
+  <div class="col-12 d-flex justify-content-between align-items-center">
+    <h3 class="mb-0">LMS Dashboard</h3>
+    <div>
+      <a class="btn btn-outline-secondary btn-sm" href="/lms/export/attendance.csv">Export Attendance CSV</a>
+      <a class="btn btn-primary btn-sm" href="/lms/payments/">Pending Payments</a>
+    </div>
+  </div>
+
+  <div class="col-md-3">
+    <div class="card shadow-sm"><div class="card-body"><div class="text-muted small">Users</div><div class="h4 mb-0">{{ stats.users }}</div></div></div>
+  </div>
+  <div class="col-md-3">
+    <div class="card shadow-sm"><div class="card-body"><div class="text-muted small">Active Subscriptions</div><div class="h4 mb-0">{{ stats.active_subs }}</div></div></div>
+  </div>
+  <div class="col-md-3">
+    <div class="card shadow-sm"><div class="card-body"><div class="text-muted small">Pending Payments</div><div class="h4 mb-0">{{ stats.pending_payments }}</div></div></div>
+  </div>
+  <div class="col-md-3">
+    <div class="card shadow-sm"><div class="card-body"><div class="text-muted small">Today's Attendance</div><div class="h4 mb-0">{{ stats.today_attendance }}</div></div></div>
+  </div>
+
+  <div class="col-12">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">Upload Monthly Menu</h5>
+        <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <input type="hidden" name="menu_form" value="1">
+          <div class="row g-3">
+            <div class="col-md-3">
+              <label class="form-label">Month</label>
+              {{ menu_form.month }}
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Year</label>
+              {{ menu_form.year }}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Menu File (PDF)</label>
+              {{ menu_form.file }}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Menu Image</label>
+              {{ menu_form.image }}
+            </div>
+            <div class="col-12">
+              <label class="form-label">Menu Text</label>
+              {{ menu_form.text }}
+            </div>
+            <div class="col-12">
+              <button type="submit" class="btn btn-primary">
+                <i class="bi bi-upload me-2"></i>Upload Menu
+              </button>
+            </div>
+          </div>
+        </form>
+        
+        {% if current_menu %}
+        <hr class="my-4">
+        <h6 class="text-muted">Current Menu ({{ current_menu.month|date:"F" }} {{ current_menu.year }})</h6>
+        <div class="d-flex gap-2">
+          {% if current_menu.file %}
+            <a href="{{ current_menu.file.url }}" class="btn btn-outline-primary btn-sm" download>
+              <i class="bi bi-download me-1"></i>Download PDF
+            </a>
+          {% endif %}
+          {% if current_menu.image %}
+            <a href="{{ current_menu.image.url }}" class="btn btn-outline-secondary btn-sm" target="_blank">
+              <i class="bi bi-image me-1"></i>View Image
+            </a>
+          {% endif %}
+          <span class="text-muted small align-self-center">
+            Uploaded: {{ current_menu.uploaded_at|date:"M d, Y H:i" }}
+          </span>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">Recent Pending Payments</h5>
+        {% if pending %}
+          <div class="table-responsive">
+            <table class="table table-sm align-middle">
+              <thead><tr><th>User</th><th>Plan</th><th>Submitted</th></tr></thead>
+              <tbody>
+              {% for p in pending %}
+                <tr>
+                  <td>{{ p.user.username|default:"User" }}</td>
+                  <td>{{ p.subscription_plan }}</td>
+                  <td>{{ p.submitted_at }}</td>
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          <div class="text-muted">No pending payments.</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+

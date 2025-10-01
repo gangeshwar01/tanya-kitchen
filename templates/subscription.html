@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row g-4">
+  <div class="col-12">
+    <h3 class="mb-3">Dashboard</h3>
+  </div>
+
+  <div class="col-lg-6">
+    <div class="card shadow-sm h-100">
+      <div class="card-body">
+        <h5 class="card-title">Attendance</h5>
+        {% if allowed_meals %}
+          <p class="text-muted">Mark attendance for today:</p>
+          <div class="d-flex gap-2 flex-wrap">
+            {% for meal in allowed_meals %}
+              <button class="btn btn-outline-primary btn-sm" onclick="markAttendance('{{ meal }}')">Mark {{ meal|title }}</button>
+            {% endfor %}
+          </div>
+          <hr>
+          <a class="btn btn-link p-0" href="/api/attendance/" target="_blank">View attendance JSON</a>
+        {% else %}
+          <div class="alert alert-warning">No active subscription or meals not included.</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-6">
+    <div class="card shadow-sm h-100">
+      <div class="card-body">
+        <h5 class="card-title">Buy a Subscription</h5>
+        <p class="text-muted">Browse available plans and upload payment from the purchase page.</p>
+        <a class="btn btn-primary" href="/plans/">View Plans</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">Monthly Menu</h5>
+        {% if current_menu %}
+          <div class="d-flex flex-column gap-2">
+            {% if current_menu.image %}<img src="{{ current_menu.image.url }}" class="img-fluid rounded" alt="Menu image" />{% endif %}
+            {% if current_menu.file %}<a class="btn btn-outline-secondary btn-sm" href="{{ current_menu.file.url }}" download>Download Menu</a>{% endif %}
+            {% if current_menu.text %}<pre class="bg-light p-3 rounded">{{ current_menu.text }}</pre>{% endif %}
+          </div>
+        {% else %}
+          <div class="text-muted">No menu uploaded for this month.</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">Your Subscriptions & Requests</h5>
+        <div class="row g-3">
+          <div class="col-md-4">
+            <div class="border rounded p-3 h-100">
+              <div class="fw-bold mb-1">Active Subscription</div>
+              {% if active_sub %}
+                <div>{{ active_sub.plan.title }} ({{ active_sub.start_date }} → {{ active_sub.end_date }})</div>
+              {% else %}
+                <div class="text-muted">No active subscription</div>
+              {% endif %}
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="border rounded p-3 h-100">
+              <div class="fw-bold mb-1">Pending Requests</div>
+              {% if requested %}
+                <ul class="small mb-0">
+                {% for r in requested %}
+                  <li>{{ r.subscription_plan.title }} - {{ r.submitted_at }}</li>
+                {% endfor %}
+                </ul>
+              {% else %}
+                <div class="text-muted">No pending requests</div>
+              {% endif %}
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="border rounded p-3 h-100">
+              <div class="fw-bold mb-1">Rejected</div>
+              {% if rejected %}
+                <ul class="small mb-0">
+                {% for r in rejected %}
+                  <li>{{ r.subscription_plan.title }} - {{ r.reviewed_at }}</li>
+                {% endfor %}
+                </ul>
+              {% else %}
+                <div class="text-muted">No rejections</div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">Send Feedback</h5>
+        <form id="feedbackForm" class="row g-2">
+          <div class="col-12">
+            <textarea required class="form-control" name="message" rows="3" placeholder="Your feedback..."></textarea>
+          </div>
+          <div class="col-12">
+            <button class="btn btn-outline-primary" type="submit">Submit</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+async function fetchPlans() {
+  const res = await fetch('/api/plans/');
+  const plans = await res.json();
+  // moved plan selection to dedicated purchase page
+}
+
+async function markAttendance(meal) {
+  const res = await fetch('/api/attendance/mark/', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCsrf() },
+    body: JSON.stringify({ meal_type: meal })
+  });
+  if (res.ok) { alert('Marked ' + meal); } else { const d = await res.json(); alert(d.detail || 'Failed'); }
+}
+
+function getCsrf() {
+  const m = document.cookie.match(/csrftoken=([^;]+)/); return m ? m[1] : '';
+}
+
+document.getElementById('feedbackForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  const res = await fetch('/api/feedback/', { method: 'POST', headers: { 'X-CSRFToken': getCsrf() }, body: fd });
+  if (res.ok) { alert('Thanks for your feedback!'); e.target.reset(); } else { const d = await res.json(); alert('Failed: ' + JSON.stringify(d)); }
+});
+
+fetchPlans();
+</script>
+{% endblock %}

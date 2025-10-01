@@ -1,0 +1,191 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h4 class="card-title mb-1">Buy: {{ plan.title }}</h4>
+        <div class="text-muted mb-3">₹{{ plan.price }} / {{ plan.billing_period|title }}</div>
+        {% if plan.features %}<p class="text-muted">{{ plan.features }}</p>{% endif %}
+        <div class="small mb-3">Includes: {{ plan.included_meals|join:", "|title }}</div>
+        <hr>
+        <h6>Upload Payment Proof</h6>
+        <form id="buyForm" class="row g-2" enctype="multipart/form-data">
+          <input type="hidden" name="subscription_plan" value="{{ plan.id }}">
+          
+          <!-- Dynamic Payment Method Display -->
+          <div class="col-12 mb-4">
+            <div id="paymentDisplay" class="text-center" style="display: none;">
+              <div class="bg-light p-4 rounded border">
+                <div id="paymentContent"></div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Payment Method Selection -->
+          <div class="col-12">
+            <label class="form-label">Select Payment Method</label>
+            <div class="row g-2">
+              <div class="col-md-4">
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="payment_method" id="gpay" value="gpay" required onchange="showPaymentMethod('gpay')">
+                  <label class="form-check-label" for="gpay">
+                    <i class="bi bi-phone text-success me-1"></i>Google Pay
+                  </label>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="payment_method" id="phonepe" value="phonepe" required onchange="showPaymentMethod('phonepe')">
+                  <label class="form-check-label" for="phonepe">
+                    <i class="bi bi-phone text-primary me-1"></i>PhonePe
+                  </label>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="payment_method" id="upi" value="upi" required onchange="showPaymentMethod('upi')">
+                  <label class="form-check-label" for="upi">
+                    <i class="bi bi-credit-card text-info me-1"></i>UPI ID
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-12">
+            <label class="form-label">Payment Screenshot</label>
+            <input type="file" class="form-control" name="screenshot" accept="image/*" required>
+            <div class="form-text">Upload screenshot of your payment confirmation</div>
+          </div>
+          <div class="col-12">
+            <button class="btn btn-success" type="submit">Submit Proof</button>
+          </div>
+        </form>
+        <div class="small text-muted mt-2">After admin approval, your subscription activates automatically.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Hidden data for JavaScript -->
+{% if paycfg %}
+<div id="paymentData" style="display: none;">
+  <div id="upi-id">{{ paycfg.upi_id|default:'' }}</div>
+  <div id="gpay-qr">{% if paycfg.gpay_qr %}{{ paycfg.gpay_qr.url }}{% endif %}</div>
+  <div id="phonepe-qr">{% if paycfg.phonepe_qr %}{{ paycfg.phonepe_qr.url }}{% endif %}</div>
+</div>
+{% endif %}
+
+<script>
+function showPaymentMethod(method) {
+  const displayDiv = document.getElementById('paymentDisplay');
+  const contentDiv = document.getElementById('paymentContent');
+  
+  // Get payment data
+  const upiId = document.getElementById('upi-id')?.textContent || '';
+  const gpayQr = document.getElementById('gpay-qr')?.textContent || '';
+  const phonepeQr = document.getElementById('phonepe-qr')?.textContent || '';
+  
+  let content = '';
+  
+  switch(method) {
+    case 'gpay':
+      if (gpayQr) {
+        content = `
+          <div class="mb-3 text-center">
+            <i class="bi bi-phone text-success me-2" style="font-size: 1.5rem;"></i>
+            <strong>Google Pay QR Code</strong>
+          </div>
+          <div class="text-center">
+            <img src="${gpayQr}" alt="Google Pay QR" class="img-fluid border rounded mx-auto d-block" style="max-height: 250px;">
+          </div>
+          <div class="mt-3 text-center">
+            <small class="text-muted">
+              <i class="bi bi-info-circle me-1"></i>
+              Scan this QR code with your Google Pay app to make payment
+            </small>
+          </div>
+        `;
+      } else {
+        content = `
+          <div class="alert alert-warning">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            Google Pay QR code is not configured yet. Please contact admin.
+          </div>
+        `;
+      }
+      break;
+      
+    case 'phonepe':
+      if (phonepeQr) {
+        content = `
+          <div class="mb-3 text-center">
+            <i class="bi bi-phone text-primary me-2" style="font-size: 1.5rem;"></i>
+            <strong>PhonePe QR Code</strong>
+          </div>
+          <div class="text-center">
+            <img src="${phonepeQr}" alt="PhonePe QR" class="img-fluid border rounded mx-auto d-block" style="max-height: 250px;">
+          </div>
+          <div class="mt-3 text-center">
+            <small class="text-muted">
+              <i class="bi bi-info-circle me-1"></i>
+              Scan this QR code with your PhonePe app to make payment
+            </small>
+          </div>
+        `;
+      } else {
+        content = `
+          <div class="alert alert-warning">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            PhonePe QR code is not configured yet. Please contact admin.
+          </div>
+        `;
+      }
+      break;
+      
+    case 'upi':
+      if (upiId) {
+        content = `
+          <div class="mb-3 text-center">
+            <i class="bi bi-credit-card text-info me-2" style="font-size: 1.5rem;"></i>
+            <strong>UPI ID</strong>
+          </div>
+          <div class="bg-white p-4 rounded border text-center">
+            <code class="fs-4 fw-bold text-primary">${upiId}</code>
+          </div>
+          <div class="mt-3 text-center">
+            <small class="text-muted">
+              <i class="bi bi-info-circle me-1"></i>
+              Use this UPI ID in any UPI app (Google Pay, PhonePe, Paytm, etc.) to make payment
+            </small>
+          </div>
+        `;
+      } else {
+        content = `
+          <div class="alert alert-warning">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            UPI ID is not configured yet. Please contact admin.
+          </div>
+        `;
+      }
+      break;
+  }
+  
+  contentDiv.innerHTML = content;
+  displayDiv.style.display = 'block';
+  
+  // Scroll to the payment display
+  displayDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function getCsrf() { const m = document.cookie.match(/csrftoken=([^;]+)/); return m ? m[1] : ''; }
+document.getElementById('buyForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  const res = await fetch('/api/payments/', { method: 'POST', headers: { 'X-CSRFToken': getCsrf() }, body: fd });
+  if (res.ok) { alert('Payment proof submitted successfully! Admin will review and approve your subscription.'); window.location.href = '/plans/'; } else { const d = await res.json(); alert('Failed: ' + JSON.stringify(d)); }
+});
+</script>
+{% endblock %}
+

@@ -1,0 +1,519 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+.swiper {
+  width: 100%;
+  height: 250px;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+.swiper-slide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+}
+.swiper-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.swiper-button-next,
+.swiper-button-prev {
+  color: #007bff;
+}
+.swiper-pagination-bullet {
+  background: #007bff;
+}
+.swiper-pagination-bullet-active {
+  background: #0056b3;
+}
+</style>
+<section class="py-5 py-lg-6">
+  <div class="row align-items-center g-4">
+    <div class="col-lg-6">
+      {% if user.is_staff %}
+      <h1 class="display-5 fw-bold mb-3">Admin Dashboard</h1>
+      <p class="text-muted mb-4">Manage subscriptions, approve payments, track attendance, and oversee the mess operations.</p>
+      <a class="btn btn-primary btn-lg me-2" href="/dashboard/">Go to Dashboard</a>
+      {% else %}
+      <h1 class="display-5 fw-bold mb-3">Healthy, affordable meals for your daily routine</h1>
+      <p class="text-muted mb-4">Subscribe to breakfast, lunch, dinner or all three. Track attendance, upload payments, and enjoy a hassle-free mess experience.</p>
+      {% if not user.is_authenticated %}
+      <a class="btn btn-primary btn-lg me-2" href="/register/">Get Started</a>
+      <a class="btn btn-outline-primary btn-lg" href="/login/">Login</a>
+      {% endif %}
+      {% endif %}
+    </div>
+    <div class="col-lg-6">
+      <div class="swiper rounded shadow-sm">
+        <div class="swiper-wrapper">
+          {% if carousel_images %}
+            {% for image in carousel_images %}
+            <div class="swiper-slide position-relative">
+              <img src="{{ image.image.url }}" alt="{{ image.title }}" class="w-100 h-100" style="object-fit: cover;">
+              <div class="position-absolute bottom-0 start-0 end-0 bg-dark bg-opacity-75 text-white p-3">
+                <h5 class="mb-1">{{ image.title }}</h5>
+                {% if image.description %}
+                <p class="mb-0 small">{{ image.description }}</p>
+                {% endif %}
+              </div>
+            </div>
+            {% endfor %}
+          {% else %}
+            <div class="swiper-slide d-flex align-items-center justify-content-center bg-primary text-white">
+              <div class="text-center">
+                <h4>🍽️ Healthy Breakfast</h4>
+                <p class="mb-0">Start your day right</p>
+              </div>
+            </div>
+            <div class="swiper-slide d-flex align-items-center justify-content-center bg-success text-white">
+              <div class="text-center">
+                <h4>🥗 Wholesome Lunch</h4>
+                <p class="mb-0">Nutritious midday meals</p>
+              </div>
+            </div>
+            <div class="swiper-slide d-flex align-items-center justify-content-center bg-warning text-dark">
+              <div class="text-center">
+                <h4>🍽️ Delicious Dinner</h4>
+                <p class="mb-0">End your day perfectly</p>
+              </div>
+            </div>
+          {% endif %}
+        </div>
+        <div class="swiper-pagination"></div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="py-5 bg-white rounded-3 shadow-sm">
+  <div class="container">
+    <div class="row g-4 text-center">
+      {% if user.is_staff %}
+      <div class="col-md-4">
+        <div class="p-4">
+          <div class="h3 mb-2">👥</div>
+          <h5>User Management</h5>
+          <p class="text-muted">Monitor user subscriptions, attendance, and payment status.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="p-4">
+          <div class="h3 mb-2">💰</div>
+          <h5>Payment Approval</h5>
+          <p class="text-muted">Review and approve payment proofs from users.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="p-4">
+          <div class="h3 mb-2">📊</div>
+          <h5>Analytics & Reports</h5>
+          <p class="text-muted">Track attendance patterns and generate detailed reports.</p>
+        </div>
+      </div>
+      {% else %}
+      <div class="col-md-4">
+        <div class="p-4">
+          <div class="h3 mb-2">🍽️</div>
+          <h5>Flexible Plans</h5>
+          <p class="text-muted">Pick meals that fit your schedule: breakfast, lunch, dinner or all.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="p-4">
+          <div class="h3 mb-2">✅</div>
+          <h5>Attendance Tracking</h5>
+          <p class="text-muted">One-click, per-meal attendance with duplicate protection.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="p-4">
+          <div class="h3 mb-2">💳</div>
+          <h5>Simple Payments</h5>
+          <p class="text-muted">Upload proof, get admin approval, and auto-activate your plan.</p>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<!-- Attendance Section for Authenticated Users (Non-Admin) -->
+{% if user.is_authenticated and not user.is_staff %}
+<section class="py-5 bg-light">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 text-center mb-4">
+        <h2 class="fw-bold">Quick Attendance</h2>
+        <p class="text-muted">Mark your attendance for today's meals</p>
+      </div>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="card shadow-sm">
+          <div class="card-body p-4">
+            {% if attendance_data %}
+              {% if attendance_data.active_sub %}
+                <div class="row g-3">
+                  {% for meal in attendance_data.allowed_meals %}
+                  <div class="col-md-4">
+                    <div class="text-center">
+                      <div class="mb-3">
+                        {% if meal == 'breakfast' %}
+                          <i class="bi bi-sunrise text-warning" style="font-size: 2.5rem;"></i>
+                        {% elif meal == 'lunch' %}
+                          <i class="bi bi-sun text-warning" style="font-size: 2.5rem;"></i>
+                        {% elif meal == 'dinner' %}
+                          <i class="bi bi-moon text-primary" style="font-size: 2.5rem;"></i>
+                        {% endif %}
+                      </div>
+                      <h6>{{ meal|title }}</h6>
+                      {% if meal in attendance_data.marked_meals %}
+                        <span class="badge bg-success">Marked</span>
+                      {% else %}
+                        <button class="btn btn-outline-primary btn-sm" onclick="markAttendance('{{ meal }}')">
+                          Mark
+                        </button>
+                      {% endif %}
+                    </div>
+                  </div>
+                  {% endfor %}
+                </div>
+                <div class="text-center mt-4">
+                  <a href="/attendance/" class="btn btn-primary">
+                    <i class="bi bi-calendar-check me-2"></i>View Full Attendance
+                  </a>
+                </div>
+              {% else %}
+                <div class="text-center">
+                  <i class="bi bi-exclamation-triangle text-warning" style="font-size: 3rem;"></i>
+                  <h5 class="mt-3">No Active Subscription</h5>
+                  <p class="text-muted">You need an active subscription to mark attendance.</p>
+                  <a href="/plans/" class="btn btn-primary">View Plans</a>
+                </div>
+              {% endif %}
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- Available Plans Section (Non-Admin Users) -->
+{% if plans and not user.is_staff %}
+<section class="py-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 text-center mb-5">
+        <h2 class="fw-bold">Choose Your Plan</h2>
+        <p class="text-muted">Select the perfect meal plan for your needs</p>
+      </div>
+    </div>
+    <div class="row g-4">
+      {% for plan in plans %}
+      <div class="col-lg-4 col-md-6">
+        <div class="card shadow-sm h-100 border-0">
+          <div class="card-body p-4">
+            <div class="text-center mb-4">
+              <h4 class="fw-bold text-primary">{{ plan.title }}</h4>
+              <div class="h2 fw-bold">₹{{ plan.price }}</div>
+              <small class="text-muted">{{ plan.billing_period|title }}</small>
+            </div>
+            
+            <div class="mb-4">
+              <h6 class="fw-bold mb-3">Included Meals:</h6>
+              <div class="d-flex flex-wrap gap-2">
+                {% for meal in plan.included_meals %}
+                <span class="badge bg-success">{{ meal|title }}</span>
+                {% endfor %}
+              </div>
+            </div>
+            
+            {% if plan.features %}
+            <div class="mb-4">
+              <h6 class="fw-bold mb-3">Features:</h6>
+              <div class="small text-muted">
+                {{ plan.features|linebreaks }}
+              </div>
+            </div>
+            {% endif %}
+            
+            <div class="text-center mt-auto">
+              {% if attendance_data and attendance_data.active_sub and attendance_data.active_sub.plan.id == plan.id %}
+                <span class="badge bg-secondary">Current Plan</span>
+              {% elif attendance_data and attendance_data.active_sub %}
+                <a href="/plans/{{ plan.id }}/buy/" class="btn btn-warning w-100">
+                  <i class="bi bi-arrow-up-circle me-2"></i>Upgrade
+                </a>
+              {% else %}
+                <a href="/plans/{{ plan.id }}/buy/" class="btn btn-primary w-100">
+                  <i class="bi bi-cart-plus me-2"></i>Buy Now
+                </a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    
+    <div class="row mt-5">
+      <div class="col-12 text-center">
+        <a href="/plans/" class="btn btn-outline-primary">
+          <i class="bi bi-list me-2"></i>View All Plans
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- Visitor Payment & Feedback (No login required) -->
+ {% if not user.is_authenticated %}
+<section class="py-5 bg-light">
+  <div class="container">
+    <div class="row align-items-center g-4">
+      <div class="col-lg-6">
+        <div class="card shadow-sm">
+          <div class="card-body p-4">
+            <h4 class="fw-bold mb-3">Pay for a Meal (Visitors)</h4>
+            <p class="text-muted">Scan the QR or upload your payment screenshot with details.</p>
+            <div class="mb-3">
+              {% if paycfg and paycfg.gpay_qr %}
+                <img src="{{ paycfg.gpay_qr.url }}" alt="Payment QR" class="img-fluid rounded border" style="max-width: 260px;">
+              {% endif %}
+            </div>
+            <form method="post" action="/visitor/payment/" enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label">Your Name</label>
+                  <input type="text" class="form-control" name="name" required>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Mobile (optional)</label>
+                  <input type="text" class="form-control" name="mobile_no">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Amount</label>
+                  <input type="number" step="0.01" class="form-control" name="amount" required>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Meal</label>
+                  <select name="meal_type" class="form-control" required>
+                    <option value="breakfast">Breakfast</option>
+                    <option value="lunch">Lunch</option>
+                    <option value="dinner">Dinner</option>
+                  </select>
+                </div>
+                <div class="col-12">
+                  <label class="form-label">Payment Screenshot</label>
+                  <input type="file" class="form-control" name="screenshot" accept="image/*" required>
+                </div>
+                <div class="col-12">
+                  <label class="form-label">Note</label>
+                  <input type="text" class="form-control" name="note" placeholder="Optional">
+                </div>
+                <div class="col-12 text-end">
+                  <button class="btn btn-success" type="submit">Submit Payment</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="card shadow-sm">
+          <div class="card-body p-4">
+            <h4 class="fw-bold mb-3">Meal Feedback (Visitors)</h4>
+            <form id="visitorFeedbackForm" method="post">
+              {% csrf_token %}
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label">Your Name</label>
+                  <input type="text" class="form-control" name="name" required>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Meal</label>
+                  <select name="meal_type" class="form-control" required>
+                    <option value="breakfast">Breakfast</option>
+                    <option value="lunch">Lunch</option>
+                    <option value="dinner">Dinner</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Meal Date</label>
+                  <input type="date" class="form-control" name="meal_date" required>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Rating (1-5)</label>
+                  <input type="number" min="1" max="5" class="form-control" name="rating" required>
+                </div>
+                <div class="col-12">
+                  <label class="form-label">Comments</label>
+                  <textarea class="form-control" rows="3" name="comments"></textarea>
+                </div>
+                <div class="col-12 text-end">
+                  <button class="btn btn-primary" type="submit">Submit Feedback</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('Initializing Swiper...');
+  
+  // Check if Swiper is available
+  if (typeof Swiper === 'undefined') {
+    console.error('Swiper is not loaded!');
+    return;
+  }
+  
+  const swiperElement = document.querySelector('.swiper');
+  if (!swiperElement) {
+    console.error('Swiper element not found!');
+    return;
+  }
+  
+  const swiper = new Swiper('.swiper', {
+    loop: true,
+    autoplay: { 
+      delay: 3000,
+      disableOnInteraction: false,
+      pauseOnMouseEnter: true
+    },
+    pagination: { 
+      el: '.swiper-pagination', 
+      clickable: true,
+      dynamicBullets: true
+    },
+    navigation: { 
+      nextEl: '.swiper-button-next', 
+      prevEl: '.swiper-button-prev' 
+    },
+    effect: 'slide',
+    speed: 600,
+    spaceBetween: 0,
+    centeredSlides: true,
+    slidesPerView: 1,
+    on: {
+      init: function() {
+        console.log('Swiper initialized successfully');
+      },
+      slideChange: function() {
+        console.log('Slide changed to:', this.activeIndex);
+      }
+    },
+    breakpoints: {
+      768: {
+        slidesPerView: 1,
+        spaceBetween: 0
+      }
+    }
+  });
+  
+  // Ensure autoplay starts
+  if (swiper.autoplay) {
+    swiper.autoplay.start();
+    console.log('Autoplay started');
+  }
+  
+  // Debug info
+  console.log('Swiper slides count:', swiper.slides.length);
+  console.log('Carousel images count: {{ carousel_images|length }}');
+});
+
+// Visitor feedback submit
+const visitorFeedbackForm = document.getElementById('visitorFeedbackForm');
+if (visitorFeedbackForm) {
+  visitorFeedbackForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const formData = new FormData(visitorFeedbackForm);
+    const resp = await fetch('/api/visitor/feedback/', {
+      method: 'POST',
+      headers: { 'X-CSRFToken': getCsrfToken() },
+      body: formData
+    });
+    const data = await resp.json();
+    if (resp.ok && data.success) {
+      showAlert('success', 'Thanks for your feedback!');
+      visitorFeedbackForm.reset();
+    } else {
+      showAlert('danger', 'Please check your inputs.');
+    }
+  });
+}
+
+// Attendance marking function
+async function markAttendance(meal) {
+  try {
+    const response = await fetch('/api/attendance/mark/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': getCsrfToken()
+      },
+      body: JSON.stringify({ meal_type: meal })
+    });
+    
+    const data = await response.json();
+    
+    if (response.ok) {
+      // Show success message
+      showAlert('success', `Attendance marked for ${meal}!`);
+      // Reload page to update UI
+      setTimeout(() => {
+        location.reload();
+      }, 1500);
+    } else {
+      showAlert('danger', data.detail || 'Failed to mark attendance');
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    showAlert('danger', 'An error occurred while marking attendance');
+  }
+}
+
+function getCsrfToken() {
+  const cookies = document.cookie.split(';');
+  for (let cookie of cookies) {
+    const [name, value] = cookie.trim().split('=');
+    if (name === 'csrftoken') {
+      return value;
+    }
+  }
+  return '';
+}
+
+function showAlert(type, message) {
+  const alertDiv = document.createElement('div');
+  alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+  alertDiv.innerHTML = `
+    ${message}
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  `;
+  
+  // Insert at the top of the main content
+  const main = document.querySelector('main');
+  main.insertBefore(alertDiv, main.firstChild);
+  
+  // Auto-dismiss after 5 seconds
+  setTimeout(() => {
+    if (alertDiv.parentNode) {
+      alertDiv.remove();
+    }
+  }, 5000);
+}
+</script>
+{% endblock %}

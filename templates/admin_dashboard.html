@@ -1,0 +1,2914 @@
+{% extends 'base.html' %}
+{% block content %}
+<!-- Mobile Navigation Toggle -->
+<div class="d-lg-none mb-3">
+  <button class="btn btn-primary w-100" type="button" data-bs-toggle="offcanvas" data-bs-target="#adminSidebar" aria-controls="adminSidebar">
+    <i class="bi bi-list me-2"></i>Admin Menu
+  </button>
+</div>
+
+<div class="row g-0">
+  <!-- Desktop Sidebar -->
+  <div class="col-md-3 col-lg-2 bg-white border-end shadow-sm d-none d-md-block" style="min-height: calc(100vh - 5.5rem);">
+    <div class="p-3 d-flex flex-column" style="height: 100%;">
+      <!-- Admin Panel Header -->
+      <div class="text-center mb-4 pb-3 border-bottom">
+        <div class="bg-gradient-primary rounded-3 d-inline-flex align-items-center justify-content-center mb-3" style="width: 50px; height: 50px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+          <i class="bi bi-gear-fill text-white" style="font-size: 1.2rem;"></i>
+        </div>
+        <h6 class="mb-1 text-dark fw-bold">Admin Panel</h6>
+        <small class="text-muted">MessMate</small>
+      </div>
+
+      <!-- Navigation Menu -->
+      <nav class="nav flex-column flex-grow-1">
+        <a class="nav-link text-dark py-2 px-3 mb-1 rounded-2 active" href="#overview" data-section="overview" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white !important;">
+          <i class="bi bi-speedometer2 me-2"></i>
+          <span class="fw-medium">Overview</span>
+        </a>
+        <a class="nav-link text-dark py-2 px-3 mb-1 rounded-2" href="#payments" data-section="payments" style="transition: all 0.2s ease;">
+          <i class="bi bi-credit-card me-2"></i>
+          <span class="fw-medium">Payments</span>
+        </a>
+        <a class="nav-link text-dark py-2 px-3 mb-1 rounded-2" href="#plans" data-section="plans" style="transition: all 0.2s ease;">
+          <i class="bi bi-list-ul me-2"></i>
+          <span class="fw-medium">Plans</span>
+        </a>
+        <a class="nav-link text-dark py-2 px-3 mb-1 rounded-2" href="#menu" data-section="menu" style="transition: all 0.2s ease;">
+          <i class="bi bi-journal-text me-2"></i>
+          <span class="fw-medium">Menu</span>
+        </a>
+        <a class="nav-link text-dark py-2 px-3 mb-1 rounded-2" href="#carousel" data-section="carousel" style="transition: all 0.2s ease;">
+          <i class="bi bi-images me-2"></i>
+          <span class="fw-medium">Carousel</span>
+        </a>
+        <a class="nav-link text-dark py-2 px-3 mb-1 rounded-2" href="#payment-config" data-section="payment-config" style="transition: all 0.2s ease;">
+          <i class="bi bi-gear me-2"></i>
+          <span class="fw-medium">Payment Config</span>
+        </a>
+        <a class="nav-link text-dark py-2 px-3 mb-1 rounded-2" href="#feedback" data-section="feedback" style="transition: all 0.2s ease;">
+          <i class="bi bi-chat-dots me-2"></i>
+          <span class="fw-medium">Feedback</span>
+        </a>
+        <a class="nav-link text-dark py-2 px-3 mb-1 rounded-2" href="#lms" data-section="lms" style="transition: all 0.2s ease;">
+          <i class="bi bi-people me-2"></i>
+          <span class="fw-medium">LMS</span>
+        </a>
+        <a class="nav-link text-dark py-2 px-3 mb-1 rounded-2" href="#user-management" data-section="user-management" style="transition: all 0.2s ease;">
+          <i class="bi bi-person-gear me-2"></i>
+          <span class="fw-medium">User Management</span>
+        </a>
+        <a class="nav-link text-dark py-2 px-3 mb-1 rounded-2" href="#meal-feedback" data-section="meal-feedback" style="transition: all 0.2s ease;">
+          <i class="bi bi-chat-heart me-2"></i>
+          <span class="fw-medium">Meal Feedback</span>
+        </a>
+        
+        <!-- Divider -->
+        <hr class="my-3">
+        
+        <!-- Export Action -->
+        <a class="nav-link text-success py-2 px-3 rounded-2" href="/admin/export/attendance.csv" onclick="exportAttendanceCSV(event)" style="background-color: rgba(25, 135, 84, 0.1); transition: all 0.2s ease;">
+          <i class="bi bi-download me-2"></i>
+          <span class="fw-medium">Export Attendance CSV</span>
+        </a>
+      </nav>
+
+      <!-- User Info at Bottom -->
+      <div class="pt-3 border-top">
+        <div class="d-flex align-items-center">
+          <div class="bg-light rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 35px; height: 35px;">
+            <i class="bi bi-person text-muted"></i>
+          </div>
+          <div>
+            <div class="small fw-medium text-dark">{{ user.username }}</div>
+            <div class="small text-success">Admin</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="col-12 col-md-9 col-lg-10">
+    <div class="p-4">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="mb-0" id="section-title">Dashboard Overview</h3>
+          <div class="text-muted small">
+            <i class="bi bi-clock me-1"></i>
+            <span id="admin-current-time">{{ current_time|date:"M d, Y H:i:s" }}</span> IST
+          </div>
+      </div>
+
+      <!-- Overview Section -->
+      <div id="overview-section" class="dashboard-section">
+        <!-- Welcome Header -->
+        <div class="row mb-4">
+          <div class="col-12">
+            <div class="card bg-primary text-white shadow-sm">
+              <div class="card-body">
+                <div class="row align-items-center">
+                  <div class="col-md-8">
+                    <h4 class="card-title mb-2">
+                      <i class="bi bi-speedometer2 me-2"></i>Welcome to Admin Dashboard
+                    </h4>
+                    <p class="card-text mb-0">
+                      Manage your mess management system efficiently. Current time: <strong>{{ current_time|date:"F d, Y - H:i:s" }} IST</strong>
+                    </p>
+                  </div>
+                  <div class="col-md-4 text-md-end">
+                    <div class="d-flex justify-content-md-end gap-2">
+                      <button class="btn btn-light btn-sm" onclick="refreshCurrentSection()">
+                        <i class="bi bi-arrow-clockwise me-1"></i>Refresh
+                      </button>
+                      <button class="btn btn-outline-light btn-sm" onclick="exportAttendanceCSV(event)">
+                        <i class="bi bi-download me-1"></i>Export Data
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main Statistics Cards -->
+        <div class="row g-4 mb-4">
+          <div class="col-lg-3 col-md-6">
+            <div class="card shadow-sm border-0" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+              <div class="card-body text-white">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <div class="text-white-50 small">Total Users</div>
+                    <div class="h3 mb-0">{{ stats.users }}</div>
+                    <small class="text-white-75">Registered users</small>
+                  </div>
+                  <div class="fs-1 opacity-50">
+                    <i class="bi bi-people"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-lg-3 col-md-6">
+            <div class="card shadow-sm border-0" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+              <div class="card-body text-white">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <div class="text-white-50 small">Active Subscriptions</div>
+                    <div class="h3 mb-0">{{ stats.active_subs }}</div>
+                    <small class="text-white-75">{{ active_subscriptions_count }} total</small>
+                  </div>
+                  <div class="fs-1 opacity-50">
+                    <i class="bi bi-credit-card"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-lg-3 col-md-6">
+            <div class="card shadow-sm border-0" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+              <div class="card-body text-white">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <div class="text-white-50 small">Pending Payments</div>
+                    <div class="h3 mb-0">{{ stats.pending_payments }}</div>
+                    <small class="text-white-75">Awaiting review</small>
+                  </div>
+                  <div class="fs-1 opacity-50">
+                    <i class="bi bi-clock-history"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-lg-3 col-md-6">
+            <div class="card shadow-sm border-0" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+              <div class="card-body text-white">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <div class="text-white-50 small">Today's Attendance</div>
+                    <div class="h3 mb-0">{{ stats.today_attendance }}</div>
+                    <small class="text-white-75">{{ attendance_rate }}% rate</small>
+                  </div>
+                  <div class="fs-1 opacity-50">
+                    <i class="bi bi-check-circle"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Additional Statistics Row -->
+        <div class="row g-4 mb-4">
+          <div class="col-lg-2 col-md-4 col-sm-6">
+            <div class="card shadow-sm">
+              <div class="card-body text-center">
+                <div class="text-primary fs-2 mb-2">
+                  <i class="bi bi-calendar-check"></i>
+              </div>
+                <div class="text-muted small">Attendance Rate</div>
+                <div class="h5 mb-0 text-primary">{{ attendance_rate }}%</div>
+            </div>
+          </div>
+          </div>
+          
+          <div class="col-lg-2 col-md-4 col-sm-6">
+            <div class="card shadow-sm">
+              <div class="card-body text-center">
+                <div class="text-warning fs-2 mb-2">
+                  <i class="bi bi-person-x"></i>
+                </div>
+                <div class="text-muted small">Absent Today</div>
+                <div class="h5 mb-0 text-warning">{{ absent_today_count }}</div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-lg-2 col-md-4 col-sm-6">
+            <div class="card shadow-sm">
+              <div class="card-body text-center">
+                <div class="text-info fs-2 mb-2">
+                  <i class="bi bi-list-ul"></i>
+                </div>
+                <div class="text-muted small">Total Plans</div>
+                <div class="h5 mb-0 text-info">{{ plans|length }}</div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-lg-2 col-md-4 col-sm-6">
+            <div class="card shadow-sm">
+              <div class="card-body text-center">
+                <div class="text-success fs-2 mb-2">
+                  <i class="bi bi-chat-dots"></i>
+                </div>
+                <div class="text-muted small">Recent Feedback</div>
+                <div class="h5 mb-0 text-success">{{ recent_feedbacks|length }}</div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-lg-2 col-md-4 col-sm-6">
+            <div class="card shadow-sm">
+              <div class="card-body text-center">
+                <div class="text-danger fs-2 mb-2">
+                  <i class="bi bi-person-dash"></i>
+                </div>
+                <div class="text-muted small">No Subscription</div>
+                <div class="h5 mb-0 text-danger">{{ no_subscriptions_count }}</div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-lg-2 col-md-4 col-sm-6">
+            <div class="card shadow-sm">
+              <div class="card-body text-center">
+                <div class="text-secondary fs-2 mb-2">
+                  <i class="bi bi-images"></i>
+                </div>
+                <div class="text-muted small">Carousel Images</div>
+                <div class="h5 mb-0 text-secondary">{{ carousel_images|length }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions and Recent Activity -->
+        <div class="row g-4">
+          <!-- Quick Actions -->
+          <div class="col-lg-6">
+            <div class="card shadow-sm">
+              <div class="card-header bg-light">
+                <h6 class="card-title mb-0">
+                  <i class="bi bi-lightning me-2"></i>Quick Actions
+                </h6>
+              </div>
+              <div class="card-body">
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <button class="btn btn-outline-primary w-100" onclick="navigateToSection('payments')">
+                      <i class="bi bi-credit-card me-2"></i>Review Payments
+                    </button>
+              </div>
+                  <div class="col-md-6">
+                    <button class="btn btn-outline-success w-100" onclick="navigateToSection('user-management')">
+                      <i class="bi bi-people me-2"></i>Manage Users
+                    </button>
+            </div>
+                  <div class="col-md-6">
+                    <button class="btn btn-outline-info w-100" onclick="navigateToSection('menu')">
+                      <i class="bi bi-menu-button-wide me-2"></i>Upload Menu
+                    </button>
+          </div>
+                  <div class="col-md-6">
+                    <button class="btn btn-outline-warning w-100" onclick="navigateToSection('plans')">
+                      <i class="bi bi-list-ul me-2"></i>Manage Plans
+                    </button>
+                  </div>
+                  <div class="col-md-6">
+                    <button class="btn btn-outline-danger w-100" onclick="navigateToSection('meal-feedback')">
+                      <i class="bi bi-chat-heart me-2"></i>Meal Feedback
+                    </button>
+                  </div>
+                  <div class="col-md-6">
+                    <button class="btn btn-outline-secondary w-100" onclick="navigateToSection('carousel')">
+                      <i class="bi bi-images me-2"></i>Carousel Images
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recent Activity -->
+          <div class="col-lg-6">
+            <div class="card shadow-sm">
+              <div class="card-header bg-light">
+                <h6 class="card-title mb-0">
+                  <i class="bi bi-clock-history me-2"></i>Recent Activity
+                </h6>
+              </div>
+              <div class="card-body">
+                {% if recent_feedbacks %}
+                  <div class="list-group list-group-flush">
+                    {% for feedback in recent_feedbacks|slice:":3" %}
+                    <div class="list-group-item px-0 py-2">
+                      <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                          <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                            <i class="bi bi-chat text-white small"></i>
+              </div>
+            </div>
+                        <div class="flex-grow-1 ms-3">
+                          <div class="fw-medium small">{{ feedback.user.username }}</div>
+                          <div class="text-muted small">{{ feedback.message|truncatechars:50 }}</div>
+                          <div class="text-muted small">{{ feedback.created_at|timesince }} ago</div>
+          </div>
+                      </div>
+                    </div>
+                    {% endfor %}
+                  </div>
+                {% else %}
+                  <div class="text-center text-muted py-3">
+                    <i class="bi bi-inbox fs-1"></i>
+                    <p class="mb-0">No recent activity</p>
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- System Status -->
+        <div class="row g-4 mt-2">
+          <div class="col-12">
+            <div class="card shadow-sm">
+              <div class="card-header bg-light">
+                <h6 class="card-title mb-0">
+                  <i class="bi bi-gear me-2"></i>System Status
+                </h6>
+              </div>
+              <div class="card-body">
+                <div class="row g-3">
+                  <div class="col-md-3">
+                    <div class="d-flex align-items-center">
+                      <div class="bg-success rounded-circle me-3" style="width: 12px; height: 12px;"></div>
+                      <div>
+                        <div class="fw-medium small">Database</div>
+                        <div class="text-muted small">Connected</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="d-flex align-items-center">
+                      <div class="bg-success rounded-circle me-3" style="width: 12px; height: 12px;"></div>
+                      <div>
+                        <div class="fw-medium small">File Storage</div>
+                        <div class="text-muted small">Active</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="d-flex align-items-center">
+                      <div class="bg-success rounded-circle me-3" style="width: 12px; height: 12px;"></div>
+                      <div>
+                        <div class="fw-medium small">Email Service</div>
+                        <div class="text-muted small">Ready</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="d-flex align-items-center">
+                      <div class="bg-success rounded-circle me-3" style="width: 12px; height: 12px;"></div>
+                      <div>
+                        <div class="fw-medium small">Timezone</div>
+                        <div class="text-muted small">Asia/Kolkata</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Payments Section -->
+      <div id="payments-section" class="dashboard-section" style="display: none;">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">Pending Payments</h5>
+            {% if pending_payments %}
+              <div class="table-responsive">
+                <table class="table table-sm align-middle">
+                  <thead>
+                    <tr>
+                      <th>User</th>
+                      <th>Plan</th>
+                      <th>Amount</th>
+                      <th>Submitted</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for payment in pending_payments %}
+                    <tr>
+                      <td>{{ payment.user.username }}</td>
+                      <td>{{ payment.subscription_plan.title }}</td>
+                      <td>₹{{ payment.subscription_plan.price }}</td>
+                      <td>{{ payment.submitted_at|date:"M d, Y H:i" }}</td>
+                      <td>
+                        <div class="d-flex gap-2">
+                          <button type="button" class="btn btn-outline-info btn-sm" data-bs-toggle="modal" data-bs-target="#proofModal{{ payment.id }}">
+                            <i class="bi bi-eye me-1"></i>View Proof
+                          </button>
+                          <form method="post" class="d-inline">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="approve_payment">
+                            <input type="hidden" name="payment_id" value="{{ payment.id }}">
+                            <button type="submit" class="btn btn-success btn-sm">
+                              <i class="bi bi-check me-1"></i>Approve
+                            </button>
+                          </form>
+                          <form method="post" class="d-inline">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="reject_payment">
+                            <input type="hidden" name="payment_id" value="{{ payment.id }}">
+                            <button type="submit" class="btn btn-danger btn-sm">
+                              <i class="bi bi-x me-1"></i>Reject
+                            </button>
+                          </form>
+                        <form method="post" class="d-inline" onsubmit="return confirm('Delete this payment proof?')">
+                          {% csrf_token %}
+                          <input type="hidden" name="action" value="delete_payment_proof">
+                          <input type="hidden" name="payment_id" value="{{ payment.id }}">
+                          <button type="submit" class="btn btn-outline-danger btn-sm">
+                            <i class="bi bi-trash"></i>
+                          </button>
+                        </form>
+                        </div>
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            {% else %}
+              <div class="text-muted">No pending payments.</div>
+            {% endif %}
+
+            <hr class="my-4">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <h5 class="card-title mb-0">Visitor Payments</h5>
+              <form method="get" class="d-inline" action="{{ request.path }}#payments">
+                <div class="input-group input-group-sm" style="width: 220px;">
+                  <span class="input-group-text">Period</span>
+                  <select class="form-select" name="visitor_period" onchange="this.form.submit()">
+                    <option value="" {% if not request.GET.visitor_period %}selected{% endif %}>All</option>
+                    <option value="today" {% if request.GET.visitor_period == 'today' %}selected{% endif %}>Today</option>
+                    <option value="week" {% if request.GET.visitor_period == 'week' %}selected{% endif %}>This Week</option>
+                    <option value="month" {% if request.GET.visitor_period == 'month' %}selected{% endif %}>This Month</option>
+                  </select>
+                </div>
+              </form>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-sm align-middle">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Meal</th>
+                    <th>Amount</th>
+                    <th>Screenshot</th>
+                    <th>Note</th>
+                    <th>When</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for vp in visitor_payments %}
+                  <tr>
+                    <td>{{ vp.name }}<br><small class="text-muted">{{ vp.mobile_no }}</small></td>
+                    <td>{{ vp.meal_type|title }}</td>
+                    <td>₹{{ vp.amount }}</td>
+                    <td>
+                      {% if vp.screenshot %}
+                        <a href="{{ vp.screenshot.url }}" target="_blank" class="btn btn-sm btn-outline-secondary">View</a>
+                      {% endif %}
+                    </td>
+                    <td>{{ vp.note|default:'-' }}</td>
+                    <td>{{ vp.created_at|date:"M d, Y H:i" }}</td>
+                    <td>
+                      <form method="post" action="{{ request.path }}#payments" onsubmit="return confirm('Delete this visitor payment?')" class="d-inline">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="delete_visitor_payment">
+                        <input type="hidden" name="vp_id" value="{{ vp.id }}">
+                        <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                      </form>
+                    </td>
+                  </tr>
+                  {% empty %}
+                  <tr>
+                    <td colspan="7" class="text-center text-muted">No visitor payments found</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Plans Section -->
+      <div id="plans-section" class="dashboard-section" style="display: none;">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">Manage Subscription Plans</h5>
+            
+            <!-- Plans Overview -->
+            <h6>Plans Overview</h6>
+            <div class="table-responsive">
+              <table class="table table-sm">
+                <thead>
+                  <tr>
+                    <th>Title</th>
+                    <th>Price</th>
+                    <th>Period</th>
+                    <th>Meals</th>
+                    <th>Status</th>
+                    <th>Features</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for plan in plans %}
+                  <tr>
+                    <td>{{ plan.title }}</td>
+                    <td>₹{{ plan.price }}</td>
+                    <td>{{ plan.billing_period|title }}</td>
+                    <td>{{ plan.included_meals|join:", "|title }}</td>
+                    <td>{% if plan.is_active %}<span class="badge bg-success">Active</span>{% else %}<span class="badge bg-danger">Inactive</span>{% endif %}</td>
+                    <td>{{ plan.features|truncatechars:50 }}</td>
+                    <td>
+                      <form method="post" class="d-inline" onsubmit="return confirm('Delete this plan?')">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="delete_plan">
+                        <input type="hidden" name="plan_id" value="{{ plan.id }}">
+                        <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                      </form>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            <div class="mt-3">
+              <a href="/plans/" class="btn btn-primary">
+                <i class="bi bi-plus me-2"></i>Manage Plans
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Menu Section -->
+      <div id="menu-section" class="dashboard-section" style="display: none;">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">Upload Monthly Menu</h5>
+            <form method="post" enctype="multipart/form-data">
+              {% csrf_token %}
+              <input type="hidden" name="action" value="upload_menu">
+              <div class="row g-3">
+                <div class="col-md-3">
+                  <label class="form-label">Month</label>
+                  {{ menu_form.month }}
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Year</label>
+                  {{ menu_form.year }}
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Menu File (PDF)</label>
+                  {{ menu_form.file }}
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Menu Image</label>
+                  {{ menu_form.image }}
+                </div>
+                <div class="col-12">
+                  <label class="form-label">Menu Text</label>
+                  {{ menu_form.text }}
+                </div>
+                <div class="col-12">
+                  <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-upload me-2"></i>Upload Menu
+                  </button>
+                </div>
+              </div>
+            </form>
+
+            {% if current_menu %}
+            <hr class="my-4">
+            <h6 class="text-muted">Current Menu ({{ current_menu.month|date:"F" }} {{ current_menu.year }})</h6>
+            <div class="d-flex gap-2">
+              {% if current_menu.file %}
+                <a href="{{ current_menu.file.url }}" class="btn btn-outline-primary btn-sm" download>
+                  <i class="bi bi-download me-1"></i>Download PDF
+                </a>
+              {% endif %}
+              {% if current_menu.image %}
+                <a href="{{ current_menu.image.url }}" class="btn btn-outline-secondary btn-sm" target="_blank">
+                  <i class="bi bi-image me-1"></i>View Image
+                </a>
+              {% endif %}
+              <span class="text-muted small align-self-center">
+                Uploaded: {{ current_menu.uploaded_at|date:"M d, Y H:i" }}
+              </span>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Carousel Section -->
+      <div id="carousel-section" class="dashboard-section" style="display: none;">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">Manage Home Page Carousel</h5>
+
+            <!-- Add New Carousel Image Form -->
+            <div class="mb-4">
+              <h6>Add New Carousel Image</h6>
+              <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="add_carousel">
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label class="form-label">Image Title</label>
+                    {{ carousel_form.title }}
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">Display Order</label>
+                    {{ carousel_form.order }}
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">Status</label>
+                    <select class="form-control" name="is_active">
+                      <option value="1">Active</option>
+                      <option value="0">Inactive</option>
+                    </select>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label">Image File</label>
+                    {{ carousel_form.image }}
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label">Description</label>
+                    {{ carousel_form.description }}
+                  </div>
+                  <div class="col-12">
+                    <button type="submit" class="btn btn-success">
+                      <i class="bi bi-plus me-2"></i>Add Carousel Image
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+
+            <!-- Existing Carousel Images -->
+            <hr>
+            <h6>Current Carousel Images</h6>
+            {% if carousel_images %}
+              <div class="row g-3">
+                {% for image in carousel_images %}
+                <div class="col-md-4">
+                  <div class="card">
+                    <img src="{{ image.image.url }}" class="card-img-top" alt="{{ image.title }}" style="height: 200px; object-fit: cover;">
+                    <div class="card-body">
+                      <h6 class="card-title">{{ image.title }}</h6>
+                      <p class="card-text small text-muted">{{ image.description|truncatechars:50 }}</p>
+                      <div class="d-flex justify-content-between align-items-center">
+                        <small class="text-muted">Order: {{ image.order }}</small>
+                        <form method="post" class="d-inline">
+                          {% csrf_token %}
+                          <input type="hidden" name="action" value="delete_carousel">
+                          <input type="hidden" name="carousel_id" value="{{ image.id }}">
+                          <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Delete this carousel image?')">
+                            <i class="bi bi-trash"></i>
+                          </button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+            {% else %}
+              <div class="text-muted">No carousel images uploaded yet.</div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Payment Configuration Section -->
+      <div id="payment-config-section" class="dashboard-section" style="display: none;">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">Payment Configuration</h5>
+            <p class="text-muted">Configure payment methods for users to see when purchasing subscriptions.</p>
+
+            <form method="post" enctype="multipart/form-data">
+              {% csrf_token %}
+              <input type="hidden" name="action" value="save_payment_config">
+              <div class="row g-3">
+                <div class="col-md-4">
+                  <label class="form-label">UPI ID</label>
+                  <input type="text" class="form-control" name="upi_id" value="{{ paycfg.upi_id|default:'' }}" placeholder="yourname@paytm">
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Google Pay QR</label>
+                  <input type="file" class="form-control" name="gpay_qr" accept="image/*">
+                  {% if paycfg.gpay_qr %}
+                    <div class="mt-2">
+                      <small class="text-muted">Current: </small>
+                      <a href="{{ paycfg.gpay_qr.url }}" target="_blank" class="small">View Current QR</a>
+                    </div>
+                  {% endif %}
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">PhonePe QR</label>
+                  <input type="file" class="form-control" name="phonepe_qr" accept="image/*">
+                  {% if paycfg.phonepe_qr %}
+                    <div class="mt-2">
+                      <small class="text-muted">Current: </small>
+                      <a href="{{ paycfg.phonepe_qr.url }}" target="_blank" class="small">View Current QR</a>
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+              <div class="mt-3">
+                <button type="submit" class="btn btn-primary">
+                  <i class="bi bi-save me-2"></i>Save Configuration
+                </button>
+              </div>
+            </form>
+
+            {% if paycfg %}
+            <hr class="my-4">
+            <h6>Current Configuration Preview</h6>
+            <div class="row g-3">
+              {% if paycfg.upi_id %}
+              <div class="col-md-4">
+                <div class="bg-light p-3 rounded">
+                  <strong>UPI ID:</strong><br>
+                  <code>{{ paycfg.upi_id }}</code>
+                </div>
+              </div>
+              {% endif %}
+              {% if paycfg.gpay_qr %}
+              <div class="col-md-4">
+                <div class="text-center">
+                  <strong>Google Pay QR</strong><br>
+                  <img src="{{ paycfg.gpay_qr.url }}" alt="GPay QR" class="img-fluid" style="max-height: 100px;">
+                </div>
+              </div>
+              {% endif %}
+              {% if paycfg.phonepe_qr %}
+              <div class="col-md-4">
+                <div class="text-center">
+                  <strong>PhonePe QR</strong><br>
+                  <img src="{{ paycfg.phonepe_qr.url }}" alt="PhonePe QR" class="img-fluid" style="max-height: 100px;">
+                </div>
+              </div>
+              {% endif %}
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Feedback Section -->
+      <div id="feedback-section" class="dashboard-section" style="display: none;">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">Recent Feedback</h5>
+            {% if recent_feedbacks %}
+              <div class="table-responsive">
+                <table class="table table-sm align-middle">
+                  <thead><tr><th>User</th><th>Message</th><th>Date</th></tr></thead>
+                  <tbody>
+                  {% for feedback in recent_feedbacks %}
+                    <tr>
+                      <td>{{ feedback.user.username|default:"User" }}</td>
+                      <td>{{ feedback.message|truncatechars:100 }}</td>
+                      <td>{{ feedback.created_at|date:"M d, Y H:i" }}</td>
+                    </tr>
+                  {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            {% else %}
+              <div class="text-muted">No recent feedback.</div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <!-- LMS Section -->
+      <div id="lms-section" class="dashboard-section" style="display: none;">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <h5 class="card-title mb-0">Learning Management System</h5>
+              <div class="d-flex gap-2">
+                <button class="btn btn-outline-primary btn-sm" onclick="exportAttendance()">
+                  <i class="bi bi-download me-1"></i>Export Attendance CSV
+                </button>
+                <button class="btn btn-primary btn-sm" onclick="refreshAttendance()">
+                  <i class="bi bi-arrow-clockwise me-1"></i>Refresh
+                </button>
+              </div>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="mb-4">
+              <div class="input-group">
+                <span class="input-group-text">
+                  <i class="bi bi-search"></i>
+                </span>
+                <input type="text" class="form-control" id="studentSearch" placeholder="Search students by name or email..." onkeyup="filterStudents()" oninput="filterStudents()" onpaste="setTimeout(filterStudents, 10)">
+                <button class="btn btn-outline-secondary" type="button" onclick="clearSearch()">
+                  <i class="bi bi-x"></i>
+                </button>
+              </div>
+              <div id="searchResults" class="mt-2 text-muted small" style="display: none;">
+                <i class="bi bi-info-circle me-1"></i>
+                <span id="searchCount">0</span> students found
+              </div>
+            </div>
+
+            <!-- Attendance Summary -->
+            <div class="row mb-4">
+              <div class="col-md-3">
+                <div class="card bg-primary text-white">
+                  <div class="card-body text-center">
+                    <h6 class="card-title">Total Students</h6>
+                    <h4 id="totalStudents">{{ all_users|length }}</h4>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="card bg-success text-white">
+                  <div class="card-body text-center">
+                    <h6 class="card-title">Present Today</h6>
+                    <h4 id="presentToday">{{ today_attendance_count }}</h4>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="card bg-warning text-white">
+                  <div class="card-body text-center">
+                    <h6 class="card-title">Absent Today</h6>
+                    <h4 id="absentToday">{{ absent_today_count }}</h4>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="card bg-info text-white">
+                  <div class="card-body text-center">
+                    <h6 class="card-title">Attendance Rate</h6>
+                    <h4 id="attendanceRate">{{ attendance_rate }}%</h4>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Students List -->
+            <div class="row g-2 mb-2">
+              <div class="col-auto">
+                <form method="get" action="{{ request.path }}#lms-section">
+                  <div class="input-group input-group-sm">
+                    <span class="input-group-text">Hostel</span>
+                    <select class="form-select" name="hostel_status" onchange="this.form.submit()">
+                      <option value="all" {% if not selected_hostel_status or selected_hostel_status == 'all' %}selected{% endif %}>All</option>
+                      <option value="hosteller" {% if selected_hostel_status == 'hosteller' %}selected{% endif %}>Hosteller</option>
+                      <option value="non_hosteller" {% if selected_hostel_status == 'non_hosteller' %}selected{% endif %}>Non-Hosteller</option>
+                    </select>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <div class="table-responsive" style="max-height: 500px; overflow-y: auto;">
+              <table class="table table-hover align-middle">
+                <thead class="table-dark sticky-top">
+                  <tr>
+                    <th>#</th>
+                    <th>Student Name</th>
+                    <th>Email</th>
+                    <th>Subscription</th>
+                    <th>Today's Attendance</th>
+                    <th>Last Attendance</th>
+                    <th>Total Attendance</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="studentsTableBody">
+                  {% for user in all_users %}
+                  <tr class="student-row" data-name="{{ user.username|lower }}" data-email="{{ user.email|lower }}" data-fullname="{{ user.full_name|lower|default:user.username|lower }}">
+                    <td>{{ forloop.counter }}</td>
+                    <td>
+                      <div class="d-flex align-items-center">
+                        <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 35px; height: 35px;">
+                          <span class="text-white fw-bold">{{ user.username|first|upper }}</span>
+                        </div>
+                        <div>
+                          <div class="fw-medium">{{ user.username }}</div>
+                          <small class="text-muted">ID: {{ user.id }}</small>
+                        </div>
+                      </div>
+                    </td>
+                    <td>{{ user.email }}</td>
+                    <td>
+                      {% if user.active_subscriptions.exists %}
+                        {% with user.active_subscriptions.first as sub %}
+                          <span class="badge bg-success">{{ sub.plan.title }}</span>
+                          <br><small class="text-muted">{{ sub.plan.included_meals|join:", " }}</small>
+                        {% endwith %}
+                      {% else %}
+                        <span class="badge bg-secondary">No Subscription</span>
+                      {% endif %}
+                    </td>
+                    <td>
+                      {% if user.today_attendance %}
+                        <span class="badge bg-success">
+                          <i class="bi bi-check-circle me-1"></i>Present
+                        </span>
+                        <br><small class="text-muted">{{ user.today_attendance.marked_at|date:"H:i" }}</small>
+                      {% else %}
+                        <span class="badge bg-danger">
+                          <i class="bi bi-x-circle me-1"></i>Absent
+                        </span>
+                      {% endif %}
+                    </td>
+                    <td>
+                      {% if user.last_attendance %}
+                        {{ user.last_attendance.marked_at|date:"M d, Y H:i" }}
+                      {% else %}
+                        <span class="text-muted">Never</span>
+                      {% endif %}
+                    </td>
+                    <td>
+                      <span class="badge bg-info">{{ user.total_attendance_count }}</span>
+                    </td>
+                    <td>
+                      <div class="btn-group btn-group-sm">
+                        <button class="btn btn-outline-primary" onclick="viewStudentDetails({{ user.id }})" title="View Details">
+                          <i class="bi bi-eye"></i>
+                        </button>
+                        <button class="btn btn-outline-success" onclick="markAttendance({{ user.id }})" title="Mark Attendance">
+                          <i class="bi bi-check"></i>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                  {% empty %}
+                  <tr>
+                    <td colspan="8" class="text-center text-muted py-4">No students found</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Pagination -->
+            <nav aria-label="Students pagination" class="mt-3">
+              <ul class="pagination justify-content-center" id="pagination">
+                <!-- Pagination will be generated by JavaScript -->
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+
+      <!-- Meal Feedback Section -->
+      <div id="meal-feedback-section" class="dashboard-section" style="display: none;">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <h5 class="card-title mb-0">
+                <i class="bi bi-chat-heart me-2"></i>Meal Feedback Management
+              </h5>
+              <div class="d-flex gap-2">
+                <button class="btn btn-outline-primary btn-sm" onclick="refreshMealFeedback()">
+                  <i class="bi bi-arrow-clockwise me-1"></i>Refresh
+                </button>
+                <button class="btn btn-outline-success btn-sm" onclick="exportMealFeedback()">
+                  <i class="bi bi-download me-1"></i>Export CSV
+                </button>
+              </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="row g-3 mb-4">
+              <div class="col-md-3">
+                <select class="form-control" id="mealTypeFilter" onchange="filterMealFeedback()">
+                  <option value="">All Meal Types</option>
+                  <option value="breakfast">Breakfast</option>
+                  <option value="lunch">Lunch</option>
+                  <option value="dinner">Dinner</option>
+                </select>
+              </div>
+              <div class="col-md-3">
+                <input type="date" class="form-control" id="dateFromFilter" onchange="filterMealFeedback()" placeholder="From Date">
+              </div>
+              <div class="col-md-3">
+                <input type="date" class="form-control" id="dateToFilter" onchange="filterMealFeedback()" placeholder="To Date">
+              </div>
+              <div class="col-md-3">
+                <select class="form-control" id="ratingFilter" onchange="filterMealFeedback()">
+                  <option value="">All Ratings</option>
+                  <option value="5">5 Stars</option>
+                  <option value="4">4+ Stars</option>
+                  <option value="3">3+ Stars</option>
+                  <option value="2">2+ Stars</option>
+                  <option value="1">1+ Stars</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Statistics -->
+            <div class="row g-3 mb-4">
+              <div class="col-md-3">
+                <div class="card bg-primary text-white">
+                  <div class="card-body text-center">
+                    <h4 class="mb-0" id="totalFeedbackCount">0</h4>
+                    <small>Total Feedback</small>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="card bg-success text-white">
+                  <div class="card-body text-center">
+                    <h4 class="mb-0" id="avgRating">0.0</h4>
+                    <small>Average Rating</small>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="card bg-info text-white">
+                  <div class="card-body text-center">
+                    <h4 class="mb-0" id="todayFeedbackCount">0</h4>
+                    <small>Today's Feedback</small>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="card bg-warning text-white">
+                  <div class="card-body text-center">
+                    <h4 class="mb-0" id="lowRatingCount">0</h4>
+                    <small>Low Ratings (≤2)</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Feedback List -->
+            <div class="table-responsive">
+              <table class="table table-hover">
+                <thead class="table-dark">
+                  <tr>
+                    <th>User</th>
+                    <th>Meal Type</th>
+                    <th>Date</th>
+                    <th>Overall Rating</th>
+                    <th>Detailed Ratings</th>
+                    <th>Comments</th>
+                    <th>Submitted</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="mealFeedbackTableBody">
+                  <!-- Feedback data will be loaded here -->
+                </tbody>
+              </table>
+            </div>
+
+            <hr class="my-4">
+            <h5 class="card-title">Visitor Feedback (Latest)</h5>
+            <div class="table-responsive">
+              <table class="table table-sm align-middle">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Meal</th>
+                    <th>Date</th>
+                    <th>Rating</th>
+                    <th>Comments</th>
+                    <th>When</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for vf in visitor_feedbacks %}
+                  <tr>
+                    <td>{{ vf.name }}</td>
+                    <td>{{ vf.meal_type|title }}</td>
+                    <td>{{ vf.meal_date|date:"Y-m-d" }}</td>
+                    <td>{{ vf.rating }}</td>
+                    <td>{{ vf.comments|default:'-' }}</td>
+                    <td>{{ vf.created_at|date:"M d, Y H:i" }}</td>
+                    <td>
+                      <form method="post" onsubmit="return confirm('Delete this visitor feedback?')">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="delete_visitor_feedback">
+                        <input type="hidden" name="vf_id" value="{{ vf.id }}">
+                        <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                      </form>
+                    </td>
+                  </tr>
+                  {% empty %}
+                  <tr>
+                    <td colspan="7" class="text-center text-muted">No visitor feedback yet</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Pagination -->
+            <nav aria-label="Meal Feedback pagination">
+              <ul class="pagination justify-content-center" id="mealFeedbackPagination">
+                <!-- Pagination will be loaded here -->
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+
+      <!-- User Management Section -->
+      <div id="user-management-section" class="dashboard-section" style="display: none;">
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h5 class="card-title mb-0">User Management</h5>
+        <div class="d-flex gap-2">
+          <button class="btn btn-success btn-sm" onclick="showAddUserModal()">
+            <i class="bi bi-person-plus me-1"></i>Add User
+          </button>
+          <button class="btn btn-outline-primary btn-sm" onclick="exportUsersCSV(event)">
+            <i class="bi bi-download me-1"></i>Export Users CSV
+          </button>
+          <button class="btn btn-primary btn-sm" onclick="refreshUsers()">
+            <i class="bi bi-arrow-clockwise me-1"></i>Refresh
+          </button>
+        </div>
+      </div>
+
+      <!-- User Search Bar -->
+      <div class="mb-4">
+        <div class="input-group">
+          <span class="input-group-text">
+            <i class="bi bi-search"></i>
+          </span>
+          <input type="text" class="form-control" id="userSearch" placeholder="Search users by name, email, or mobile..." onkeyup="filterUsers()" oninput="filterUsers()" onpaste="setTimeout(filterUsers, 10)">
+          <button class="btn btn-outline-secondary" type="button" onclick="clearUserSearch()">
+            <i class="bi bi-x"></i>
+          </button>
+        </div>
+        <div id="userSearchResults" class="mt-2 text-muted small" style="display: none;">
+          <i class="bi bi-info-circle me-1"></i>
+          <span id="userSearchCount">0</span> users found
+        </div>
+      </div>
+
+      <!-- User Statistics -->
+      <div class="row mb-4">
+        <div class="col-md-3">
+          <div class="card bg-primary text-white">
+            <div class="card-body text-center">
+              <h6 class="card-title">Total Users</h6>
+              <h4 id="totalUsers">{{ all_users|length }}</h4>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card bg-success text-white">
+            <div class="card-body text-center">
+              <h6 class="card-title">Active Subscriptions</h6>
+              <h4 id="activeSubscriptions">{{ active_subscriptions_count }}</h4>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card bg-warning text-white">
+            <div class="card-body text-center">
+              <h6 class="card-title">No Subscription</h6>
+              <h4 id="noSubscriptions">{{ no_subscriptions_count }}</h4>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card bg-info text-white">
+            <div class="card-body text-center">
+              <h6 class="card-title">New This Month</h6>
+              <h4 id="newThisMonth">{{ new_users_count }}</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Users List -->
+      <div class="row g-2 mb-2">
+        <div class="col-auto">
+          <form method="get" action="{{ request.path }}#user-management-section">
+            <div class="input-group input-group-sm">
+              <span class="input-group-text">Hostel</span>
+              <select class="form-select" name="hostel_status" onchange="this.form.submit()">
+                <option value="all" {% if not selected_hostel_status or selected_hostel_status == 'all' %}selected{% endif %}>All</option>
+                <option value="hosteller" {% if selected_hostel_status == 'hosteller' %}selected{% endif %}>Hosteller</option>
+                <option value="non_hosteller" {% if selected_hostel_status == 'non_hosteller' %}selected{% endif %}>Non-Hosteller</option>
+              </select>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="table-responsive" style="max-height: 500px; overflow-y: auto;">
+        <table class="table table-hover align-middle">
+          <thead class="table-dark sticky-top">
+            <tr>
+              <th>#</th>
+              <th>User Details</th>
+              <th>Contact Info</th>
+              <th>Subscription</th>
+              <th>Status</th>
+              <th>Joined</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="usersTableBody">
+            {% for user in all_users %}
+            <tr class="user-row" data-name="{{ user.username|lower }}" data-email="{{ user.email|lower }}" data-fullname="{{ user.full_name|lower|default:user.username|lower }}" data-mobile="{{ user.mobile_no|default:'' }}">
+              <td>{{ forloop.counter }}</td>
+              <td>
+                <div class="d-flex align-items-center">
+                  {% if user.profile_image %}
+                    <img src="{{ user.profile_image.url }}" alt="{{ user.username }}" class="rounded-circle me-2" style="width: 40px; height: 40px; object-fit: cover;">
+                  {% else %}
+                    <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 40px; height: 40px;">
+                      <span class="text-white fw-bold">{{ user.username|first|upper }}</span>
+                    </div>
+                  {% endif %}
+                  <div>
+                    <div class="fw-medium">{{ user.username }}</div>
+                    <small class="text-muted">{{ user.full_name|default:"No full name" }}</small>
+                    <br><small class="text-muted">ID: {{ user.id }}</small>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div>
+                  <i class="bi bi-envelope me-1"></i>{{ user.email }}
+                </div>
+                {% if user.mobile_no %}
+                <div class="mt-1">
+                  <i class="bi bi-phone me-1"></i>{{ user.mobile_no }}
+                </div>
+                {% endif %}
+              </td>
+              <td>
+                {% if user.active_subscriptions.exists %}
+                  {% with user.active_subscriptions.first as sub %}
+                    <span class="badge bg-success">{{ sub.plan.title }}</span>
+                    <br><small class="text-muted">₹{{ sub.plan.price }}/{{ sub.plan.billing_period }}</small>
+                    <br><small class="text-muted">{{ sub.plan.included_meals|join:", " }}</small>
+                  {% endwith %}
+                {% else %}
+                  <span class="badge bg-secondary">No Subscription</span>
+                {% endif %}
+              </td>
+              <td>
+                {% if user.is_active %}
+                  <span class="badge bg-success">
+                    <i class="bi bi-check-circle me-1"></i>Active
+                  </span>
+                {% else %}
+                  <span class="badge bg-danger">
+                    <i class="bi bi-x-circle me-1"></i>Inactive
+                  </span>
+                {% endif %}
+                <br>
+                {% if user.last_login %}
+                  <small class="text-muted">Last login: {{ user.last_login|date:"M d, Y" }}</small>
+                {% else %}
+                  <small class="text-muted">Never logged in</small>
+                {% endif %}
+              </td>
+              <td>
+                <small>{{ user.date_joined|date:"M d, Y" }}</small>
+                <br><small class="text-muted">{{ user.date_joined|timesince }} ago</small>
+              </td>
+              <td>
+                <div class="btn-group btn-group-sm">
+                  <button class="btn btn-outline-primary" onclick="viewUserDetails({{ user.id }})" title="View Details">
+                    <i class="bi bi-eye"></i>
+                  </button>
+                  <button class="btn btn-outline-warning" onclick="editUser({{ user.id }})" title="Edit User">
+                    <i class="bi bi-pencil"></i>
+                  </button>
+                  <button class="btn btn-outline-danger" onclick="deleteUser({{ user.id }})" title="Delete User">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="7" class="text-center text-muted py-4">No users found</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      <nav aria-label="Users pagination" class="mt-3">
+        <ul class="pagination justify-content-center" id="userPagination">
+          <!-- Pagination will be generated by JavaScript -->
+        </ul>
+      </nav>
+      </div>
+    </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Student Details Modal -->
+<div class="modal fade" id="studentDetailsModal" tabindex="-1" aria-labelledby="studentDetailsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="studentDetailsModalLabel">
+          <i class="bi bi-person-circle me-2"></i>Student Details
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div id="studentDetailsContent">
+          <!-- Content will be loaded here -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="markAttendanceBtn" onclick="markAttendanceFromModal()">
+          <i class="bi bi-check-circle me-1"></i>Mark Attendance
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- User Details Modal -->
+<div class="modal fade" id="userDetailsModal" tabindex="-1" aria-labelledby="userDetailsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="userDetailsModalLabel">
+          <i class="bi bi-person-circle me-2"></i>User Details
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div id="userDetailsContent">
+          <!-- Content will be loaded here -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-warning" id="editUserBtn" onclick="editUserFromModal()">
+          <i class="bi bi-pencil me-1"></i>Edit User
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Meal Feedback Details Modal -->
+<div class="modal fade" id="mealFeedbackDetailsModal" tabindex="-1" aria-labelledby="mealFeedbackDetailsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="mealFeedbackDetailsModalLabel">
+          <i class="bi bi-chat-heart me-2"></i>Meal Feedback Details
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="mealFeedbackDetailsContent">
+        <!-- Feedback details will be loaded here -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add/Edit User Modal -->
+<div class="modal fade" id="addEditUserModal" tabindex="-1" aria-labelledby="addEditUserModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addEditUserModalLabel">
+          <i class="bi bi-person-plus me-2"></i>Add New User
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="userForm">
+          <input type="hidden" id="userId" name="user_id">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label for="username" class="form-label">Username *</label>
+              <input type="text" class="form-control" id="username" name="username" required>
+            </div>
+            <div class="col-md-6">
+              <label for="email" class="form-label">Email *</label>
+              <input type="email" class="form-control" id="email" name="email" required>
+            </div>
+            <div class="col-md-6">
+              <label for="fullName" class="form-label">Full Name</label>
+              <input type="text" class="form-control" id="fullName" name="full_name">
+            </div>
+            <div class="col-md-6">
+              <label for="mobileNo" class="form-label">Mobile Number</label>
+              <input type="tel" class="form-control" id="mobileNo" name="mobile_no">
+            </div>
+            <div class="col-md-6">
+              <label for="profileImage" class="form-label">Profile Image</label>
+              <input type="file" class="form-control" id="profileImage" name="profile_image" accept="image/*">
+              <div id="profileImagePreview" class="mt-2" style="display: none;">
+                <img id="previewImg" src="" alt="Preview" class="rounded-circle" style="width: 60px; height: 60px; object-fit: cover;">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label for="password" class="form-label">Password *</label>
+              <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <div class="col-md-6">
+              <label for="confirmPassword" class="form-label">Confirm Password *</label>
+              <input type="password" class="form-control" id="confirmPassword" name="confirm_password" required>
+            </div>
+            <div class="col-md-6">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="isActive" name="is_active" checked>
+                <label class="form-check-label" for="isActive">
+                  Active User
+                </label>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="isStaff" name="is_staff">
+                <label class="form-check-label" for="isStaff">
+                  Staff Member
+                </label>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" id="saveUserBtn" onclick="saveUser()">
+          <i class="bi bi-save me-1"></i>Save User
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete User Confirmation Modal -->
+<div class="modal fade" id="deleteUserModal" tabindex="-1" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title" id="deleteUserModalLabel">
+          <i class="bi bi-exclamation-triangle me-2"></i>Confirm Delete
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete this user?</p>
+        <div class="alert alert-warning">
+          <i class="bi bi-exclamation-triangle me-2"></i>
+          <strong>Warning:</strong> This action cannot be undone. All user data, subscriptions, and attendance records will be permanently deleted.
+        </div>
+        <div id="deleteUserInfo">
+          <!-- User info will be loaded here -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-danger" id="confirmDeleteBtn" onclick="confirmDeleteUser()">
+          <i class="bi bi-trash me-1"></i>Delete User
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Mobile Offcanvas Sidebar -->
+<div class="offcanvas offcanvas-start" tabindex="-1" id="adminSidebar" aria-labelledby="adminSidebarLabel">
+  <div class="offcanvas-header bg-primary text-white">
+    <h5 class="offcanvas-title" id="adminSidebarLabel">
+      <i class="bi bi-gear-fill me-2"></i>Admin Panel
+    </h5>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body p-0">
+    <div class="p-3 d-flex flex-column" style="height: 100%;">
+      <!-- Admin Panel Header -->
+      <div class="text-center mb-4 pb-3 border-bottom">
+        <div class="bg-gradient-primary rounded-3 d-inline-flex align-items-center justify-content-center mb-3" style="width: 50px; height: 50px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+          <i class="bi bi-gear-fill text-white" style="font-size: 1.2rem;"></i>
+        </div>
+        <h6 class="mb-1 text-dark fw-bold">Admin Panel</h6>
+        <small class="text-muted">MessMate</small>
+      </div>
+
+      <!-- Navigation Menu -->
+      <nav class="nav flex-column flex-grow-1">
+        <a class="nav-link text-dark py-2 px-3 mb-1 rounded-2 active" href="#overview" data-section="overview" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white !important;">
+          <i class="bi bi-speedometer2 me-2"></i>
+          <span class="fw-medium">Overview</span>
+        </a>
+        <a class="nav-link text-dark py-2 px-3 mb-1 rounded-2" href="#payments" data-section="payments" style="transition: all 0.2s ease;">
+          <i class="bi bi-credit-card me-2"></i>
+          <span class="fw-medium">Payments</span>
+        </a>
+        <a class="nav-link text-dark py-2 px-3 mb-1 rounded-2" href="#plans" data-section="plans" style="transition: all 0.2s ease;">
+          <i class="bi bi-list-ul me-2"></i>
+          <span class="fw-medium">Plans</span>
+        </a>
+        <a class="nav-link text-dark py-2 px-3 mb-1 rounded-2" href="#menu" data-section="menu" style="transition: all 0.2s ease;">
+          <i class="bi bi-journal-text me-2"></i>
+          <span class="fw-medium">Menu</span>
+        </a>
+        <a class="nav-link text-dark py-2 px-3 mb-1 rounded-2" href="#carousel" data-section="carousel" style="transition: all 0.2s ease;">
+          <i class="bi bi-images me-2"></i>
+          <span class="fw-medium">Carousel</span>
+        </a>
+        <a class="nav-link text-dark py-2 px-3 mb-1 rounded-2" href="#payment-config" data-section="payment-config" style="transition: all 0.2s ease;">
+          <i class="bi bi-gear me-2"></i>
+          <span class="fw-medium">Payment Config</span>
+        </a>
+        <a class="nav-link text-dark py-2 px-3 mb-1 rounded-2" href="#feedback" data-section="feedback" style="transition: all 0.2s ease;">
+          <i class="bi bi-chat-dots me-2"></i>
+          <span class="fw-medium">Feedback</span>
+        </a>
+        <a class="nav-link text-dark py-2 px-3 mb-1 rounded-2" href="#lms" data-section="lms" style="transition: all 0.2s ease;">
+          <i class="bi bi-people me-2"></i>
+          <span class="fw-medium">LMS</span>
+        </a>
+        <a class="nav-link text-dark py-2 px-3 mb-1 rounded-2" href="#user-management" data-section="user-management" style="transition: all 0.2s ease;">
+          <i class="bi bi-person-gear me-2"></i>
+          <span class="fw-medium">User Management</span>
+        </a>
+        <a class="nav-link text-dark py-2 px-3 mb-1 rounded-2" href="#meal-feedback" data-section="meal-feedback" style="transition: all 0.2s ease;">
+          <i class="bi bi-chat-heart me-2"></i>
+          <span class="fw-medium">Meal Feedback</span>
+        </a>
+        
+        <!-- Divider -->
+        <hr class="my-3">
+        
+        <!-- Export Action -->
+        <a class="nav-link text-success py-2 px-3 rounded-2" href="/admin/export/attendance.csv" onclick="exportAttendanceCSV(event)" style="background-color: rgba(25, 135, 84, 0.1); transition: all 0.2s ease;">
+          <i class="bi bi-download me-2"></i>
+          <span class="fw-medium">Export Attendance CSV</span>
+        </a>
+      </nav>
+
+      <!-- User Info at Bottom -->
+      <div class="pt-3 border-top">
+        <div class="d-flex align-items-center">
+          <div class="bg-light rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 35px; height: 35px;">
+            <i class="bi bi-person text-muted"></i>
+          </div>
+          <div>
+            <div class="small fw-medium text-dark">{{ user.username }}</div>
+            <div class="small text-success">Admin</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Payment Proof Modals -->
+{% for payment in pending_payments %}
+<div class="modal fade" id="proofModal{{ payment.id }}" tabindex="-1" aria-labelledby="proofModalLabel{{ payment.id }}" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="proofModalLabel{{ payment.id }}">
+          Payment Proof - {{ payment.user.username }} ({{ payment.subscription_plan.title }})
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center">
+        {% if payment.screenshot %}
+          <img src="{{ payment.screenshot.url }}" alt="Payment Proof" class="img-fluid rounded shadow-sm" style="max-height: 70vh;">
+          <div class="mt-3">
+            <small class="text-muted">
+              Submitted: {{ payment.submitted_at|date:"M d, Y H:i" }} | 
+              Amount: ₹{{ payment.subscription_plan.price }}
+            </small>
+          </div>
+        {% else %}
+          <div class="alert alert-warning">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            No payment proof uploaded.
+          </div>
+        {% endif %}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <form method="post" class="d-inline">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="approve_payment">
+          <input type="hidden" name="payment_id" value="{{ payment.id }}">
+          <button type="submit" class="btn btn-success">
+            <i class="bi bi-check me-1"></i>Approve Payment
+          </button>
+        </form>
+        <form method="post" class="d-inline">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="reject_payment">
+          <input type="hidden" name="payment_id" value="{{ payment.id }}">
+          <button type="submit" class="btn btn-danger">
+            <i class="bi bi-x me-1"></i>Reject Payment
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Sidebar navigation functionality
+  const navLinks = document.querySelectorAll('.nav-link[data-section]');
+  const sections = document.querySelectorAll('.dashboard-section');
+  const sectionTitle = document.getElementById('section-title');
+  
+  // Section titles mapping
+  const sectionTitles = {
+    'overview': 'Dashboard Overview',
+    'payments': 'Payment Management',
+    'plans': 'Subscription Plans',
+    'menu': 'Menu Management',
+    'carousel': 'Carousel Management',
+    'payment-config': 'Payment Configuration',
+    'feedback': 'User Feedback',
+    'lms': 'Learning Management System',
+    'user-management': 'User Management',
+    'meal-feedback': 'Meal Feedback Management'
+  };
+  
+  // Handle navigation clicks
+  navLinks.forEach(link => {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      
+      const targetSection = this.getAttribute('data-section');
+      
+      // Update active nav link in both desktop and mobile sidebars
+      navLinks.forEach(nav => {
+        nav.classList.remove('active');
+        nav.style.background = '';
+        nav.style.color = '';
+      });
+      this.classList.add('active');
+      this.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+      this.style.color = 'white';
+      
+      // Hide all sections
+      sections.forEach(section => {
+        section.style.display = 'none';
+      });
+      
+      // Show target section
+      const targetElement = document.getElementById(targetSection + '-section');
+      if (targetElement) {
+        targetElement.style.display = 'block';
+      }
+      
+      // Update section title
+      if (sectionTitle && sectionTitles[targetSection]) {
+        sectionTitle.textContent = sectionTitles[targetSection];
+      }
+      
+      // Update URL: set hash to current section and drop sticky "section" param
+      const url = new URL(window.location.href);
+      const params = new URLSearchParams(url.search);
+      params.delete('section');
+      const newSearch = params.toString();
+      const newUrl = url.pathname + (newSearch ? ('?' + newSearch) : '') + '#' + targetSection;
+      history.replaceState(null, '', newUrl);
+
+      // Initialize section-specific content
+      if (targetSection === 'meal-feedback') {
+        // Load meal feedback data when section becomes visible
+        setTimeout(() => {
+          loadMealFeedback();
+        }, 100);
+      } else if (targetSection === 'lms') {
+        loadLMSData();
+      } else if (targetSection === 'user-management') {
+        loadUsers();
+      }
+      
+      // Close mobile offcanvas after navigation
+      const offcanvas = document.getElementById('adminSidebar');
+      if (offcanvas && window.innerWidth < 992) {
+        const bsOffcanvas = bootstrap.Offcanvas.getInstance(offcanvas);
+        if (bsOffcanvas) {
+          bsOffcanvas.hide();
+        }
+      }
+    });
+
+    // Add hover effects (only for desktop)
+    link.addEventListener('mouseenter', function() {
+      if (!this.classList.contains('active') && window.innerWidth >= 992) {
+        this.style.background = 'rgba(102, 126, 234, 0.1)';
+      }
+    });
+
+    link.addEventListener('mouseleave', function() {
+      if (!this.classList.contains('active') && window.innerWidth >= 992) {
+        this.style.background = '';
+      }
+    });
+  });
+  
+  // Helper to activate a section by key (matches data-section)
+  function activateSection(sectionKey) {
+    const link = document.querySelector('a[data-section="' + sectionKey + '"]');
+    if (link) {
+      link.click();
+      return true;
+    }
+    return false;
+  }
+
+  // Initialize based on URL (query param or hash)
+  (function initFromUrl() {
+    const params = new URLSearchParams(window.location.search);
+    const sectionParam = params.get('section');
+    if (sectionParam && sectionTitles[sectionParam]) {
+      if (activateSection(sectionParam)) {
+        // Clean the URL so it doesn't keep forcing the same tab on refresh
+        params.delete('section');
+        const base = window.location.pathname + (params.toString() ? ('?' + params.toString()) : '') + '#' + sectionParam;
+        history.replaceState(null, '', base);
+        return;
+      }
+    }
+    const rawHash = window.location.hash.substring(1);
+    const targetKey = rawHash.endsWith('-section') ? rawHash.replace('-section', '') : rawHash;
+    if (targetKey && sectionTitles[targetKey]) {
+      if (activateSection(targetKey)) {
+        // Normalize hash to '#key'
+        const url = new URL(window.location.href);
+        const params = new URLSearchParams(url.search);
+        const normalized = url.pathname + (params.toString() ? ('?' + params.toString()) : '') + '#' + targetKey;
+        history.replaceState(null, '', normalized);
+        return;
+      }
+    }
+    // Default to overview section
+    const overviewSection = document.getElementById('overview-section');
+    if (overviewSection) {
+      overviewSection.style.display = 'block';
+    }
+  })();
+
+  // Respond to hash changes
+  window.addEventListener('hashchange', function() {
+    const rawHash = window.location.hash.substring(1);
+    const targetKey = rawHash.endsWith('-section') ? rawHash.replace('-section', '') : rawHash;
+    if (targetKey && sectionTitles[targetKey]) {
+      activateSection(targetKey);
+    }
+  });
+  
+  // Handle window resize to sync mobile and desktop navigation
+  window.addEventListener('resize', function() {
+    // Reset hover effects on mobile
+    if (window.innerWidth < 992) {
+      navLinks.forEach(link => {
+        if (!link.classList.contains('active')) {
+          link.style.background = '';
+        }
+      });
+    }
+  });
+  
+  // Real-time clock for admin dashboard
+  function updateAdminClock() {
+    const now = new Date();
+    const kolkataTime = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Kolkata"}));
+    
+    const timeString = kolkataTime.toLocaleTimeString('en-IN', {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false
+    });
+    
+    const dateString = kolkataTime.toLocaleDateString('en-IN', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric'
+    });
+    
+    const adminClock = document.getElementById('admin-current-time');
+    if (adminClock) {
+      adminClock.textContent = `${dateString} ${timeString}`;
+    }
+  }
+  
+  // Update admin clock every second
+  setInterval(updateAdminClock, 1000);
+  updateAdminClock(); // Initial call
+  
+  // Restore active section from sessionStorage
+  const savedSection = sessionStorage.getItem('activeSection');
+  if (savedSection && savedSection !== 'overview') {
+    // Find the corresponding nav link and click it
+    const targetLink = document.querySelector(`[data-section="${savedSection}"]`);
+    if (targetLink) {
+      targetLink.click();
+    }
+    // Clear the saved section
+    sessionStorage.removeItem('activeSection');
+  }
+});
+
+// LMS Functions
+function filterStudents() {
+  const searchInput = document.getElementById('studentSearch');
+  if (!searchInput) {
+    console.error('Search input not found');
+    return;
+  }
+  
+  const searchTerm = searchInput.value.toLowerCase().trim();
+  const rows = document.querySelectorAll('.student-row');
+  
+  console.log('Searching for:', searchTerm, 'in', rows.length, 'rows');
+  
+  rows.forEach(row => {
+    const name = row.getAttribute('data-name') || '';
+    const email = row.getAttribute('data-email') || '';
+    const fullname = row.getAttribute('data-fullname') || '';
+    
+    if (searchTerm === '' || 
+        name.includes(searchTerm) || 
+        email.includes(searchTerm) || 
+        fullname.includes(searchTerm)) {
+      row.style.display = '';
+    } else {
+      row.style.display = 'none';
+    }
+  });
+  
+  // Update visible count and search results
+  updateStudentCount();
+  updateSearchResults(searchTerm);
+}
+
+function clearSearch() {
+  document.getElementById('studentSearch').value = '';
+  filterStudents();
+}
+
+function updateStudentCount() {
+  const visibleRows = document.querySelectorAll('.student-row:not([style*="display: none"])');
+  const totalStudents = document.getElementById('totalStudents');
+  if (totalStudents) {
+    totalStudents.textContent = visibleRows.length;
+  }
+}
+
+function updateSearchResults(searchTerm) {
+  const searchResults = document.getElementById('searchResults');
+  const searchCount = document.getElementById('searchCount');
+  const visibleRows = document.querySelectorAll('.student-row:not([style*="display: none"])');
+  
+  if (searchTerm && searchTerm.length > 0) {
+    if (searchResults && searchCount) {
+      searchCount.textContent = visibleRows.length;
+      searchResults.style.display = 'block';
+    }
+  } else {
+    if (searchResults) {
+      searchResults.style.display = 'none';
+    }
+  }
+}
+
+function viewStudentDetails(userId) {
+  // Store the current user ID for the modal
+  window.currentStudentId = userId;
+  
+  // Fetch student details and attendance history
+  fetch(`/api/student-details/${userId}/`)
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        displayStudentDetails(data.student, data.attendance_history);
+        // Show the modal
+        const modal = new bootstrap.Modal(document.getElementById('studentDetailsModal'));
+        modal.show();
+      } else {
+        alert('Error loading student details: ' + data.message);
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('Error loading student details: ' + error.message);
+    });
+}
+
+function displayStudentDetails(student, attendanceHistory) {
+  const content = document.getElementById('studentDetailsContent');
+  
+  // Student basic info
+  const studentInfo = `
+    <div class="row mb-4">
+      <div class="col-md-4">
+        <div class="text-center">
+          <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+            <span class="text-white fw-bold" style="font-size: 2rem;">${student.username.charAt(0).toUpperCase()}</span>
+          </div>
+          <h5 class="mb-1">${student.username}</h5>
+          <p class="text-muted mb-0">ID: ${student.id}</p>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="row g-3">
+          <div class="col-sm-6">
+            <strong>Email:</strong><br>
+            <span class="text-muted">${student.email || 'Not provided'}</span>
+          </div>
+          <div class="col-sm-6">
+            <strong>Full Name:</strong><br>
+            <span class="text-muted">${student.full_name || 'Not provided'}</span>
+          </div>
+          <div class="col-sm-6">
+            <strong>Mobile:</strong><br>
+            <span class="text-muted">${student.mobile_no || 'Not provided'}</span>
+          </div>
+          <div class="col-sm-6">
+            <strong>Subscription:</strong><br>
+            ${student.active_subscriptions && student.active_subscriptions.length > 0 ? 
+              `<span class="badge bg-success">${student.active_subscriptions[0].plan.title}</span>` : 
+              '<span class="badge bg-secondary">No Subscription</span>'
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+  
+  // Attendance summary
+  const attendanceSummary = `
+    <div class="row mb-4">
+      <div class="col-md-3">
+        <div class="card bg-primary text-white text-center">
+          <div class="card-body">
+            <h6 class="card-title">Total Attendance</h6>
+            <h4>${student.total_attendance_count || 0}</h4>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card bg-success text-white text-center">
+          <div class="card-body">
+            <h6 class="card-title">Present Today</h6>
+            <h4>${student.today_attendance ? 'Yes' : 'No'}</h4>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card bg-info text-white text-center">
+          <div class="card-body">
+            <h6 class="card-title">Last Attendance</h6>
+            <h6>${student.last_attendance ? new Date(student.last_attendance).toLocaleDateString() : 'Never'}</h6>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card bg-warning text-white text-center">
+          <div class="card-body">
+            <h6 class="card-title">Today's Status</h6>
+            <h6>${student.today_attendance ? 'Present' : 'Absent'}</h6>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+  
+  // Attendance history table
+  const attendanceTable = `
+    <div class="mb-4">
+      <h6 class="fw-bold mb-3">
+        <i class="bi bi-calendar-check me-2"></i>Attendance History
+      </h6>
+      <div class="table-responsive" style="max-height: 300px; overflow-y: auto;">
+        <table class="table table-sm table-hover">
+          <thead class="table-dark sticky-top">
+            <tr>
+              <th>Date</th>
+              <th>Meal</th>
+              <th>Marked At</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${attendanceHistory && attendanceHistory.length > 0 ? 
+              attendanceHistory.map(attendance => `
+                <tr>
+                  <td>${new Date(attendance.date).toLocaleDateString()}</td>
+                  <td>
+                    <span class="badge bg-info">${attendance.meal.charAt(0).toUpperCase() + attendance.meal.slice(1)}</span>
+                  </td>
+                  <td>${new Date(attendance.marked_at).toLocaleString()}</td>
+                  <td>
+                    <span class="badge bg-success">
+                      <i class="bi bi-check-circle me-1"></i>Present
+                    </span>
+                  </td>
+                </tr>
+              `).join('') :
+              '<tr><td colspan="4" class="text-center text-muted">No attendance records found</td></tr>'
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
+  
+  content.innerHTML = studentInfo + attendanceSummary + attendanceTable;
+}
+
+function markAttendanceFromModal() {
+  if (window.currentStudentId) {
+    markAttendance(window.currentStudentId);
+  }
+}
+
+function markAttendance(userId) {
+  if (confirm('Mark attendance for this student?')) {
+    console.log('Marking attendance for user ID:', userId);
+    // Send AJAX request to mark attendance
+    fetch('/api/admin/mark-attendance/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': getCookie('csrftoken')
+      },
+      body: JSON.stringify({
+        user_id: userId
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        alert('Attendance marked successfully!');
+        refreshCurrentSection(); // Refresh the page to update the data
+      } else {
+        alert('Error: ' + data.message);
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      console.error('Error details:', error.message);
+      alert('An error occurred while marking attendance: ' + error.message);
+    });
+  }
+}
+
+function exportAttendance() {
+  // Redirect to export URL
+  window.location.href = '/admin/export/attendance.csv';
+}
+
+function exportAttendanceCSV(event) {
+  event.preventDefault();
+  // Show loading indicator
+  const element = event.target.closest('a') || event.target.closest('button');
+  const originalText = element.innerHTML;
+  element.innerHTML = '<i class="bi bi-hourglass-split me-2"></i><span class="fw-medium">Exporting...</span>';
+  element.style.pointerEvents = 'none';
+  element.disabled = true;
+  
+  // Trigger download
+  window.location.href = '/admin/export/attendance.csv';
+  
+  // Reset button after a delay
+  setTimeout(() => {
+    element.innerHTML = originalText;
+    element.style.pointerEvents = 'auto';
+    element.disabled = false;
+  }, 2000);
+}
+
+function refreshAttendance() {
+  refreshCurrentSection();
+}
+
+// Helper function to get CSRF token
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+
+// User Management Functions
+function filterUsers() {
+  const searchInput = document.getElementById('userSearch');
+  if (!searchInput) {
+    console.error('User search input not found');
+    return;
+  }
+  
+  const searchTerm = searchInput.value.toLowerCase().trim();
+  const rows = document.querySelectorAll('.user-row');
+  
+  console.log('Searching users for:', searchTerm, 'in', rows.length, 'rows');
+  
+  rows.forEach(row => {
+    const name = row.getAttribute('data-name') || '';
+    const email = row.getAttribute('data-email') || '';
+    const fullname = row.getAttribute('data-fullname') || '';
+    const mobile = row.getAttribute('data-mobile') || '';
+    
+    if (searchTerm === '' || 
+        name.includes(searchTerm) || 
+        email.includes(searchTerm) || 
+        fullname.includes(searchTerm) ||
+        mobile.includes(searchTerm)) {
+      row.style.display = '';
+    } else {
+      row.style.display = 'none';
+    }
+  });
+  
+  // Update visible count and search results
+  updateUserCount();
+  updateUserSearchResults(searchTerm);
+}
+
+function clearUserSearch() {
+  document.getElementById('userSearch').value = '';
+  filterUsers();
+}
+
+function updateUserCount() {
+  const visibleRows = document.querySelectorAll('.user-row:not([style*="display: none"])');
+  const totalUsers = document.getElementById('totalUsers');
+  if (totalUsers) {
+    totalUsers.textContent = visibleRows.length;
+  }
+}
+
+function updateUserSearchResults(searchTerm) {
+  const searchResults = document.getElementById('userSearchResults');
+  const searchCount = document.getElementById('userSearchCount');
+  const visibleRows = document.querySelectorAll('.user-row:not([style*="display: none"])');
+  
+  if (searchTerm && searchTerm.length > 0) {
+    if (searchResults && searchCount) {
+      searchCount.textContent = visibleRows.length;
+      searchResults.style.display = 'block';
+    }
+  } else {
+    if (searchResults) {
+      searchResults.style.display = 'none';
+    }
+  }
+}
+
+function viewUserDetails(userId) {
+  window.currentUserId = userId;
+  
+  fetch(`/api/user-details/${userId}/`)
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        displayUserDetails(data.user);
+        const modal = new bootstrap.Modal(document.getElementById('userDetailsModal'));
+        modal.show();
+      } else {
+        alert('Error loading user details: ' + data.message);
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('Error loading user details: ' + error.message);
+    });
+}
+
+function displayUserDetails(user) {
+  const content = document.getElementById('userDetailsContent');
+  
+  const userInfo = `
+    <div class="row mb-4">
+      <div class="col-md-4">
+        <div class="text-center">
+          ${user.profile_image ? 
+            `<img src="${user.profile_image}" alt="${user.username}" class="rounded-circle mb-3" style="width: 80px; height: 80px; object-fit: cover;">` :
+            `<div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+              <span class="text-white fw-bold" style="font-size: 2rem;">${user.username.charAt(0).toUpperCase()}</span>
+            </div>`
+          }
+          <h5 class="mb-1">${user.username}</h5>
+          <p class="text-muted mb-0">ID: ${user.id}</p>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="row g-3">
+          <div class="col-sm-6">
+            <strong>Email:</strong><br>
+            <span class="text-muted">${user.email || 'Not provided'}</span>
+          </div>
+          <div class="col-sm-6">
+            <strong>Full Name:</strong><br>
+            <span class="text-muted">${user.full_name || 'Not provided'}</span>
+          </div>
+          <div class="col-sm-6">
+            <strong>Mobile:</strong><br>
+            <span class="text-muted">${user.mobile_no || 'Not provided'}</span>
+          </div>
+          <div class="col-sm-6">
+            <strong>Status:</strong><br>
+            ${user.is_active ? '<span class="badge bg-success">Active</span>' : '<span class="badge bg-danger">Inactive</span>'}
+            ${user.is_staff ? '<span class="badge bg-info ms-1">Staff</span>' : ''}
+          </div>
+          <div class="col-sm-6">
+            <strong>Date Joined:</strong><br>
+            <span class="text-muted">${new Date(user.date_joined).toLocaleDateString()}</span>
+          </div>
+          <div class="col-sm-6">
+            <strong>Last Login:</strong><br>
+            <span class="text-muted">${user.last_login ? new Date(user.last_login).toLocaleDateString() : 'Never'}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row mb-4">
+      <div class="col-md-6">
+        <div class="card bg-primary text-white text-center">
+          <div class="card-body">
+            <h6 class="card-title">Total Attendance</h6>
+            <h4>${user.total_attendance_count || 0}</h4>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card bg-success text-white text-center">
+          <div class="card-body">
+            <h6 class="card-title">Active Subscriptions</h6>
+            <h4>${user.active_subscriptions ? user.active_subscriptions.length : 0}</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+  
+  content.innerHTML = userInfo;
+}
+
+function editUser(userId) {
+  window.currentUserId = userId;
+  
+  fetch(`/api/user-details/${userId}/`)
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        populateUserForm(data.user);
+        document.getElementById('addEditUserModalLabel').innerHTML = '<i class="bi bi-pencil me-2"></i>Edit User';
+        const modal = new bootstrap.Modal(document.getElementById('addEditUserModal'));
+        modal.show();
+      } else {
+        alert('Error loading user details: ' + data.message);
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('Error loading user details: ' + error.message);
+    });
+}
+
+function editUserFromModal() {
+  if (window.currentUserId) {
+    editUser(window.currentUserId);
+  }
+}
+
+function showAddUserModal() {
+  clearUserForm();
+  document.getElementById('addEditUserModalLabel').innerHTML = '<i class="bi bi-person-plus me-2"></i>Add New User';
+  const modal = new bootstrap.Modal(document.getElementById('addEditUserModal'));
+  modal.show();
+}
+
+function populateUserForm(user) {
+  document.getElementById('userId').value = user.id;
+  document.getElementById('username').value = user.username;
+  document.getElementById('email').value = user.email;
+  document.getElementById('fullName').value = user.full_name || '';
+  document.getElementById('mobileNo').value = user.mobile_no || '';
+  document.getElementById('isActive').checked = user.is_active;
+  document.getElementById('isStaff').checked = user.is_staff;
+  
+  // Hide password fields for editing
+  document.getElementById('password').required = false;
+  document.getElementById('confirmPassword').required = false;
+  document.getElementById('password').parentElement.style.display = 'none';
+  document.getElementById('confirmPassword').parentElement.style.display = 'none';
+}
+
+function clearUserForm() {
+  document.getElementById('userForm').reset();
+  document.getElementById('userId').value = '';
+  document.getElementById('password').required = true;
+  document.getElementById('confirmPassword').required = true;
+  document.getElementById('password').parentElement.style.display = 'block';
+  document.getElementById('confirmPassword').parentElement.style.display = 'block';
+}
+
+function saveUser() {
+  const form = document.getElementById('userForm');
+  const formData = new FormData(form);
+  const isEdit = document.getElementById('userId').value !== '';
+  
+  // Validate password confirmation for new users
+  if (!isEdit) {
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+    if (password !== confirmPassword) {
+      alert('Passwords do not match!');
+      return;
+    }
+  }
+  
+  // Process form data and convert checkbox values to booleans
+  const data = Object.fromEntries(formData);
+  
+  // Convert checkbox values to proper booleans
+  data.is_active = document.getElementById('isActive').checked;
+  data.is_staff = document.getElementById('isStaff').checked;
+  
+  // Remove password fields if they're empty (for editing)
+  if (isEdit) {
+    if (!data.password || data.password.trim() === '') {
+      delete data.password;
+    }
+    if (!data.confirm_password || data.confirm_password.trim() === '') {
+      delete data.confirm_password;
+    }
+  }
+  
+  // Debug: Log the data being sent
+  console.log('Sending user data:', data);
+  
+  // Handle profile image upload
+  const profileImageFile = document.getElementById('profileImage').files[0];
+  if (profileImageFile) {
+    // For now, we'll skip file upload in this implementation
+    // In a real implementation, you'd need to handle multipart/form-data
+    console.log('Profile image selected:', profileImageFile.name);
+  }
+  
+  fetch('/api/admin/user/', {
+    method: isEdit ? 'PUT' : 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': getCookie('csrftoken')
+    },
+    body: JSON.stringify(data)
+  })
+  .then(response => {
+    console.log('Response status:', response.status);
+    return response.json();
+  })
+  .then(data => {
+    console.log('Response data:', data);
+    if (data.success) {
+      alert(isEdit ? 'User updated successfully!' : 'User created successfully!');
+      // Close modal and refresh data without changing section
+      const modal = bootstrap.Modal.getInstance(document.getElementById('addEditUserModal'));
+      if (modal) modal.hide();
+      refreshCurrentSection();
+    } else {
+      alert('Error: ' + (data.message || 'Unknown error occurred'));
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    alert('An error occurred: ' + error.message);
+  });
+}
+
+function deleteUser(userId) {
+  window.currentUserId = userId;
+  
+  fetch(`/api/user-details/${userId}/`)
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        const userInfo = `
+          <div class="bg-light p-3 rounded">
+            <div class="d-flex align-items-center mb-3">
+              ${data.user.profile_image ? 
+                `<img src="${data.user.profile_image}" alt="${data.user.username}" class="rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover;">` :
+                `<div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                  <span class="text-white fw-bold">${data.user.username.charAt(0).toUpperCase()}</span>
+                </div>`
+              }
+              <div>
+                <strong>${data.user.username}</strong><br>
+                <small class="text-muted">ID: ${data.user.id}</small>
+              </div>
+            </div>
+            <strong>Email:</strong> ${data.user.email}<br>
+            <strong>Full Name:</strong> ${data.user.full_name || 'Not provided'}<br>
+            <strong>Mobile:</strong> ${data.user.mobile_no || 'Not provided'}
+          </div>
+        `;
+        document.getElementById('deleteUserInfo').innerHTML = userInfo;
+        const modal = new bootstrap.Modal(document.getElementById('deleteUserModal'));
+        modal.show();
+      } else {
+        alert('Error loading user details: ' + data.message);
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('Error loading user details: ' + error.message);
+    });
+}
+
+function confirmDeleteUser() {
+  if (!window.currentUserId) return;
+  
+  fetch('/api/admin/user/', {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': getCookie('csrftoken')
+    },
+    body: JSON.stringify({
+      user_id: window.currentUserId
+    })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      alert('User deleted successfully!');
+      // Close modal and refresh data without changing section
+      const modal = bootstrap.Modal.getInstance(document.getElementById('deleteUserModal'));
+      if (modal) modal.hide();
+      refreshCurrentSection();
+    } else {
+      alert('Error: ' + data.message);
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    alert('An error occurred: ' + error.message);
+  });
+}
+
+function exportUsers() {
+  window.location.href = '/admin/export/users.csv';
+}
+
+function exportUsersCSV(event) {
+  event.preventDefault();
+  // Show loading indicator
+  const button = event.target.closest('button');
+  const originalText = button.innerHTML;
+  button.innerHTML = '<i class="bi bi-hourglass-split me-1"></i>Exporting...';
+  button.disabled = true;
+  
+  // Trigger download
+  window.location.href = '/admin/export/users.csv';
+  
+  // Reset button after a delay
+  setTimeout(() => {
+    button.innerHTML = originalText;
+    button.disabled = false;
+  }, 2000);
+}
+
+function refreshUsers() {
+  refreshCurrentSection();
+}
+
+// Global variable to store current meal feedbacks
+let currentMealFeedbacks = [];
+
+// Quick Actions Navigation Function
+function navigateToSection(sectionName) {
+  // Find the corresponding nav link and click it
+  const targetLink = document.querySelector(`[data-section="${sectionName}"]`);
+  if (targetLink) {
+    targetLink.click();
+  } else {
+    console.error('Section not found:', sectionName);
+  }
+}
+
+// Meal Feedback Functions
+function refreshMealFeedback() {
+  loadMealFeedback();
+}
+
+function loadMealFeedback() {
+  const mealType = document.getElementById('mealTypeFilter').value;
+  const dateFrom = document.getElementById('dateFromFilter').value;
+  const dateTo = document.getElementById('dateToFilter').value;
+  const ratingMin = document.getElementById('ratingFilter').value;
+  
+  const params = new URLSearchParams();
+  if (mealType) params.append('meal_type', mealType);
+  if (dateFrom) params.append('date_from', dateFrom);
+  if (dateTo) params.append('date_to', dateTo);
+  if (ratingMin) params.append('rating_min', ratingMin);
+  
+  fetch(`/api/meal-feedback-list/?${params.toString()}`)
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        currentMealFeedbacks = data.feedbacks; // Store feedbacks globally
+        displayMealFeedback(data.feedbacks);
+        updateMealFeedbackStats(data);
+        updateMealFeedbackPagination(data);
+      } else {
+        console.error('Error loading meal feedback:', data.message);
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+}
+
+function displayMealFeedback(feedbacks) {
+  const tbody = document.getElementById('mealFeedbackTableBody');
+  tbody.innerHTML = '';
+  
+  if (feedbacks.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="8" class="text-center text-muted py-4">No feedback found</td></tr>';
+    return;
+  }
+  
+  feedbacks.forEach(feedback => {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>
+        <div class="d-flex align-items-center">
+          ${feedback.user.profile_image ? 
+            `<img src="${feedback.user.profile_image}" alt="${feedback.user.username}" class="rounded-circle me-2" style="width: 32px; height: 32px; object-fit: cover;">` :
+            `<div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px;">
+              <span class="text-white small fw-bold">${feedback.user.username.charAt(0).toUpperCase()}</span>
+            </div>`
+          }
+          <div>
+            <div class="fw-medium">${feedback.user.username}</div>
+            <small class="text-muted">${feedback.user.full_name}</small>
+          </div>
+        </div>
+      </td>
+      <td>
+        <span class="badge bg-info">${feedback.meal_type}</span>
+      </td>
+      <td>${feedback.meal_date}</td>
+      <td>
+        <div class="d-flex align-items-center">
+          <span class="me-2">${feedback.rating}/5</span>
+          <div>
+            ${'★'.repeat(feedback.rating)}${'☆'.repeat(5 - feedback.rating)}
+          </div>
+        </div>
+      </td>
+      <td>
+        <div class="small">
+          ${feedback.taste_rating ? `<div>Taste: ${feedback.taste_rating}/5</div>` : ''}
+          ${feedback.quantity_rating ? `<div>Quantity: ${feedback.quantity_rating}/5</div>` : ''}
+          ${feedback.hygiene_rating ? `<div>Hygiene: ${feedback.hygiene_rating}/5</div>` : ''}
+        </div>
+      </td>
+      <td>
+        <div class="text-truncate" style="max-width: 200px;" title="${feedback.comments}">
+          ${feedback.comments || 'No comments'}
+        </div>
+      </td>
+      <td>
+        <small class="text-muted">${feedback.created_at}</small>
+      </td>
+      <td>
+        <button class="btn btn-sm btn-outline-primary" onclick="viewMealFeedback(${feedback.id})">
+          <i class="bi bi-eye"></i>
+        </button>
+      </td>
+    `;
+    tbody.appendChild(row);
+  });
+}
+
+function updateMealFeedbackStats(data) {
+  // Update statistics with real data from API
+  document.getElementById('totalFeedbackCount').textContent = data.total || 0;
+  document.getElementById('avgRating').textContent = (data.avg_rating || 0).toFixed(1);
+  document.getElementById('todayFeedbackCount').textContent = data.today_feedback || 0;
+  document.getElementById('lowRatingCount').textContent = data.low_ratings || 0;
+}
+
+function updateMealFeedbackPagination(data) {
+  const pagination = document.getElementById('mealFeedbackPagination');
+  pagination.innerHTML = '';
+  
+  if (data.has_prev) {
+    const prevLi = document.createElement('li');
+    prevLi.className = 'page-item';
+    prevLi.innerHTML = `<a class="page-link" href="#" onclick="loadMealFeedbackPage(${data.page - 1})">Previous</a>`;
+    pagination.appendChild(prevLi);
+  }
+  
+  if (data.has_next) {
+    const nextLi = document.createElement('li');
+    nextLi.className = 'page-item';
+    nextLi.innerHTML = `<a class="page-link" href="#" onclick="loadMealFeedbackPage(${data.page + 1})">Next</a>`;
+    pagination.appendChild(nextLi);
+  }
+}
+
+function loadMealFeedbackPage(page) {
+  // Add page parameter and reload
+  const params = new URLSearchParams(window.location.search);
+  params.set('page', page);
+  loadMealFeedback();
+}
+
+function filterMealFeedback() {
+  loadMealFeedback();
+}
+
+function exportMealFeedback() {
+  // Export meal feedback to CSV
+  window.location.href = '/admin/export/meal-feedback.csv';
+}
+
+function viewMealFeedback(feedbackId) {
+  // Find the feedback data from the current loaded feedbacks
+  const feedback = currentMealFeedbacks.find(f => f.id === feedbackId);
+  if (!feedback) {
+    console.error('Feedback not found:', feedbackId);
+    return;
+  }
+  
+  // Display feedback details in modal
+  displayMealFeedbackDetails(feedback);
+  
+  // Show the modal
+  const modal = new bootstrap.Modal(document.getElementById('mealFeedbackDetailsModal'));
+  modal.show();
+}
+
+function displayMealFeedbackDetails(feedback) {
+  const content = document.getElementById('mealFeedbackDetailsContent');
+  
+  // Create star rating display
+  const createStarRating = (rating) => {
+    let stars = '';
+    for (let i = 1; i <= 5; i++) {
+      if (i <= rating) {
+        stars += '<i class="bi bi-star-fill text-warning"></i>';
+      } else {
+        stars += '<i class="bi bi-star text-muted"></i>';
+      }
+    }
+    return stars;
+  };
+  
+  content.innerHTML = `
+    <div class="row">
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-body text-center">
+            ${feedback.user.profile_image ? 
+              `<img src="${feedback.user.profile_image}" alt="${feedback.user.username}" class="rounded-circle mb-3" style="width: 80px; height: 80px; object-fit: cover;">` :
+              `<div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                <span class="text-white fw-bold" style="font-size: 2rem;">${feedback.user.username.charAt(0).toUpperCase()}</span>
+              </div>`
+            }
+            <h6 class="mb-1">${feedback.user.username}</h6>
+            <small class="text-muted">${feedback.user.full_name}</small>
+            ${feedback.is_anonymous ? '<br><span class="badge bg-secondary mt-1">Anonymous</span>' : ''}
+          </div>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="row g-3">
+          <div class="col-12">
+            <h6 class="text-primary mb-2">
+              <i class="bi bi-calendar-event me-1"></i>Meal Information
+            </h6>
+            <div class="row">
+              <div class="col-sm-6">
+                <strong>Meal Type:</strong><br>
+                <span class="badge bg-info fs-6">${feedback.meal_type}</span>
+              </div>
+              <div class="col-sm-6">
+                <strong>Date:</strong><br>
+                <span class="text-muted">${feedback.meal_date}</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-12">
+            <h6 class="text-primary mb-2">
+              <i class="bi bi-star me-1"></i>Ratings
+            </h6>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <div class="d-flex justify-content-between align-items-center">
+                  <span><strong>Overall Rating:</strong></span>
+                  <div>
+                    ${createStarRating(feedback.rating)}
+                    <span class="ms-2 fw-bold">${feedback.rating}/5</span>
+                  </div>
+                </div>
+              </div>
+              ${feedback.taste_rating ? `
+                <div class="col-md-6">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <span><strong>Taste:</strong></span>
+                    <div>
+                      ${createStarRating(feedback.taste_rating)}
+                      <span class="ms-2 fw-bold">${feedback.taste_rating}/5</span>
+                    </div>
+                  </div>
+                </div>
+              ` : ''}
+              ${feedback.quantity_rating ? `
+                <div class="col-md-6">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <span><strong>Quantity:</strong></span>
+                    <div>
+                      ${createStarRating(feedback.quantity_rating)}
+                      <span class="ms-2 fw-bold">${feedback.quantity_rating}/5</span>
+                    </div>
+                  </div>
+                </div>
+              ` : ''}
+              ${feedback.hygiene_rating ? `
+                <div class="col-md-6">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <span><strong>Hygiene:</strong></span>
+                    <div>
+                      ${createStarRating(feedback.hygiene_rating)}
+                      <span class="ms-2 fw-bold">${feedback.hygiene_rating}/5</span>
+                    </div>
+                  </div>
+                </div>
+              ` : ''}
+            </div>
+          </div>
+          
+          ${feedback.comments ? `
+            <div class="col-12">
+              <h6 class="text-primary mb-2">
+                <i class="bi bi-chat-text me-1"></i>Comments
+              </h6>
+              <div class="card bg-light">
+                <div class="card-body">
+                  <p class="mb-0">${feedback.comments}</p>
+                </div>
+              </div>
+            </div>
+          ` : ''}
+          
+          <div class="col-12">
+            <h6 class="text-primary mb-2">
+              <i class="bi bi-info-circle me-1"></i>Additional Information
+            </h6>
+            <div class="row">
+              <div class="col-sm-6">
+                <strong>Submitted:</strong><br>
+                <span class="text-muted">${feedback.created_at}</span>
+              </div>
+              <div class="col-sm-6">
+                <strong>Overall Score:</strong><br>
+                <span class="badge bg-success fs-6">${feedback.overall_rating}/5</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// Profile image preview functionality
+document.addEventListener('DOMContentLoaded', function() {
+  const profileImageInput = document.getElementById('profileImage');
+  const previewContainer = document.getElementById('profileImagePreview');
+  const previewImg = document.getElementById('previewImg');
+  
+  if (profileImageInput) {
+    profileImageInput.addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          previewImg.src = e.target.result;
+          previewContainer.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+      } else {
+        previewContainer.style.display = 'none';
+      }
+    });
+  }
+});
+
+// Function to refresh current section without changing the active section
+function refreshCurrentSection() {
+  // Get the current active section
+  const activeSection = document.querySelector('.dashboard-section:not([style*="display: none"])');
+  if (activeSection) {
+    const sectionId = activeSection.id;
+    
+    // If we're in user management section, reload the page but stay in that section
+    if (sectionId === 'user-management-section') {
+      // Store the current section in sessionStorage
+      sessionStorage.setItem('activeSection', 'user-management');
+      location.reload();
+    } else if (sectionId === 'lms-section') {
+      // Store the current section in sessionStorage
+      sessionStorage.setItem('activeSection', 'lms');
+      location.reload();
+    } else {
+      // For other sections, just reload normally
+      location.reload();
+    }
+  } else {
+    location.reload();
+  }
+}
+</script>
+
+{% endblock %}

@@ -1,0 +1,272 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Meal Feedback - Tanya's Kitchen{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Header -->
+            <div class="text-center mb-4">
+                <h2 class="fw-bold text-primary">
+                    <i class="bi bi-chat-heart me-2"></i>Meal Feedback
+                </h2>
+                <p class="text-muted">Share your thoughts about our meals to help us improve</p>
+            </div>
+
+            <!-- Feedback Form -->
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-star me-2"></i>Rate Your Meal
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" id="feedbackForm">
+                        {% csrf_token %}
+                        <div class="row g-3">
+                            <!-- Meal Type -->
+                            <div class="col-md-6">
+                                <label for="{{ form.meal_type.id_for_label }}" class="form-label">
+                                    <i class="bi bi-utensils me-1"></i>Meal Type *
+                                </label>
+                                {{ form.meal_type }}
+                                {% if form.meal_type.errors %}
+                                    <div class="text-danger small">{{ form.meal_type.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Meal Date -->
+                            <div class="col-md-6">
+                                <label for="{{ form.meal_date.id_for_label }}" class="form-label">
+                                    <i class="bi bi-calendar me-1"></i>Meal Date *
+                                </label>
+                                {{ form.meal_date }}
+                                {% if form.meal_date.errors %}
+                                    <div class="text-danger small">{{ form.meal_date.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Overall Rating -->
+                            <div class="col-12">
+                                <label for="{{ form.rating.id_for_label }}" class="form-label">
+                                    <i class="bi bi-star me-1"></i>Overall Rating *
+                                </label>
+                                {{ form.rating }}
+                                {% if form.rating.errors %}
+                                    <div class="text-danger small">{{ form.rating.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Detailed Ratings -->
+                            <div class="col-12">
+                                <h6 class="text-muted mb-3">Detailed Ratings (Optional)</h6>
+                                <div class="row g-3">
+                                    <div class="col-md-4">
+                                        <label for="{{ form.taste_rating.id_for_label }}" class="form-label">
+                                            <i class="bi bi-emoji-smile me-1"></i>Taste
+                                        </label>
+                                        {{ form.taste_rating }}
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="{{ form.quantity_rating.id_for_label }}" class="form-label">
+                                            <i class="bi bi-box me-1"></i>Quantity
+                                        </label>
+                                        {{ form.quantity_rating }}
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="{{ form.hygiene_rating.id_for_label }}" class="form-label">
+                                            <i class="bi bi-shield-check me-1"></i>Hygiene
+                                        </label>
+                                        {{ form.hygiene_rating }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Comments -->
+                            <div class="col-12">
+                                <label for="{{ form.comments.id_for_label }}" class="form-label">
+                                    <i class="bi bi-chat-text me-1"></i>Comments
+                                </label>
+                                {{ form.comments }}
+                                {% if form.comments.errors %}
+                                    <div class="text-danger small">{{ form.comments.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Anonymous Option -->
+                            <div class="col-12">
+                                <div class="form-check">
+                                    {{ form.is_anonymous }}
+                                    <label class="form-check-label" for="{{ form.is_anonymous.id_for_label }}">
+                                        <i class="bi bi-eye-slash me-1"></i>Submit anonymously
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="col-12 text-center">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="bi bi-send me-2"></i>Submit Feedback
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Recent Feedback -->
+            {% if recent_feedback %}
+            <div class="card shadow-sm mt-4">
+                <div class="card-header bg-light">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-clock-history me-2"></i>Your Recent Feedback
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="list-group list-group-flush">
+                        {% for feedback in recent_feedback %}
+                        <div class="list-group-item px-0 py-3">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div class="flex-grow-1">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <h6 class="mb-0 me-3">{{ feedback.get_meal_type_display }}</h6>
+                                        <span class="badge bg-secondary">{{ feedback.meal_date }}</span>
+                                        <div class="ms-3">
+                                            {% for i in "12345" %}
+                                                {% if forloop.counter <= feedback.rating %}
+                                                    <i class="bi bi-star-fill text-warning"></i>
+                                                {% else %}
+                                                    <i class="bi bi-star text-muted"></i>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    {% if feedback.comments %}
+                                        <p class="text-muted mb-1">{{ feedback.comments|truncatechars:100 }}</p>
+                                    {% endif %}
+                                    <small class="text-muted">
+                                        <i class="bi bi-clock me-1"></i>{{ feedback.created_at|timesince }} ago
+                                    </small>
+                                </div>
+                                <div class="text-end">
+                                    {% if feedback.taste_rating %}
+                                        <small class="text-muted d-block">Taste: {{ feedback.taste_rating }}/5</small>
+                                    {% endif %}
+                                    {% if feedback.quantity_rating %}
+                                        <small class="text-muted d-block">Quantity: {{ feedback.quantity_rating }}/5</small>
+                                    {% endif %}
+                                    {% if feedback.hygiene_rating %}
+                                        <small class="text-muted d-block">Hygiene: {{ feedback.hygiene_rating }}/5</small>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Add star rating visual feedback
+    const ratingSelects = document.querySelectorAll('select[id$="_rating"]');
+    ratingSelects.forEach(select => {
+        select.addEventListener('change', function() {
+            const value = parseInt(this.value);
+            const container = this.parentElement;
+            const stars = container.querySelectorAll('.rating-stars');
+            
+            // Remove existing star display if any
+            const existingStars = container.querySelector('.rating-display');
+            if (existingStars) {
+                existingStars.remove();
+            }
+            
+            if (value > 0) {
+                const starDisplay = document.createElement('div');
+                starDisplay.className = 'rating-display mt-1';
+                starDisplay.innerHTML = '★'.repeat(value) + '☆'.repeat(5 - value);
+                starDisplay.style.color = '#ffc107';
+                container.appendChild(starDisplay);
+            }
+        });
+    });
+    
+    // Form validation
+    const form = document.getElementById('feedbackForm');
+    form.addEventListener('submit', function(e) {
+        const mealType = document.getElementById('id_meal_type').value;
+        const mealDate = document.getElementById('id_meal_date').value;
+        const rating = document.getElementById('id_rating').value;
+        
+        if (!mealType || !mealDate || !rating) {
+            e.preventDefault();
+            alert('Please fill in all required fields.');
+            return false;
+        }
+        
+        // Show loading state
+        const submitBtn = this.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Submitting...';
+        submitBtn.disabled = true;
+        
+        // Re-enable after 3 seconds (in case of error)
+        setTimeout(() => {
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+        }, 3000);
+    });
+});
+</script>
+
+<style>
+.rating-display {
+    font-size: 1.2em;
+    letter-spacing: 2px;
+}
+
+.form-control:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+.card {
+    border: none;
+    border-radius: 15px;
+}
+
+.card-header {
+    border-radius: 15px 15px 0 0 !important;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    border-radius: 10px;
+    padding: 12px 30px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+.list-group-item {
+    border: none;
+    border-bottom: 1px solid #eee;
+}
+
+.list-group-item:last-child {
+    border-bottom: none;
+}
+</style>
+{% endblock %}

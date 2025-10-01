@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h3 class="mb-0">Manage Plans</h3>
+  <span class="text-muted small">Add a new plan below</span>
+  </div>
+
+<div class="card mb-3"><div class="card-body">
+  <form method="post">{% csrf_token %}
+    <div class="row g-2">
+      <div class="col-md-3">
+        <label class="form-label">Title</label>
+        <input name="title" class="form-control" required>
+      </div>
+      <div class="col-md-2">
+        <label class="form-label">Price</label>
+        <input name="price" type="number" step="0.01" class="form-control" required>
+      </div>
+      <div class="col-md-2">
+        <label class="form-label">Billing Period</label>
+        <select name="billing_period" class="form-select">
+          <option value="monthly">Monthly</option>
+          <option value="quarterly">Quarterly</option>
+          <option value="yearly">Yearly</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Included Meals</label>
+        <select name="included_meals" class="form-select" multiple>
+          <option value="breakfast">Breakfast</option>
+          <option value="lunch">Lunch</option>
+          <option value="dinner">Dinner</option>
+        </select>
+        <div class="form-text">Hold Ctrl/Command to select multiple</div>
+      </div>
+      <div class="col-md-2 d-flex align-items-end">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="is_active" id="isActive" checked>
+          <label class="form-check-label" for="isActive">Active</label>
+        </div>
+      </div>
+      <div class="col-12">
+        <label class="form-label">Features</label>
+        <textarea name="features" rows="2" class="form-control"></textarea>
+      </div>
+      <div class="col-12">
+        <button class="btn btn-primary" type="submit">Save Plan</button>
+      </div>
+    </div>
+  </form>
+  </div></div>
+
+<div class="table-responsive">
+  <table class="table align-middle">
+    <thead>
+      <tr>
+        <th>Name</th><th>Price</th><th>Duration</th><th>Active</th><th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in plans %}
+      <tr>
+        <td>{{ p.title }}</td>
+        <td>₹{{ p.price }}</td>
+        <td>{{ p.billing_period|title }}</td>
+        <td>{% if p.is_active %}<span class="badge bg-success">Active</span>{% else %}<span class="badge bg-secondary">Inactive</span>{% endif %}</td>
+        <td><a class="btn btn-sm btn-outline-primary" href="/plans/{{ p.id }}/buy/" target="_blank">View</a></td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="5" class="text-center text-muted">No plans found.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
+
