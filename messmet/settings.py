@@ -117,8 +117,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+# Only include BASE_DIR/static if it exists to avoid W004 on Render
+STATICFILES_DIRS = []
+_static_dir = BASE_DIR / 'static'
+if _static_dir.exists():
+    STATICFILES_DIRS = [_static_dir]
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_URL = 'media/'
