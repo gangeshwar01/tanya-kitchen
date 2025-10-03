@@ -587,9 +587,77 @@
               </table>
             </div>
             <div class="mt-3">
-              <a href="/plans/" class="btn btn-primary">
-                <i class="bi bi-plus me-2"></i>Manage Plans
-              </a>
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addPlanModal">
+                <i class="bi bi-plus me-2"></i>Add Plan
+              </button>
+            </div>
+            
+            <!-- Add Plan Modal -->
+            <div class="modal fade" id="addPlanModal" tabindex="-1" aria-labelledby="addPlanModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="addPlanModalLabel">Add Subscription Plan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <form method="post" action="{{ request.path }}#plans">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="add_plan">
+                    <div class="modal-body">
+                      <div class="row g-3">
+                        <div class="col-md-6">
+                          <label class="form-label">Title</label>
+                          <input type="text" name="title" class="form-control" placeholder="e.g. Basic" required>
+                        </div>
+                        <div class="col-md-6">
+                          <label class="form-label">Price (₹)</label>
+                          <input type="number" name="price" class="form-control" min="0" step="0.01" placeholder="e.g. 4000" required>
+                        </div>
+                        <div class="col-md-6">
+                          <label class="form-label">Billing Period</label>
+                          <select name="billing_period" class="form-select">
+                            <option value="monthly">Monthly</option>
+                            <option value="quarterly">Quarterly</option>
+                            <option value="yearly">Yearly</option>
+                          </select>
+                        </div>
+                        <div class="col-md-6">
+                          <label class="form-label">Status</label>
+                          <select name="is_active" class="form-select">
+                            <option value="1">Active</option>
+                            <option value="0">Inactive</option>
+                          </select>
+                        </div>
+                        <div class="col-12">
+                          <label class="form-label">Included Meals</label>
+                          <div class="d-flex gap-3 flex-wrap">
+                            <div class="form-check">
+                              <input class="form-check-input" type="checkbox" id="mealBreakfast" name="included_meals" value="breakfast">
+                              <label class="form-check-label" for="mealBreakfast">Breakfast</label>
+                            </div>
+                            <div class="form-check">
+                              <input class="form-check-input" type="checkbox" id="mealLunch" name="included_meals" value="lunch">
+                              <label class="form-check-label" for="mealLunch">Lunch</label>
+                            </div>
+                            <div class="form-check">
+                              <input class="form-check-input" type="checkbox" id="mealDinner" name="included_meals" value="dinner">
+                              <label class="form-check-label" for="mealDinner">Dinner</label>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-12">
+                          <label class="form-label">Features</label>
+                          <textarea name="features" class="form-control" rows="4" placeholder="Comma-separated or free text features"></textarea>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                      <button type="submit" class="btn btn-primary">Save Plan</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
             </div>
           </div>
         </div>
