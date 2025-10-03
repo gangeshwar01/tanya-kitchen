@@ -1058,9 +1058,9 @@
                         <button class="btn btn-outline-primary" onclick="viewStudentDetails({{ user.id }})" title="View Details">
                           <i class="bi bi-eye"></i>
                         </button>
-                        <button class="btn btn-outline-success" onclick="markAttendance({{ user.id }})" title="Mark Attendance">
+                        {% comment %} <button class="btn btn-outline-success" onclick="markAttendance({{ user.id }})" title="Mark Attendance">
                           <i class="bi bi-check"></i>
-                        </button>
+                        </button> {% endcomment %}
                       </div>
                     </td>
                   </tr>
@@ -1442,7 +1442,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="studentDetailsModalLabel">
-          <i class="bi bi-person-circle me-2"></i>Student Details
+          <i class="bi bi-person-circle me-2"></i>Users Details
         </h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
@@ -1453,9 +1453,9 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="markAttendanceBtn" onclick="markAttendanceFromModal()">
+        {% comment %} <button type="button" class="btn btn-primary" id="markAttendanceBtn" onclick="markAttendanceFromModal()">
           <i class="bi bi-check-circle me-1"></i>Mark Attendance
-        </button>
+        </button> {% endcomment %}
       </div>
     </div>
   </div>
