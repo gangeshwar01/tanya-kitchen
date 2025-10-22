@@ -70,7 +70,7 @@ class SubscriptionPlan(models.Model):
 
 class UserSubscription(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="subscriptions")
-    plan = models.ForeignKey(SubscriptionPlan, on_delete=models.PROTECT, related_name="user_subscriptions")
+    plan = models.ForeignKey(SubscriptionPlan, on_delete=models.CASCADE, related_name="user_subscriptions")
     start_date = models.DateField()
     end_date = models.DateField()
     active = models.BooleanField(default=True)
@@ -94,7 +94,7 @@ class PaymentProof(models.Model):
     ]
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="payment_proofs")
-    subscription_plan = models.ForeignKey(SubscriptionPlan, on_delete=models.PROTECT, related_name="payment_proofs")
+    subscription_plan = models.ForeignKey(SubscriptionPlan, on_delete=models.CASCADE, related_name="payment_proofs")
     screenshot = models.ImageField(upload_to="payments/")
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default=STATUS_PENDING)
     txn_id = models.CharField(max_length=100, blank=True)

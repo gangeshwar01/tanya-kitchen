@@ -240,8 +240,10 @@ def dashboard(request):
                     plan_id = request.POST.get("plan_id")
                     from .models import SubscriptionPlan as SP
                     try:
-                        SP.objects.get(pk=plan_id).delete()
-                        messages.success(request, "Plan deleted.")
+                        plan = SP.objects.get(pk=plan_id)
+                        plan_title = plan.title
+                        plan.delete()  # This will now cascade delete related UserSubscription and PaymentProof records
+                        messages.success(request, f"Plan '{plan_title}' and all related records deleted successfully.")
                     except Exception as e:
                         messages.error(request, f"Cannot delete plan: {e}")
                 elif action == "delete_visitor_feedback":
@@ -272,9 +274,12 @@ def dashboard(request):
             except PaymentProof.DoesNotExist:
                 messages.error(request, "Payment not found")
             
-            # Redirect back to dashboard with a temporary query param so JS can open payments once
+            # Redirect back to dashboard with appropriate section based on action
             from django.http import HttpResponseRedirect
-            return HttpResponseRedirect(reverse('dashboard') + '?section=payments')
+            if action == "delete_plan":
+                return HttpResponseRedirect(reverse('dashboard') + '?section=plans')
+            else:
+                return HttpResponseRedirect(reverse('dashboard') + '?section=payments')
         
         return redirect('dashboard')
     
