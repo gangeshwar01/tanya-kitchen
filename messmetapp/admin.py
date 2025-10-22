@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
-from .models import User, SubscriptionPlan, UserSubscription, Attendance, MonthlyMenu, Notification, PaymentConfig, Feedback, CarouselImage
+from .models import User, SubscriptionPlan, UserSubscription, PaymentProof, Attendance, MonthlyMenu, Notification, PaymentConfig, Feedback, CarouselImage, FoodImage
 
 
 @admin.register(User)
@@ -104,5 +104,21 @@ class CarouselImageAdmin(admin.ModelAdmin):
     list_filter = ("is_active", "created_at")
     search_fields = ("title", "description")
     list_editable = ("is_active", "order")
+
+
+@admin.register(FoodImage)
+class FoodImageAdmin(admin.ModelAdmin):
+    list_display = ("title", "meal_type", "is_active", "order", "created_at")
+    list_filter = ("meal_type", "is_active", "created_at")
+    search_fields = ("title", "description")
+    list_editable = ("is_active", "order")
+    fieldsets = (
+        (None, {
+            'fields': ('title', 'image', 'description')
+        }),
+        ('Settings', {
+            'fields': ('meal_type', 'is_active', 'order')
+        }),
+    )
 
 # Register your models here.

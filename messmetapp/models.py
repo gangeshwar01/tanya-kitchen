@@ -274,3 +274,19 @@ class VisitorFeedback(models.Model):
 
     def __str__(self) -> str:
         return f"VisitorFeedback {self.name} - {self.meal_type}"
+
+
+class FoodImage(models.Model):
+    title = models.CharField(max_length=200)
+    image = models.ImageField(upload_to='food_gallery/')
+    description = models.TextField(blank=True)
+    meal_type = models.CharField(max_length=20, choices=SubscriptionPlan.MEAL_CHOICES, blank=True)
+    is_active = models.BooleanField(default=True)
+    order = models.PositiveIntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['order', '-created_at']
+
+    def __str__(self) -> str:
+        return self.title

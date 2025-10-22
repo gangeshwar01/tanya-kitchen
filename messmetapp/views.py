@@ -31,8 +31,9 @@ import csv
 
 def home(request):
     plans = SubscriptionPlan.objects.filter(is_active=True)
-    from .models import CarouselImage
+    from .models import CarouselImage, FoodImage
     carousel_images = CarouselImage.objects.filter(is_active=True).order_by('order', '-created_at')
+    food_images = FoodImage.objects.filter(is_active=True).order_by('order', '-created_at')
     
     # Get attendance data for authenticated users
     attendance_data = None
@@ -59,6 +60,7 @@ def home(request):
     return render(request, 'home.html', {
         "plans": plans, 
         "carousel_images": carousel_images,
+        "food_images": food_images,
         "attendance_data": attendance_data
     })
 
@@ -206,6 +208,42 @@ def dashboard(request):
             except CarouselImage.DoesNotExist:
                 messages.error(request, "Carousel image not found")
         
+        # Handle food gallery image management
+        elif action == "add_food_image":
+            title = request.POST.get("title", "").strip()
+            image = request.FILES.get("image")
+            description = request.POST.get("description", "").strip()
+            meal_type = request.POST.get("meal_type", "").strip()
+            order = int(request.POST.get("order", 0))
+            is_active = bool(request.POST.get("is_active"))
+            
+            if not title or not image:
+                messages.error(request, "Title and image are required.")
+            else:
+                try:
+                    from .models import FoodImage
+                    FoodImage.objects.create(
+                        title=title,
+                        image=image,
+                        description=description,
+                        meal_type=meal_type or None,
+                        order=order,
+                        is_active=is_active,
+                    )
+                    messages.success(request, "Food image added successfully!")
+                except Exception as e:
+                    messages.error(request, f"Failed to add food image: {e}")
+        
+        elif action == "delete_food_image":
+            food_image_id = request.POST.get("food_image_id")
+            try:
+                from .models import FoodImage
+                food_image = FoodImage.objects.get(pk=food_image_id)
+                food_image.delete()
+                messages.success(request, "Food image deleted successfully!")
+            except FoodImage.DoesNotExist:
+                messages.error(request, "Food image not found")
+        
         # Handle payment configuration save
         elif action == "save_payment_config":
             from .models import PaymentConfig
@@ -328,6 +366,10 @@ def dashboard(request):
     from .models import CarouselImage
     carousel_images = CarouselImage.objects.filter(is_active=True).order_by('order', '-created_at')
     
+    # Get food gallery images
+    from .models import FoodImage
+    food_images = FoodImage.objects.filter(is_active=True).order_by('order', '-created_at')
+    
     # Initialize forms
     menu_form = MonthlyMenuForm()
     carousel_form = CarouselImageForm()
@@ -394,6 +436,7 @@ def dashboard(request):
         "menu_form": menu_form,
         "carousel_images": carousel_images,
         "carousel_form": carousel_form,
+        "food_images": food_images,
         "current_time": current_time,
         "visitor_payments": visitor_payments,
         # LMS Data

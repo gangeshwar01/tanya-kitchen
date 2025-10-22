@@ -42,6 +42,10 @@
           <i class="bi bi-images me-2"></i>
           <span class="fw-medium">Carousel</span>
         </a>
+        <a class="nav-link text-dark py-2 px-3 mb-1 rounded-2" href="#food-gallery" data-section="food-gallery" style="transition: all 0.2s ease;">
+          <i class="bi bi-camera me-2"></i>
+          <span class="fw-medium">Food Gallery</span>
+        </a>
         <a class="nav-link text-dark py-2 px-3 mb-1 rounded-2" href="#payment-config" data-section="payment-config" style="transition: all 0.2s ease;">
           <i class="bi bi-gear me-2"></i>
           <span class="fw-medium">Payment Config</span>
@@ -798,6 +802,98 @@
               </div>
             {% else %}
               <div class="text-muted">No carousel images uploaded yet.</div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Food Gallery Section -->
+      <div id="food-gallery-section" class="dashboard-section" style="display: none;">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">Manage Food Gallery</h5>
+
+            <!-- Add New Food Image Form -->
+            <div class="mb-4">
+              <h6>Add New Food Image</h6>
+              <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="add_food_image">
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label class="form-label">Image Title</label>
+                    <input type="text" name="title" class="form-control" placeholder="e.g. Delicious Biryani" required>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">Meal Type</label>
+                    <select name="meal_type" class="form-select">
+                      <option value="">Select Meal Type</option>
+                      <option value="breakfast">Breakfast</option>
+                      <option value="lunch">Lunch</option>
+                      <option value="dinner">Dinner</option>
+                    </select>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">Display Order</label>
+                    <input type="number" name="order" class="form-control" value="0" min="0">
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label">Image File</label>
+                    <input type="file" name="image" class="form-control" accept="image/*" required>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label">Status</label>
+                    <select name="is_active" class="form-select">
+                      <option value="1">Active</option>
+                      <option value="0">Inactive</option>
+                    </select>
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label">Description</label>
+                    <textarea name="description" class="form-control" rows="3" placeholder="Describe the food item..."></textarea>
+                  </div>
+                  <div class="col-12">
+                    <button type="submit" class="btn btn-success">
+                      <i class="bi bi-plus me-2"></i>Add Food Image
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+
+            <!-- Existing Food Images -->
+            <hr>
+            <h6>Current Food Gallery Images</h6>
+            {% if food_images %}
+              <div class="row g-3">
+                {% for image in food_images %}
+                <div class="col-md-4">
+                  <div class="card">
+                    <img src="{{ image.image.url }}" class="card-img-top" alt="{{ image.title }}" style="height: 200px; object-fit: cover;">
+                    <div class="card-body">
+                      <h6 class="card-title">{{ image.title }}</h6>
+                      {% if image.meal_type %}
+                        <span class="badge bg-primary mb-2">{{ image.meal_type|title }}</span>
+                      {% endif %}
+                      <p class="card-text small text-muted">{{ image.description|truncatechars:50 }}</p>
+                      <div class="d-flex justify-content-between align-items-center">
+                        <small class="text-muted">Order: {{ image.order }}</small>
+                        <form method="post" class="d-inline">
+                          {% csrf_token %}
+                          <input type="hidden" name="action" value="delete_food_image">
+                          <input type="hidden" name="food_image_id" value="{{ image.id }}">
+                          <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Delete this food image?')">
+                            <i class="bi bi-trash"></i>
+                          </button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+            {% else %}
+              <div class="text-muted">No food images uploaded yet.</div>
             {% endif %}
           </div>
         </div>
@@ -1651,6 +1747,10 @@
           <i class="bi bi-images me-2"></i>
           <span class="fw-medium">Carousel</span>
         </a>
+        <a class="nav-link text-dark py-2 px-3 mb-1 rounded-2" href="#food-gallery" data-section="food-gallery" style="transition: all 0.2s ease;">
+          <i class="bi bi-camera me-2"></i>
+          <span class="fw-medium">Food Gallery</span>
+        </a>
         <a class="nav-link text-dark py-2 px-3 mb-1 rounded-2" href="#payment-config" data-section="payment-config" style="transition: all 0.2s ease;">
           <i class="bi bi-gear me-2"></i>
           <span class="fw-medium">Payment Config</span>
@@ -1763,6 +1863,7 @@ document.addEventListener('DOMContentLoaded', function() {
     'plans': 'Subscription Plans',
     'menu': 'Menu Management',
     'carousel': 'Carousel Management',
+    'food-gallery': 'Food Gallery Management',
     'payment-config': 'Payment Configuration',
     'feedback': 'User Feedback',
     'lms': 'Attendance Management System',
