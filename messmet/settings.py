@@ -102,6 +102,14 @@ WSGI_APPLICATION = 'messmet.wsgi.application'
 
 DATABASE_URL = os.getenv('DATABASE_URL', None)
 
+# Check if MySQL environment variables are set
+USE_MYSQL = all([
+    os.getenv('DB_NAME'),
+    os.getenv('DB_USER'),
+    os.getenv('DB_PASSWORD'),
+    os.getenv('DB_HOST')
+])
+
 if DATABASE_URL:
     # Use dj_database_url for production when DATABASE_URL is set
     DATABASES = {
@@ -111,16 +119,8 @@ if DATABASE_URL:
             ssl_require=not DEBUG,
         )
     }
-elif DEBUG:
-    # Local development configuration (SQLite fallback)
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
-    }
-else:
-    # Production configuration for PythonAnywhere
+elif USE_MYSQL:
+    # Production configuration for PythonAnywhere (when DB_* vars are set)
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
@@ -133,6 +133,14 @@ else:
                 'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
                 'charset': 'utf8mb4',
             },
+        }
+    }
+else:
+    # Local development configuration (SQLite fallback)
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
 
