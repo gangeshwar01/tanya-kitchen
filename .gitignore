@@ -108,9 +108,11 @@ celerybeat.pid
 .venv
 env/
 venv/
+venv2/
 ENV/
 env.bak/
 venv.bak/
+*.pyenv
 
 # Spyder project settings
 .spyderproject
@@ -171,3 +173,14 @@ yarn-error.log*
 *.bak
 *.backup
 *.old
+
+# PythonAnywhere specific
+.pythonanywhere/
+*.mysql.dump
+
+# Sensitive files (keep wsgi.py but with placeholders)
+*.local.py
+secret_key.txt
+
+# Documentation files
+*.md
