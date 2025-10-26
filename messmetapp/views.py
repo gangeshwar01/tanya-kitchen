@@ -737,11 +737,13 @@ def api_active_notices(request):
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
-@user_passes_test(lambda u: u.is_staff)
 def api_notices_list(request):
     """
     Get all popup notices for admin dashboard
     """
+    if not request.user.is_staff:
+        return Response({'success': False, 'message': 'Permission denied'}, status=403)
+    
     notices = PopupNotice.objects.all().order_by('-priority', '-created_at')
     
     notices_data = []
@@ -763,11 +765,13 @@ def api_notices_list(request):
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
-@user_passes_test(lambda u: u.is_staff)
 def api_notice_create(request):
     """
     Create a new popup notice
     """
+    if not request.user.is_staff:
+        return Response({'success': False, 'message': 'Permission denied'}, status=403)
+    
     try:
         data = request.data
         notice = PopupNotice.objects.create(
@@ -787,11 +791,13 @@ def api_notice_create(request):
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
-@user_passes_test(lambda u: u.is_staff)
 def api_notice_update(request, notice_id):
     """
     Update an existing popup notice
     """
+    if not request.user.is_staff:
+        return Response({'success': False, 'message': 'Permission denied'}, status=403)
+    
     try:
         notice = PopupNotice.objects.get(id=notice_id)
         data = request.data
@@ -814,11 +820,13 @@ def api_notice_update(request, notice_id):
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
-@user_passes_test(lambda u: u.is_staff)
 def api_notice_delete(request, notice_id):
     """
     Delete a popup notice
     """
+    if not request.user.is_staff:
+        return Response({'success': False, 'message': 'Permission denied'}, status=403)
+    
     try:
         notice = PopupNotice.objects.get(id=notice_id)
         notice.delete()
