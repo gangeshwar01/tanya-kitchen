@@ -27,6 +27,10 @@ urlpatterns = [
     path('api/payments/config/', views.api_payment_config, name='api_payment_config'),
     path('api/feedback/', views.api_feedback, name='api_feedback'),
     path('api/notices/active/', views.api_active_notices, name='api_active_notices'),
+    path('api/notices/list/', views.api_notices_list, name='api_notices_list'),
+    path('api/notices/create/', views.api_notice_create, name='api_notice_create'),
+    path('api/notices/update/<int:notice_id>/', views.api_notice_update, name='api_notice_update'),
+    path('api/notices/delete/<int:notice_id>/', views.api_notice_delete, name='api_notice_delete'),
     # Admin APIs
     path('api/admin/mark-attendance/', views.admin_mark_attendance, name='admin_mark_attendance'),
     path('api/admin/mark-attendance', views.admin_mark_attendance, name='admin_mark_attendance_no_slash'),

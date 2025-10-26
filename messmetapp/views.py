@@ -735,6 +735,100 @@ def api_active_notices(request):
     return Response(notices_data)
 
 
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+@user_passes_test(lambda u: u.is_staff)
+def api_notices_list(request):
+    """
+    Get all popup notices for admin dashboard
+    """
+    notices = PopupNotice.objects.all().order_by('-priority', '-created_at')
+    
+    notices_data = []
+    for notice in notices:
+        notices_data.append({
+            'id': notice.id,
+            'title': notice.title,
+            'message': notice.message,
+            'start_datetime': notice.start_datetime.isoformat(),
+            'end_datetime': notice.end_datetime.isoformat(),
+            'target_audience': notice.target_audience,
+            'is_active': notice.is_active,
+            'priority': notice.priority,
+            'created_by': notice.created_by.username if notice.created_by else None,
+        })
+    
+    return Response(notices_data)
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+@user_passes_test(lambda u: u.is_staff)
+def api_notice_create(request):
+    """
+    Create a new popup notice
+    """
+    try:
+        data = request.data
+        notice = PopupNotice.objects.create(
+            title=data.get('title'),
+            message=data.get('message'),
+            start_datetime=data.get('start_datetime'),
+            end_datetime=data.get('end_datetime'),
+            target_audience=data.get('target_audience', 'all'),
+            priority=data.get('priority', 0),
+            is_active=data.get('is_active', True),
+            created_by=request.user
+        )
+        return Response({'success': True, 'id': notice.id, 'message': 'Notice created successfully'})
+    except Exception as e:
+        return Response({'success': False, 'message': str(e)}, status=400)
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+@user_passes_test(lambda u: u.is_staff)
+def api_notice_update(request, notice_id):
+    """
+    Update an existing popup notice
+    """
+    try:
+        notice = PopupNotice.objects.get(id=notice_id)
+        data = request.data
+        
+        notice.title = data.get('title', notice.title)
+        notice.message = data.get('message', notice.message)
+        notice.start_datetime = data.get('start_datetime', notice.start_datetime)
+        notice.end_datetime = data.get('end_datetime', notice.end_datetime)
+        notice.target_audience = data.get('target_audience', notice.target_audience)
+        notice.priority = data.get('priority', notice.priority)
+        notice.is_active = data.get('is_active', notice.is_active)
+        notice.save()
+        
+        return Response({'success': True, 'message': 'Notice updated successfully'})
+    except PopupNotice.DoesNotExist:
+        return Response({'success': False, 'message': 'Notice not found'}, status=404)
+    except Exception as e:
+        return Response({'success': False, 'message': str(e)}, status=400)
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+@user_passes_test(lambda u: u.is_staff)
+def api_notice_delete(request, notice_id):
+    """
+    Delete a popup notice
+    """
+    try:
+        notice = PopupNotice.objects.get(id=notice_id)
+        notice.delete()
+        return Response({'success': True, 'message': 'Notice deleted successfully'})
+    except PopupNotice.DoesNotExist:
+        return Response({'success': False, 'message': 'Notice not found'}, status=404)
+    except Exception as e:
+        return Response({'success': False, 'message': str(e)}, status=400)
+
+
 # --------- Custom LMS (staff) ---------
 
 def staff_required(view_func):
