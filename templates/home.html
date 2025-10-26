@@ -1,5 +1,34 @@
 {% extends 'base.html' %}
 {% block content %}
+
+<!-- Popup Notice Modal -->
+<div class="modal fade" id="noticeModal" tabindex="-1" aria-labelledby="noticeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="noticeModalLabel">
+          <i class="bi bi-megaphone me-2"></i>
+          <span id="noticeTitle"></span>
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p id="noticeMessage" style="white-space: pre-wrap;"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="prevNoticeBtn">
+          <i class="bi bi-arrow-left me-1"></i>Previous
+        </button>
+        <span id="noticeCounter" class="text-muted"></span>
+        <button type="button" class="btn btn-secondary" id="nextNoticeBtn">
+          Next<i class="bi bi-arrow-right ms-1"></i>
+        </button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Got it!</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <style>
 .swiper {
   width: 100%;
@@ -551,5 +580,76 @@ function showAlert(type, message) {
     }
   }, 5000);
 }
+
+// Popup Notice Functionality
+(function() {
+  const popupNotices = {{ popup_notices|safe|default:"[]" }};
+  
+  if (!popupNotices || popupNotices.length === 0) {
+    console.log('No active popup notices');
+    return;
+  }
+  
+  // Check if notices have been shown in this session
+  const shownNoticesKey = 'shownNotices_' + new Date().toISOString().split('T')[0]; // Store by date
+  let shownNotices = JSON.parse(sessionStorage.getItem(shownNoticesKey) || '[]');
+  
+  // Filter out notices that have already been shown
+  const unshownNotices = popupNotices.filter(notice => !shownNotices.includes(notice.id));
+  
+  if (unshownNotices.length === 0) {
+    console.log('All notices have been shown in this session');
+    return;
+  }
+  
+  let currentNoticeIndex = 0;
+  const notices = unshownNotices;
+  
+  function showNotice(index) {
+    if (index < 0 || index >= notices.length) return;
+    
+    currentNoticeIndex = index;
+    const notice = notices[index];
+    
+    document.getElementById('noticeTitle').textContent = notice.title;
+    document.getElementById('noticeMessage').textContent = notice.message;
+    document.getElementById('noticeCounter').textContent = `${index + 1} of ${notices.length}`;
+    
+    // Show/hide navigation buttons
+    document.getElementById('prevNoticeBtn').style.display = index > 0 ? 'inline-block' : 'none';
+    document.getElementById('nextNoticeBtn').style.display = index < notices.length - 1 ? 'inline-block' : 'none';
+  }
+  
+  // Event listeners for navigation
+  document.getElementById('prevNoticeBtn').addEventListener('click', function() {
+    if (currentNoticeIndex > 0) {
+      showNotice(currentNoticeIndex - 1);
+    }
+  });
+  
+  document.getElementById('nextNoticeBtn').addEventListener('click', function() {
+    if (currentNoticeIndex < notices.length - 1) {
+      showNotice(currentNoticeIndex + 1);
+    }
+  });
+  
+  // Mark notices as shown when modal is closed
+  const noticeModal = document.getElementById('noticeModal');
+  noticeModal.addEventListener('hidden.bs.modal', function() {
+    // Mark all notices as shown
+    const noticeIds = notices.map(n => n.id);
+    shownNotices = [...shownNotices, ...noticeIds];
+    sessionStorage.setItem(shownNoticesKey, JSON.stringify(shownNotices));
+  });
+  
+  // Show the first notice
+  showNotice(0);
+  
+  // Display the modal after a short delay
+  setTimeout(() => {
+    const modal = new bootstrap.Modal(noticeModal);
+    modal.show();
+  }, 1000);
+})();
 </script>
 {% endblock %}

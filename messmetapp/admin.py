@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
-from .models import User, SubscriptionPlan, UserSubscription, PaymentProof, Attendance, MonthlyMenu, Notification, PaymentConfig, Feedback, CarouselImage, FoodImage
+from .models import User, SubscriptionPlan, UserSubscription, PaymentProof, Attendance, MonthlyMenu, Notification, PaymentConfig, Feedback, CarouselImage, FoodImage, PopupNotice
 
 
 @admin.register(User)
@@ -120,5 +120,34 @@ class FoodImageAdmin(admin.ModelAdmin):
             'fields': ('meal_type', 'is_active', 'order')
         }),
     )
+
+
+@admin.register(PopupNotice)
+class PopupNoticeAdmin(admin.ModelAdmin):
+    list_display = ("title", "start_datetime", "end_datetime", "target_audience", "is_active", "priority", "created_by")
+    list_filter = ("is_active", "target_audience", "start_datetime", "end_datetime")
+    search_fields = ("title", "message")
+    list_editable = ("is_active", "priority")
+    readonly_fields = ("created_by", "created_at", "updated_at")
+    fieldsets = (
+        ("Notice Content", {
+            'fields': ('title', 'message')
+        }),
+        ("Schedule & Targeting", {
+            'fields': ('start_datetime', 'end_datetime', 'target_audience', 'priority')
+        }),
+        ("Status", {
+            'fields': ('is_active',)
+        }),
+        ("Metadata", {
+            'fields': ('created_by', 'created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
+    
+    def save_model(self, request, obj, form, change):
+        if not change:  # Only set created_by on creation
+            obj.created_by = request.user
+        super().save_model(request, obj, form, change)
 
 # Register your models here.

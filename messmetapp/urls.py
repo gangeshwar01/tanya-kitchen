@@ -26,6 +26,7 @@ urlpatterns = [
     path('api/payments/', views.api_payment_proofs, name='api_payment_proofs'),
     path('api/payments/config/', views.api_payment_config, name='api_payment_config'),
     path('api/feedback/', views.api_feedback, name='api_feedback'),
+    path('api/notices/active/', views.api_active_notices, name='api_active_notices'),
     # Admin APIs
     path('api/admin/mark-attendance/', views.admin_mark_attendance, name='admin_mark_attendance'),
     path('api/admin/mark-attendance', views.admin_mark_attendance, name='admin_mark_attendance_no_slash'),

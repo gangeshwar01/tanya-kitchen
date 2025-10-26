@@ -290,3 +290,45 @@ class FoodImage(models.Model):
 
     def __str__(self) -> str:
         return self.title
+
+
+class PopupNotice(models.Model):
+    """
+    Admin can create popup notices that will be shown to users
+    on home screen between start_datetime and end_datetime
+    """
+    TARGET_ALL_USERS = 'all'
+    TARGET_HOSTELLERS = 'hostellers'
+    TARGET_NON_HOSTELLERS = 'non_hostellers'
+    TARGET_ACTIVE_SUBSCRIBERS = 'active_subscribers'
+    
+    TARGET_CHOICES = [
+        (TARGET_ALL_USERS, 'All Users'),
+        (TARGET_HOSTELLERS, 'Hostellers Only'),
+        (TARGET_NON_HOSTELLERS, 'Non-Hostellers Only'),
+        (TARGET_ACTIVE_SUBSCRIBERS, 'Active Subscribers Only'),
+    ]
+    
+    title = models.CharField(max_length=200)
+    message = models.TextField()
+    start_datetime = models.DateTimeField(help_text="When to start showing this notice")
+    end_datetime = models.DateTimeField(help_text="When to stop showing this notice")
+    target_audience = models.CharField(max_length=30, choices=TARGET_CHOICES, default=TARGET_ALL_USERS)
+    is_active = models.BooleanField(default=True, help_text="Uncheck to temporarily disable")
+    priority = models.PositiveIntegerField(default=0, help_text="Higher priority notices show first")
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, related_name="created_notices")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        ordering = ['-priority', '-created_at']
+        verbose_name = "Popup Notice"
+        verbose_name_plural = "Popup Notices"
+    
+    def __str__(self) -> str:
+        return f"{self.title} ({self.start_datetime.strftime('%Y-%m-%d')} - {self.end_datetime.strftime('%Y-%m-%d')})"
+    
+    def is_currently_active(self):
+        """Check if notice should be displayed now"""
+        now = timezone.now()
+        return self.is_active and self.start_datetime <= now <= self.end_datetime

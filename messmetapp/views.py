@@ -9,7 +9,7 @@ from django.db.models import Count, Max, Q
 from django.utils import timezone
 import csv
 from datetime import timedelta, datetime
-from .models import SubscriptionPlan, User, UserSubscription, Attendance, MonthlyMenu, PaymentProof, MealFeedback, VisitorPayment, VisitorFeedback
+from .models import SubscriptionPlan, User, UserSubscription, Attendance, MonthlyMenu, PaymentProof, MealFeedback, VisitorPayment, VisitorFeedback, PopupNotice
 from .meal_feedback_views import meal_feedback_view, api_meal_feedback, api_meal_feedback_list
 from .forms import RegisterForm, ProfileForm, MonthlyMenuForm, CarouselImageForm, MealFeedbackForm, VisitorPaymentForm, VisitorFeedbackForm
 from rest_framework.decorators import api_view, permission_classes
@@ -27,6 +27,43 @@ from .serializers import (
 from django.utils import timezone
 from django.http import HttpResponse
 import csv
+
+
+def get_active_notices_for_user(user):
+    """
+    Get all currently active popup notices for a given user
+    based on datetime and target audience
+    """
+    now = timezone.now()
+    
+    # Get notices that are active and within the datetime range
+    notices = PopupNotice.objects.filter(
+        is_active=True,
+        start_datetime__lte=now,
+        end_datetime__gte=now
+    )
+    
+    # Filter based on target audience
+    if user.is_authenticated:
+        # Check if user has active subscription
+        has_active_sub = UserSubscription.objects.filter(user=user, active=True).exists()
+        
+        # Filter notices based on target audience
+        filtered_notices = []
+        for notice in notices:
+            if notice.target_audience == PopupNotice.TARGET_ALL_USERS:
+                filtered_notices.append(notice)
+            elif notice.target_audience == PopupNotice.TARGET_HOSTELLERS and user.hostel_status == User.HOSTEL_STATUS_HOSTELLER:
+                filtered_notices.append(notice)
+            elif notice.target_audience == PopupNotice.TARGET_NON_HOSTELLERS and user.hostel_status == User.HOSTEL_STATUS_NON_HOSTELLER:
+                filtered_notices.append(notice)
+            elif notice.target_audience == PopupNotice.TARGET_ACTIVE_SUBSCRIBERS and has_active_sub:
+                filtered_notices.append(notice)
+        
+        return filtered_notices
+    else:
+        # For anonymous users, only show "all users" notices
+        return notices.filter(target_audience=PopupNotice.TARGET_ALL_USERS)
 
 
 def home(request):
@@ -57,11 +94,26 @@ def home(request):
             'marked_meals': marked_meals,
         }
     
+    # Get active popup notices for the current user
+    active_notices = get_active_notices_for_user(request.user)
+    
+    # Serialize notices to JSON format
+    import json
+    notices_json = json.dumps([{
+        'id': notice.id,
+        'title': notice.title,
+        'message': notice.message,
+        'priority': notice.priority,
+        'start_datetime': notice.start_datetime.isoformat(),
+        'end_datetime': notice.end_datetime.isoformat(),
+    } for notice in active_notices])
+    
     return render(request, 'home.html', {
         "plans": plans, 
         "carousel_images": carousel_images,
         "food_images": food_images,
-        "attendance_data": attendance_data
+        "attendance_data": attendance_data,
+        "popup_notices": notices_json
     })
 
 
@@ -659,6 +711,28 @@ def api_feedback(request):
         obj = serializer.save(user=request.user)
         return Response(FeedbackSerializer(obj).data, status=201)
     return Response(serializer.errors, status=400)
+
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def api_active_notices(request):
+    """
+    Get all currently active popup notices for the requesting user
+    """
+    notices = get_active_notices_for_user(request.user)
+    
+    notices_data = []
+    for notice in notices:
+        notices_data.append({
+            'id': notice.id,
+            'title': notice.title,
+            'message': notice.message,
+            'priority': notice.priority,
+            'start_datetime': notice.start_datetime.isoformat(),
+            'end_datetime': notice.end_datetime.isoformat(),
+        })
+    
+    return Response(notices_data)
 
 
 # --------- Custom LMS (staff) ---------
