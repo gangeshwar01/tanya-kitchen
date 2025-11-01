@@ -318,16 +318,58 @@
 
 /* Responsive */
 @media (max-width: 768px) {
+  .hero-section {
+    padding: 2.5rem 1.5rem !important;
+    margin-bottom: 2rem !important;
+    border-radius: 15px !important;
+  }
+  
   .hero-title {
-    font-size: 2rem;
+    font-size: 1.75rem !important;
+    font-weight: 700 !important;
+    line-height: 1.3 !important;
+    margin-bottom: 1rem !important;
   }
   
   .hero-subtitle {
-    font-size: 1rem;
+    font-size: 0.95rem !important;
+    line-height: 1.5 !important;
+    margin-bottom: 1.5rem !important;
+    opacity: 0.9 !important;
+  }
+  
+  .hero-content .btn {
+    font-size: 0.9rem !important;
+    padding: 0.5rem 1rem !important;
+    width: 100% !important;
+    margin-bottom: 0.75rem !important;
+  }
+  
+  .hero-content .btn-lg {
+    font-size: 0.9rem !important;
+    padding: 0.6rem 1.2rem !important;
   }
   
   .swiper {
-    height: 250px;
+    height: 200px !important;
+    border-radius: 15px !important;
+    margin-top: 1.5rem !important;
+  }
+  
+  .swiper-button-next,
+  .swiper-button-prev {
+    width: 35px !important;
+    height: 35px !important;
+  }
+  
+  .swiper-button-next::after,
+  .swiper-button-prev::after {
+    font-size: 1rem !important;
+  }
+  
+  .swiper-pagination-bullet {
+    width: 8px !important;
+    height: 8px !important;
   }
   
   .attendance-card {
@@ -826,8 +868,8 @@
       <div class="col-lg-6 hero-content">
         <h1 class="hero-title">🍽️ Fresh, Healthy Meals Delivered Daily</h1>
         <p class="hero-subtitle">Experience the best of home-style cooking with flexible meal plans. Join Tanya's Kitchen for nutritious breakfast, lunch, and dinner that fits your lifestyle.</p>
-      {% if not user.is_authenticated %}
-        <div class="d-flex gap-3 flex-wrap">
+        {% if not user.is_authenticated %}
+        <div class="d-flex flex-column flex-sm-row gap-2 gap-sm-3">
           <a class="btn btn-light btn-lg px-4" href="/register/">
             <i class="bi bi-rocket-takeoff me-2"></i>Get Started
           </a>
@@ -835,7 +877,7 @@
             <i class="bi bi-box-arrow-in-right me-2"></i>Login
           </a>
         </div>
-      {% endif %}
+        {% endif %}
     </div>
     <div class="col-lg-6">
         <div class="swiper">
