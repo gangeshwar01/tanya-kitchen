@@ -1218,8 +1218,8 @@ def student_details(request, user_id):
         # Get the user with attendance count annotation
         from django.db.models import Count, Max
         user = User.objects.filter(id=user_id, is_staff=False).annotate(
-            total_attendance_count=Attendance.objects.filter(date=timezone.localdate()).values('user').distinct().count(),
-            last_attendance=Attendance.objects.filter(date=timezone.localdate()).values('user').distinct().first()
+            total_attendance_count=Count('attendances'),
+            last_attendance=Max('attendances__marked_at')
         ).first()
         
         if not user:
