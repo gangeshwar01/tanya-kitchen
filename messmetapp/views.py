@@ -384,13 +384,15 @@ def dashboard(request):
         return redirect('dashboard')
     
     # Get all data for the unified admin dashboard
+    today_date = timezone.localdate()
     stats = {
         # Exclude staff/admin from user-facing counts
         "users": User.objects.filter(is_staff=False).count(),
         # Count users with at least one active subscription (distinct users)
         "active_subs": UserSubscription.objects.filter(active=True, user__is_staff=False).values('user').distinct().count(),
         "pending_payments": PaymentProof.objects.filter(status="pending").count(),
-        "today_attendance": Attendance.objects.filter(date=timezone.localdate(), user__is_staff=False).count(),
+        # Count distinct users who attended today, not total meal records
+        "today_attendance": Attendance.objects.filter(date=today_date, user__is_staff=False).values('user').distinct().count(),
     }
     
     # Get pending payments
@@ -465,7 +467,8 @@ def dashboard(request):
         user.active_subscriptions = UserSubscription.objects.filter(user=user, active=True)
     
     # Calculate attendance statistics
-    today_attendance_count = Attendance.objects.filter(date=today).count()
+    # Count distinct users who attended today, not total meal records
+    today_attendance_count = Attendance.objects.filter(date=today, user__is_staff=False).values('user').distinct().count()
     total_users = all_users.count()
     absent_today_count = total_users - today_attendance_count
     attendance_rate = round((today_attendance_count / total_users * 100) if total_users > 0 else 0, 1)
@@ -1026,7 +1029,8 @@ def lms_dashboard(request):
         "users": User.objects.count(),
         "active_subs": UserSubscription.objects.filter(active=True).count(),
         "pending_payments": request.user.reviewed_payments.none().model.objects.filter(status="pending").count(),
-        "today_attendance": Attendance.objects.filter(date=timezone.localdate()).count(),
+        # Count distinct users who attended today, not total meal records
+        "today_attendance": Attendance.objects.filter(date=timezone.localdate()).values('user').distinct().count(),
     }
     pending = PaymentProofSerializer(
         PaymentProofSerializer.Meta.model.objects.filter(status="pending").order_by("-submitted_at")[:10],
