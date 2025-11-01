@@ -371,11 +371,12 @@
   width: 100%;
   margin-bottom: 4rem;
   padding: 2rem 0;
+  min-height: 500px;
 }
 
 .stars-container {
   position: absolute;
-  top: 0;
+  top: -100px;
   left: 0;
   right: 0;
   bottom: 0;
@@ -401,26 +402,7 @@
   right: 20px;
 }
 
-/* Hanging wire/string for stars */
-.star-hanger {
-  position: absolute;
-  top: 0;
-  width: 2px;
-  background: linear-gradient(to bottom, rgba(102, 126, 234, 0.4), rgba(118, 75, 162, 0.6));
-  pointer-events: none;
-}
-
-.star-hanger::before {
-  content: '';
-  position: absolute;
-  top: -2px;
-  left: -3px;
-  width: 8px;
-  height: 8px;
-  background: radial-gradient(circle, rgba(102, 126, 234, 0.8), transparent);
-  border-radius: 50%;
-}
-
+/* Hanging wire/string for stars - extends from top */
 .star-with-wire {
   position: absolute;
   display: flex;
@@ -429,81 +411,81 @@
 }
 
 .star-wire {
-  width: 2px;
-  background: linear-gradient(to bottom, rgba(102, 126, 234, 0.5), rgba(118, 75, 162, 0.7));
-  margin-bottom: 5px;
+  width: 1.5px;
+  background: #333;
   position: relative;
+  margin-bottom: 8px;
 }
 
-.star-wire::before {
+.star-wire::after {
   content: '';
   position: absolute;
-  top: -3px;
-  left: -2px;
-  width: 6px;
-  height: 6px;
-  background: rgba(102, 126, 234, 0.6);
+  top: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  background: #333;
   border-radius: 50%;
-  box-shadow: 0 0 5px rgba(102, 126, 234, 0.5);
 }
 
 .sparkle-star {
-  color: #667eea;
+  color: #ffd700;
   font-size: 1.8rem;
   animation: sparkle 3s infinite ease-in-out;
   pointer-events: none;
-  text-shadow: 0 0 10px rgba(102, 126, 234, 0.6), 0 0 20px rgba(118, 75, 162, 0.4);
-  filter: drop-shadow(0 0 8px rgba(102, 126, 234, 0.5));
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.8), 0 0 20px rgba(255, 215, 0, 0.5);
+  filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6));
 }
 
-/* Left side stars with hanging wires */
-.stars-left .star-with-wire:nth-child(1) { top: 8%; left: 50%; }
-.stars-left .star-with-wire:nth-child(1) .star-wire { height: 40px; }
+/* Left side stars with hanging wires - wires extend from top */
+.stars-left .star-with-wire:nth-child(1) { top: 150px; left: 50%; }
+.stars-left .star-with-wire:nth-child(1) .star-wire { height: 120px; }
 .stars-left .star-with-wire:nth-child(1) .sparkle-star { font-size: 2rem; animation-delay: 0s; }
 
-.stars-left .star-with-wire:nth-child(2) { top: 22%; left: 65%; }
-.stars-left .star-with-wire:nth-child(2) .star-wire { height: 50px; }
+.stars-left .star-with-wire:nth-child(2) { top: 220px; left: 65%; }
+.stars-left .star-with-wire:nth-child(2) .star-wire { height: 140px; }
 .stars-left .star-with-wire:nth-child(2) .sparkle-star { font-size: 2.4rem; animation-delay: 0.4s; }
 
-.stars-left .star-with-wire:nth-child(3) { top: 38%; left: 45%; }
-.stars-left .star-with-wire:nth-child(3) .star-wire { height: 45px; }
+.stars-left .star-with-wire:nth-child(3) { top: 320px; left: 45%; }
+.stars-left .star-with-wire:nth-child(3) .star-wire { height: 180px; }
 .stars-left .star-with-wire:nth-child(3) .sparkle-star { font-size: 1.8rem; animation-delay: 0.8s; }
 
-.stars-left .star-with-wire:nth-child(4) { top: 52%; left: 60%; }
-.stars-left .star-with-wire:nth-child(4) .star-wire { height: 55px; }
+.stars-left .star-with-wire:nth-child(4) { top: 400px; left: 60%; }
+.stars-left .star-with-wire:nth-child(4) .star-wire { height: 200px; }
 .stars-left .star-with-wire:nth-child(4) .sparkle-star { font-size: 2.1rem; animation-delay: 1.2s; }
 
-.stars-left .star-with-wire:nth-child(5) { top: 68%; left: 50%; }
-.stars-left .star-with-wire:nth-child(5) .star-wire { height: 42px; }
+.stars-left .star-with-wire:nth-child(5) { top: 480px; left: 50%; }
+.stars-left .star-with-wire:nth-child(5) .star-wire { height: 240px; }
 .stars-left .star-with-wire:nth-child(5) .sparkle-star { font-size: 1.7rem; animation-delay: 1.6s; }
 
-.stars-left .star-with-wire:nth-child(6) { top: 82%; left: 70%; }
-.stars-left .star-with-wire:nth-child(6) .star-wire { height: 48px; }
+.stars-left .star-with-wire:nth-child(6) { top: 560px; left: 70%; }
+.stars-left .star-with-wire:nth-child(6) .star-wire { height: 260px; }
 .stars-left .star-with-wire:nth-child(6) .sparkle-star { font-size: 2rem; animation-delay: 2s; }
 
-/* Right side stars with hanging wires */
-.stars-right .star-with-wire:nth-child(1) { top: 10%; right: 55%; }
-.stars-right .star-with-wire:nth-child(1) .star-wire { height: 45px; }
+/* Right side stars with hanging wires - wires extend from top */
+.stars-right .star-with-wire:nth-child(1) { top: 180px; right: 55%; }
+.stars-right .star-with-wire:nth-child(1) .star-wire { height: 130px; }
 .stars-right .star-with-wire:nth-child(1) .sparkle-star { font-size: 2.1rem; animation-delay: 0.2s; }
 
-.stars-right .star-with-wire:nth-child(2) { top: 26%; right: 40%; }
-.stars-right .star-with-wire:nth-child(2) .star-wire { height: 52px; }
+.stars-right .star-with-wire:nth-child(2) { top: 250px; right: 40%; }
+.stars-right .star-with-wire:nth-child(2) .star-wire { height: 150px; }
 .stars-right .star-with-wire:nth-child(2) .sparkle-star { font-size: 2.5rem; animation-delay: 0.6s; }
 
-.stars-right .star-with-wire:nth-child(3) { top: 40%; right: 65%; }
-.stars-right .star-with-wire:nth-child(3) .star-wire { height: 43px; }
+.stars-right .star-with-wire:nth-child(3) { top: 340px; right: 65%; }
+.stars-right .star-with-wire:nth-child(3) .star-wire { height: 190px; }
 .stars-right .star-with-wire:nth-child(3) .sparkle-star { font-size: 1.7rem; animation-delay: 1s; }
 
-.stars-right .star-with-wire:nth-child(4) { top: 56%; right: 45%; }
-.stars-right .star-with-wire:nth-child(4) .star-wire { height: 50px; }
+.stars-right .star-with-wire:nth-child(4) { top: 420px; right: 45%; }
+.stars-right .star-with-wire:nth-child(4) .star-wire { height: 210px; }
 .stars-right .star-with-wire:nth-child(4) .sparkle-star { font-size: 2rem; animation-delay: 1.4s; }
 
-.stars-right .star-with-wire:nth-child(5) { top: 70%; right: 60%; }
-.stars-right .star-with-wire:nth-child(5) .star-wire { height: 46px; }
+.stars-right .star-with-wire:nth-child(5) { top: 500px; right: 60%; }
+.stars-right .star-with-wire:nth-child(5) .star-wire { height: 250px; }
 .stars-right .star-with-wire:nth-child(5) .sparkle-star { font-size: 1.9rem; animation-delay: 1.8s; }
 
-.stars-right .star-with-wire:nth-child(6) { top: 86%; right: 50%; }
-.stars-right .star-with-wire:nth-child(6) .star-wire { height: 44px; }
+.stars-right .star-with-wire:nth-child(6) { top: 580px; right: 50%; }
+.stars-right .star-with-wire:nth-child(6) .star-wire { height: 270px; }
 .stars-right .star-with-wire:nth-child(6) .sparkle-star { font-size: 1.8rem; animation-delay: 2.2s; }
 
 @keyframes sparkle {
@@ -551,6 +533,10 @@
     margin: 0 80px !important;
   }
   
+  .stars-container {
+    top: -50px;
+  }
+  
   .stars-left {
     left: 10px;
   }
@@ -558,11 +544,21 @@
   .stars-right {
     right: 10px;
   }
+  
+  .stars-left .star-with-wire .star-wire,
+  .stars-right .star-with-wire .star-wire {
+    height: calc(var(--wire-height, 120px) * 0.7) !important;
+  }
 }
 
 @media (max-width: 768px) {
   .stars-wrapper {
     padding: 1rem 0;
+    min-height: 400px;
+  }
+  
+  .stars-container {
+    top: -30px;
   }
   
   .hero-section {
@@ -582,13 +578,19 @@
     right: 5px;
   }
   
+  .stars-left .star-with-wire,
+  .stars-right .star-with-wire {
+    top: calc(var(--star-top, 150px) * 0.6) !important;
+  }
+  
+  .stars-left .star-with-wire .star-wire,
+  .stars-right .star-with-wire .star-wire {
+    height: calc(var(--wire-height, 120px) * 0.5) !important;
+  }
+  
   .stars-left .star-with-wire .sparkle-star,
   .stars-right .star-with-wire .sparkle-star {
     font-size: 1.2rem !important;
-  }
-  
-  .star-wire {
-    height: 30px !important;
   }
 }
 </style>
