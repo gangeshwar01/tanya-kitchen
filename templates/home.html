@@ -603,7 +603,13 @@
         <div class="plan-card">
           <div class="text-center mb-4">
             <div class="mb-3">
-              <i class="bi bi-{{ forloop.counter == 1 and 'cup-hot' or forloop.counter == 2 and 'utensils' or 'egg-fried' }}" style="font-size: 3rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></i>
+              {% if forloop.counter == 1 %}
+                <i class="bi bi-cup-hot" style="font-size: 3rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></i>
+              {% elif forloop.counter == 2 %}
+                <i class="bi bi-utensils" style="font-size: 3rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></i>
+              {% else %}
+                <i class="bi bi-egg-fried" style="font-size: 3rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></i>
+              {% endif %}
             </div>
             <h4 class="fw-bold mb-2">{{ plan.title }}</h4>
             <div class="plan-price mb-1">₹{{ plan.price }}</div>
@@ -617,7 +623,13 @@
             <div class="d-flex flex-wrap gap-2 justify-content-center">
               {% for meal in plan.included_meals %}
               <span class="badge" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 0.5rem 1rem; font-size: 0.85rem;">
-                <i class="bi bi-{{ meal == 'breakfast' and 'sunrise' or meal == 'lunch' and 'sun' or 'moon' }} me-1"></i>{{ meal|title }}
+                {% if meal == 'breakfast' %}
+                  <i class="bi bi-sunrise me-1"></i>{{ meal|title }}
+                {% elif meal == 'lunch' %}
+                  <i class="bi bi-sun me-1"></i>{{ meal|title }}
+                {% else %}
+                  <i class="bi bi-moon me-1"></i>{{ meal|title }}
+                {% endif %}
               </span>
               {% endfor %}
             </div>
