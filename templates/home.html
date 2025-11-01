@@ -365,7 +365,14 @@
   }
 }
 
-/* Sparkling Stars */
+/* Sparkling Stars - Outside hero section */
+.stars-wrapper {
+  position: relative;
+  width: 100%;
+  margin-bottom: 4rem;
+  padding: 2rem 0;
+}
+
 .stars-container {
   position: absolute;
   top: 0;
@@ -374,51 +381,52 @@
   bottom: 0;
   overflow: visible;
   pointer-events: none;
-  z-index: 1;
+  z-index: 0;
 }
 
 .stars-left,
 .stars-right {
   position: absolute;
-  top: 0;
-  height: 100%;
-  width: 12%;
+  top: 50%;
+  transform: translateY(-50%);
+  height: calc(100% + 4rem);
+  width: 150px;
   pointer-events: none;
 }
 
 .stars-left {
-  left: -2%;
+  left: -20px;
 }
 
 .stars-right {
-  right: -2%;
+  right: -20px;
 }
 
 .sparkle-star {
   position: absolute;
-  color: rgba(255, 255, 255, 0.9);
+  color: #667eea;
   font-size: 1.8rem;
   animation: sparkle 3s infinite ease-in-out;
   pointer-events: none;
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(255, 255, 255, 0.5);
-  filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.6));
+  text-shadow: 0 0 10px rgba(102, 126, 234, 0.6), 0 0 20px rgba(118, 75, 162, 0.4);
+  filter: drop-shadow(0 0 8px rgba(102, 126, 234, 0.5));
 }
 
-/* Left side stars - hanging effect */
-.stars-left .sparkle-star:nth-child(1) { top: 8%; left: 15%; animation-delay: 0s; font-size: 1.5rem; }
-.stars-left .sparkle-star:nth-child(2) { top: 20%; left: 25%; animation-delay: 0.4s; font-size: 2rem; }
-.stars-left .sparkle-star:nth-child(3) { top: 35%; left: 10%; animation-delay: 0.8s; font-size: 1.6rem; }
-.stars-left .sparkle-star:nth-child(4) { top: 55%; left: 20%; animation-delay: 1.2s; font-size: 1.9rem; }
-.stars-left .sparkle-star:nth-child(5) { top: 75%; left: 15%; animation-delay: 1.6s; font-size: 1.4rem; }
-.stars-left .sparkle-star:nth-child(6) { top: 90%; left: 25%; animation-delay: 2s; font-size: 1.7rem; }
+/* Left side stars - hanging outside in white space */
+.stars-left .sparkle-star:nth-child(1) { top: 10%; left: 40%; animation-delay: 0s; font-size: 2rem; }
+.stars-left .sparkle-star:nth-child(2) { top: 25%; left: 60%; animation-delay: 0.4s; font-size: 2.4rem; }
+.stars-left .sparkle-star:nth-child(3) { top: 40%; left: 35%; animation-delay: 0.8s; font-size: 1.8rem; }
+.stars-left .sparkle-star:nth-child(4) { top: 55%; left: 55%; animation-delay: 1.2s; font-size: 2.1rem; }
+.stars-left .sparkle-star:nth-child(5) { top: 70%; left: 40%; animation-delay: 1.6s; font-size: 1.7rem; }
+.stars-left .sparkle-star:nth-child(6) { top: 85%; left: 65%; animation-delay: 2s; font-size: 2rem; }
 
-/* Right side stars - hanging effect */
-.stars-right .sparkle-star:nth-child(1) { top: 12%; right: 18%; animation-delay: 0.2s; font-size: 1.6rem; }
-.stars-right .sparkle-star:nth-child(2) { top: 28%; right: 12%; animation-delay: 0.6s; font-size: 2.1rem; }
-.stars-right .sparkle-star:nth-child(3) { top: 42%; right: 22%; animation-delay: 1s; font-size: 1.5rem; }
-.stars-right .sparkle-star:nth-child(4) { top: 62%; right: 15%; animation-delay: 1.4s; font-size: 1.8rem; }
-.stars-right .sparkle-star:nth-child(5) { top: 78%; right: 20%; animation-delay: 1.8s; font-size: 1.7rem; }
-.stars-right .sparkle-star:nth-child(6) { top: 92%; right: 18%; animation-delay: 2.2s; font-size: 1.5rem; }
+/* Right side stars - hanging outside in white space */
+.stars-right .sparkle-star:nth-child(1) { top: 12%; right: 45%; animation-delay: 0.2s; font-size: 2.1rem; }
+.stars-right .sparkle-star:nth-child(2) { top: 28%; right: 30%; animation-delay: 0.6s; font-size: 2.5rem; }
+.stars-right .sparkle-star:nth-child(3) { top: 42%; right: 60%; animation-delay: 1s; font-size: 1.7rem; }
+.stars-right .sparkle-star:nth-child(4) { top: 58%; right: 35%; animation-delay: 1.4s; font-size: 2rem; }
+.stars-right .sparkle-star:nth-child(5) { top: 72%; right: 55%; animation-delay: 1.8s; font-size: 1.9rem; }
+.stars-right .sparkle-star:nth-child(6) { top: 88%; right: 40%; animation-delay: 2.2s; font-size: 1.8rem; }
 
 @keyframes sparkle {
   0%, 100% {
@@ -456,33 +464,34 @@
 }
 
 @media (max-width: 768px) {
+  .stars-wrapper {
+    padding: 1rem 0;
+  }
+  
   .stars-left,
   .stars-right {
-    width: 8%;
+    width: 80px;
+    height: calc(100% + 2rem);
   }
   
   .stars-left {
-    left: -1%;
+    left: -10px;
   }
   
   .stars-right {
-    right: -1%;
-  }
-  
-  .sparkle-star {
-    font-size: 1.2rem;
+    right: -10px;
   }
   
   .stars-left .sparkle-star:nth-child(n),
   .stars-right .sparkle-star:nth-child(n) {
-    font-size: 1rem !important;
+    font-size: 1.4rem !important;
   }
 }
 </style>
 <!-- Hero Section -->
 {% if not user.is_staff %}
-<section class="hero-section fade-in-up">
-  <!-- Sparkling Stars -->
+<div class="stars-wrapper">
+  <!-- Sparkling Stars - Outside hero -->
   <div class="stars-container">
     <div class="stars-left">
       <div class="sparkle-star">⭐</div>
@@ -502,6 +511,7 @@
     </div>
   </div>
   
+  <section class="hero-section fade-in-up" style="position: relative; z-index: 1;">
   <div class="container">
     <div class="row align-items-center">
       <div class="col-lg-6 hero-content">
@@ -560,7 +570,8 @@
       </div>
     </div>
   </div>
-</section>
+  </section>
+</div>
 {% else %}
 <section class="py-5">
   <div class="container">
