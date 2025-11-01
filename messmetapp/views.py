@@ -108,12 +108,17 @@ def home(request):
         'end_datetime': notice.end_datetime.isoformat(),
     } for notice in active_notices])
     
+    # Get payment config for visitor payment section
+    from .models import PaymentConfig
+    paycfg = PaymentConfig.objects.first()
+    
     return render(request, 'home.html', {
         "plans": plans, 
         "carousel_images": carousel_images,
         "food_images": food_images,
         "attendance_data": attendance_data,
-        "popup_notices": notices_json
+        "popup_notices": notices_json,
+        "paycfg": paycfg
     })
 
 

@@ -30,52 +30,362 @@
 </div>
 
 <style>
-.swiper {
-  width: 100%;
-  height: 250px;
-  border-radius: 0.5rem;
+/* Hero Section Styling */
+.hero-section {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 20px;
+  padding: 4rem 2rem;
+  margin-bottom: 4rem;
+  position: relative;
   overflow: hidden;
 }
+
+.hero-section::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+  background-size: 50px 50px;
+  animation: float 20s infinite linear;
+}
+
+@keyframes float {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  100% { transform: translate(-50px, -50px) rotate(360deg); }
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  color: white;
+}
+
+.hero-title {
+  font-size: 3.5rem;
+  font-weight: 800;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+  line-height: 1.2;
+  margin-bottom: 1.5rem;
+}
+
+.hero-subtitle {
+  font-size: 1.3rem;
+  opacity: 0.95;
+  margin-bottom: 2rem;
+}
+
+.swiper {
+  width: 100%;
+  height: 400px;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+
 .swiper-slide {
   display: flex;
   align-items: center;
   justify-content: center;
   background: #fff;
+  position: relative;
 }
+
 .swiper-slide img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.5s ease;
 }
+
+.swiper-slide:hover img {
+  transform: scale(1.05);
+}
+
 .swiper-button-next,
 .swiper-button-prev {
-  color: #007bff;
+  color: white;
+  background: rgba(0,0,0,0.3);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  backdrop-filter: blur(10px);
 }
+
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+  background: rgba(0,0,0,0.5);
+}
+
 .swiper-pagination-bullet {
-  background: #007bff;
+  background: white;
+  opacity: 0.5;
+  width: 12px;
+  height: 12px;
 }
+
 .swiper-pagination-bullet-active {
-  background: #0056b3;
+  background: white;
+  opacity: 1;
+}
+
+/* Feature Cards */
+.feature-card {
+  background: white;
+  border-radius: 15px;
+  padding: 2.5rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  height: 100%;
+}
+
+.feature-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+  border-color: #667eea;
+}
+
+.feature-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 1.5rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  color: white;
+  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+}
+
+/* Attendance Section */
+.attendance-card {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  border-radius: 20px;
+  padding: 3rem;
+  color: white;
+  box-shadow: 0 20px 60px rgba(245, 87, 108, 0.3);
+}
+
+.meal-card {
+  background: rgba(255,255,255,0.2);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  padding: 1.5rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  border: 2px solid rgba(255,255,255,0.3);
+}
+
+.meal-card:hover {
+  background: rgba(255,255,255,0.3);
+  transform: scale(1.05);
+}
+
+/* Plan Cards */
+.plan-card {
+  background: white;
+  border-radius: 20px;
+  padding: 2.5rem;
+  height: 100%;
+  transition: all 0.3s ease;
+  border: 2px solid #f0f0f0;
+  position: relative;
+  overflow: hidden;
+}
+
+.plan-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+}
+
+.plan-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+  border-color: #667eea;
+}
+
+.plan-price {
+  font-size: 3rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Food Gallery */
+.gallery-card {
+  border-radius: 15px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.gallery-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+}
+
+.gallery-card img {
+  transition: transform 0.5s ease;
+}
+
+.gallery-card:hover img {
+  transform: scale(1.1);
+}
+
+/* Buttons */
+.btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 50px;
+  padding: 0.75rem 2rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+}
+
+.btn-outline-primary {
+  border: 2px solid #667eea;
+  border-radius: 50px;
+  padding: 0.75rem 2rem;
+  font-weight: 600;
+  color: #667eea;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-primary:hover {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-color: transparent;
+  color: white;
+  transform: translateY(-2px);
+}
+
+/* Section Headings */
+.section-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 1rem;
+}
+
+.section-subtitle {
+  color: #6c757d;
+  font-size: 1.1rem;
+}
+
+/* Stats Badge */
+.stats-badge {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 0.5rem 1.5rem;
+  border-radius: 50px;
+  font-weight: 600;
+  display: inline-block;
+  margin-top: 1rem;
+}
+
+/* Visitor Forms */
+.visitor-form-card {
+  background: white;
+  border-radius: 20px;
+  padding: 2.5rem;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+}
+
+.visitor-form-card:hover {
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2rem;
+  }
+  
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+  
+  .swiper {
+    height: 250px;
+  }
+  
+  .attendance-card {
+    padding: 2rem;
+  }
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* Meal Icons Animation */
+.meal-icon {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
 }
 </style>
-<section class="py-5 py-lg-6">
-  <div class="row align-items-center g-4">
-    <div class="col-lg-6">
-      {% if user.is_staff %}
-      <h1 class="display-5 fw-bold mb-3">Admin Dashboard</h1>
-      <p class="text-muted mb-4">Manage subscriptions, approve payments, track attendance, and oversee the mess operations.</p>
-      <a class="btn btn-primary btn-lg me-2" href="/dashboard/">Go to Dashboard</a>
-      {% else %}
-      <h1 class="display-5 fw-bold mb-3">Healthy, affordable meals for your daily routine</h1>
-      <p class="text-muted mb-4">Subscribe to breakfast, lunch, dinner or all three. Track attendance, upload payments, and enjoy a hassle-free mess experience.</p>
-      {% if not user.is_authenticated %}
-      <a class="btn btn-primary btn-lg me-2" href="/register/">Get Started</a>
-      <a class="btn btn-outline-primary btn-lg" href="/login/">Login</a>
-      {% endif %}
-      {% endif %}
-    </div>
-    <div class="col-lg-6">
-      <div class="swiper rounded shadow-sm">
+<!-- Hero Section -->
+{% if not user.is_staff %}
+<section class="hero-section fade-in-up">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-6 hero-content">
+        <h1 class="hero-title">🍽️ Fresh, Healthy Meals Delivered Daily</h1>
+        <p class="hero-subtitle">Experience the best of home-style cooking with flexible meal plans. Join Tanya's Kitchen for nutritious breakfast, lunch, and dinner that fits your lifestyle.</p>
+        {% if not user.is_authenticated %}
+        <div class="d-flex gap-3 flex-wrap">
+          <a class="btn btn-light btn-lg px-4" href="/register/">
+            <i class="bi bi-rocket-takeoff me-2"></i>Get Started
+          </a>
+          <a class="btn btn-outline-light btn-lg px-4" href="/login/">
+            <i class="bi bi-box-arrow-in-right me-2"></i>Login
+          </a>
+        </div>
+        {% endif %}
+      </div>
+      <div class="col-lg-6">
+        <div class="swiper">
         <div class="swiper-wrapper">
           {% if carousel_images %}
             {% for image in carousel_images %}
@@ -117,94 +427,131 @@
     </div>
   </div>
 </section>
-
-<section class="py-5 bg-white rounded-3 shadow-sm">
+{% else %}
+<section class="py-5">
   <div class="container">
-    <div class="row g-4 text-center">
-      {% if user.is_staff %}
-      <div class="col-md-4">
-        <div class="p-4">
-          <div class="h3 mb-2">👥</div>
-          <h5>User Management</h5>
-          <p class="text-muted">Monitor user subscriptions, attendance, and payment status.</p>
-        </div>
+    <div class="row align-items-center">
+      <div class="col-lg-6">
+        <h1 class="display-4 fw-bold mb-3">Admin Dashboard</h1>
+        <p class="lead text-muted mb-4">Manage subscriptions, approve payments, track attendance, and oversee the mess operations.</p>
+        <a class="btn btn-primary btn-lg px-4" href="/dashboard/">
+          <i class="bi bi-speedometer2 me-2"></i>Go to Dashboard
+        </a>
       </div>
-      <div class="col-md-4">
-        <div class="p-4">
-          <div class="h3 mb-2">💰</div>
-          <h5>Payment Approval</h5>
-          <p class="text-muted">Review and approve payment proofs from users.</p>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="p-4">
-          <div class="h3 mb-2">📊</div>
-          <h5>Analytics & Reports</h5>
-          <p class="text-muted">Track attendance patterns and generate detailed reports.</p>
-        </div>
-      </div>
-      {% else %}
-      <div class="col-md-4">
-        <div class="p-4">
-          <div class="h3 mb-2">🍽️</div>
-          <h5>Flexible Plans</h5>
-          <p class="text-muted">Pick meals that fit your schedule: breakfast, lunch, dinner or all.</p>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="p-4">
-          <div class="h3 mb-2">✅</div>
-          <h5>Attendance Tracking</h5>
-          <p class="text-muted">One-click, per-meal attendance with duplicate protection.</p>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="p-4">
-          <div class="h3 mb-2">💳</div>
-          <h5>Simple Payments</h5>
-          <p class="text-muted">Upload proof, get admin approval, and auto-activate your plan.</p>
-        </div>
-      </div>
-      {% endif %}
     </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- Features Section -->
+<section class="py-5">
+  <div class="container">
+    {% if user.is_staff %}
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="bi bi-people"></i>
+          </div>
+          <h5 class="fw-bold mb-3">User Management</h5>
+          <p class="text-muted">Monitor user subscriptions, attendance, and payment status with comprehensive analytics.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="bi bi-credit-card"></i>
+          </div>
+          <h5 class="fw-bold mb-3">Payment Approval</h5>
+          <p class="text-muted">Review and approve payment proofs from users efficiently with automated notifications.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="bi bi-graph-up"></i>
+          </div>
+          <h5 class="fw-bold mb-3">Analytics & Reports</h5>
+          <p class="text-muted">Track attendance patterns and generate detailed reports for better decision making.</p>
+        </div>
+      </div>
+    </div>
+    {% else %}
+    <div class="text-center mb-5">
+      <h2 class="section-title">Why Choose Tanya's Kitchen?</h2>
+      <p class="section-subtitle">Experience convenience, quality, and taste in every meal</p>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="bi bi-calendar-check"></i>
+          </div>
+          <h5 class="fw-bold mb-3">Flexible Plans</h5>
+          <p class="text-muted">Pick meals that fit your schedule: breakfast, lunch, dinner or all three. Customize your plan as per your needs.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="bi bi-check-circle"></i>
+          </div>
+          <h5 class="fw-bold mb-3">Easy Attendance</h5>
+          <p class="text-muted">One-click, per-meal attendance tracking with duplicate protection. Never miss a meal mark!</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="bi bi-wallet2"></i>
+          </div>
+          <h5 class="fw-bold mb-3">Simple Payments</h5>
+          <p class="text-muted">Upload proof, get admin approval, and auto-activate your plan. Quick and hassle-free.</p>
+        </div>
+      </div>
+    </div>
+    {% endif %}
   </div>
 </section>
 
 <!-- Attendance Section for Authenticated Users (Non-Admin) -->
 {% if user.is_authenticated and not user.is_staff %}
-<section class="py-5 bg-light">
+<section class="py-5">
   <div class="container">
-    <div class="row">
-      <div class="col-12 text-center mb-4">
-        <h2 class="fw-bold">Quick Attendance</h2>
-        <p class="text-muted">Mark your attendance for today's meals</p>
-      </div>
-    </div>
     <div class="row justify-content-center">
-      <div class="col-lg-8">
-        <div class="card shadow-sm">
-          <div class="card-body p-4">
+      <div class="col-lg-10">
+        <div class="attendance-card fade-in-up">
+          <div class="text-center mb-4">
+            <h2 class="fw-bold mb-2">📅 Quick Attendance</h2>
+            <p class="mb-0 opacity-90">Mark your attendance for today's meals in one click</p>
+          </div>
+          <div class="row justify-content-center">
+            <div class="col-lg-10">
+              <div class="card border-0" style="background: rgba(255,255,255,0.95);">
+                <div class="card-body p-4">
             {% if attendance_data %}
               {% if attendance_data.active_sub %}
                 <div class="row g-3">
                   {% for meal in attendance_data.allowed_meals %}
-                  <div class="col-md-4">
-                    <div class="text-center">
+                  <div class="col-md-4 mb-3">
+                    <div class="meal-card">
                       <div class="mb-3">
                         {% if meal == 'breakfast' %}
-                          <i class="bi bi-sunrise text-warning" style="font-size: 2.5rem;"></i>
+                          <i class="bi bi-sunrise meal-icon" style="font-size: 3.5rem; color: #FF9800;"></i>
                         {% elif meal == 'lunch' %}
-                          <i class="bi bi-sun text-warning" style="font-size: 2.5rem;"></i>
+                          <i class="bi bi-sun meal-icon" style="font-size: 3.5rem; color: #FFC107;"></i>
                         {% elif meal == 'dinner' %}
-                          <i class="bi bi-moon text-primary" style="font-size: 2.5rem;"></i>
+                          <i class="bi bi-moon meal-icon" style="font-size: 3.5rem; color: #2196F3;"></i>
                         {% endif %}
                       </div>
-                      <h6>{{ meal|title }}</h6>
+                      <h5 class="fw-bold text-dark mb-3">{{ meal|title }}</h5>
                       {% if meal in attendance_data.marked_meals %}
-                        <span class="badge bg-success">Marked</span>
+                        <span class="badge bg-success px-3 py-2" style="font-size: 0.9rem;">
+                          <i class="bi bi-check-circle me-1"></i>Marked
+                        </span>
                       {% else %}
-                        <button class="btn btn-outline-primary btn-sm" onclick="markAttendance('{{ meal }}')">
-                          Mark
+                        <button class="btn btn-primary btn-sm px-4" onclick="markAttendance('{{ meal }}')">
+                          <i class="bi bi-check2-circle me-1"></i>Mark Now
                         </button>
                       {% endif %}
                     </div>
@@ -212,19 +559,26 @@
                   {% endfor %}
                 </div>
                 <div class="text-center mt-4">
-                  <a href="/attendance/" class="btn btn-primary">
-                    <i class="bi bi-calendar-check me-2"></i>View Full Attendance
+                  <a href="/attendance/" class="btn btn-outline-primary">
+                    <i class="bi bi-calendar-check me-2"></i>View Full Attendance History
                   </a>
                 </div>
               {% else %}
-                <div class="text-center">
-                  <i class="bi bi-exclamation-triangle text-warning" style="font-size: 3rem;"></i>
-                  <h5 class="mt-3">No Active Subscription</h5>
-                  <p class="text-muted">You need an active subscription to mark attendance.</p>
-                  <a href="/plans/" class="btn btn-primary">View Plans</a>
+                <div class="text-center py-4">
+                  <div class="mb-3">
+                    <i class="bi bi-exclamation-triangle" style="font-size: 4rem; color: #FF9800;"></i>
+                  </div>
+                  <h5 class="fw-bold">No Active Subscription</h5>
+                  <p class="text-muted mb-4">You need an active subscription to mark attendance.</p>
+                  <a href="/plans/" class="btn btn-primary">
+                    <i class="bi bi-credit-card me-2"></i>View Plans
+                  </a>
                 </div>
               {% endif %}
             {% endif %}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -235,56 +589,65 @@
 
 <!-- Available Plans Section (Non-Admin Users) -->
 {% if plans and not user.is_staff %}
-<section class="py-5">
+<section class="py-5" style="background: linear-gradient(180deg, #f8f9fa 0%, white 100%);">
   <div class="container">
     <div class="row">
-      <div class="col-12 text-center mb-5">
-        <h2 class="fw-bold">Choose Your Plan</h2>
-        <p class="text-muted">Select the perfect meal plan for your needs</p>
+      <div class="col-12 text-center mb-5 fade-in-up">
+        <h2 class="section-title">🍽️ Choose Your Plan</h2>
+        <p class="section-subtitle">Select the perfect meal plan that fits your lifestyle and budget</p>
       </div>
     </div>
     <div class="row g-4">
       {% for plan in plans %}
-      <div class="col-lg-4 col-md-6">
-        <div class="card shadow-sm h-100 border-0">
-          <div class="card-body p-4">
-            <div class="text-center mb-4">
-              <h4 class="fw-bold text-primary">{{ plan.title }}</h4>
-              <div class="h2 fw-bold">₹{{ plan.price }}</div>
-              <small class="text-muted">{{ plan.billing_period|title }}</small>
+      <div class="col-lg-4 col-md-6 fade-in-up">
+        <div class="plan-card">
+          <div class="text-center mb-4">
+            <div class="mb-3">
+              <i class="bi bi-{{ forloop.counter == 1 and 'cup-hot' or forloop.counter == 2 and 'utensils' or 'egg-fried' }}" style="font-size: 3rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></i>
             </div>
+            <h4 class="fw-bold mb-2">{{ plan.title }}</h4>
+            <div class="plan-price mb-1">₹{{ plan.price }}</div>
+            <small class="text-muted">{{ plan.billing_period|title }}</small>
+          </div>
             
-            <div class="mb-4">
-              <h6 class="fw-bold mb-3">Included Meals:</h6>
-              <div class="d-flex flex-wrap gap-2">
-                {% for meal in plan.included_meals %}
-                <span class="badge bg-success">{{ meal|title }}</span>
-                {% endfor %}
-              </div>
+          <div class="mb-4">
+            <h6 class="fw-bold mb-3">
+              <i class="bi bi-check-circle text-success me-2"></i>Included Meals:
+            </h6>
+            <div class="d-flex flex-wrap gap-2 justify-content-center">
+              {% for meal in plan.included_meals %}
+              <span class="badge" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 0.5rem 1rem; font-size: 0.85rem;">
+                <i class="bi bi-{{ meal == 'breakfast' and 'sunrise' or meal == 'lunch' and 'sun' or 'moon' }} me-1"></i>{{ meal|title }}
+              </span>
+              {% endfor %}
             </div>
-            
-            {% if plan.features %}
-            <div class="mb-4">
-              <h6 class="fw-bold mb-3">Features:</h6>
-              <div class="small text-muted">
-                {{ plan.features|linebreaks }}
-              </div>
+          </div>
+          
+          {% if plan.features %}
+          <div class="mb-4">
+            <h6 class="fw-bold mb-3">
+              <i class="bi bi-star text-warning me-2"></i>Features:
+            </h6>
+            <div class="small text-muted">
+              {{ plan.features|linebreaks }}
             </div>
+          </div>
+          {% endif %}
+          
+          <div class="text-center mt-auto pt-3">
+            {% if attendance_data and attendance_data.active_sub and attendance_data.active_sub.plan.id == plan.id %}
+              <span class="stats-badge">
+                <i class="bi bi-check-circle me-1"></i>Current Plan
+              </span>
+            {% elif attendance_data and attendance_data.active_sub %}
+              <a href="/plans/{{ plan.id }}/buy/" class="btn btn-warning w-100" style="border-radius: 50px; font-weight: 600;">
+                <i class="bi bi-arrow-up-circle me-2"></i>Upgrade Plan
+              </a>
+            {% else %}
+              <a href="/plans/{{ plan.id }}/buy/" class="btn btn-primary w-100">
+                <i class="bi bi-cart-plus me-2"></i>Get Started
+              </a>
             {% endif %}
-            
-            <div class="text-center mt-auto">
-              {% if attendance_data and attendance_data.active_sub and attendance_data.active_sub.plan.id == plan.id %}
-                <span class="badge bg-secondary">Current Plan</span>
-              {% elif attendance_data and attendance_data.active_sub %}
-                <a href="/plans/{{ plan.id }}/buy/" class="btn btn-warning w-100">
-                  <i class="bi bi-arrow-up-circle me-2"></i>Upgrade
-                </a>
-              {% else %}
-                <a href="/plans/{{ plan.id }}/buy/" class="btn btn-primary w-100">
-                  <i class="bi bi-cart-plus me-2"></i>Buy Now
-                </a>
-              {% endif %}
-            </div>
           </div>
         </div>
       </div>
@@ -304,30 +667,32 @@
 
 <!-- Food Gallery Section -->
 {% if food_images %}
-<section class="py-5">
+<section class="py-5" style="background: #f8f9fa;">
   <div class="container">
     <div class="row">
-      <div class="col-12 text-center mb-5">
-        <h2 class="fw-bold">Food Gallery</h2>
-        <p class="text-muted">Take a look at our delicious meals</p>
+      <div class="col-12 text-center mb-5 fade-in-up">
+        <h2 class="section-title">🍲 Food Gallery</h2>
+        <p class="section-subtitle">Feast your eyes on our delicious, home-cooked meals</p>
       </div>
     </div>
     <div class="row g-4">
       {% for image in food_images %}
-      <div class="col-lg-4 col-md-6">
-        <div class="card shadow-sm border-0 h-100">
-          <div class="position-relative">
-            <img src="{{ image.image.url }}" class="card-img-top" alt="{{ image.title }}" style="height: 250px; object-fit: cover;">
+      <div class="col-lg-4 col-md-6 fade-in-up">
+        <div class="gallery-card card border-0 h-100">
+          <div class="position-relative overflow-hidden">
+            <img src="{{ image.image.url }}" class="card-img-top w-100" alt="{{ image.title }}" style="height: 280px; object-fit: cover;">
             {% if image.meal_type %}
-            <div class="position-absolute top-0 end-0 m-2">
-              <span class="badge bg-primary">{{ image.meal_type|title }}</span>
+            <div class="position-absolute top-0 end-0 m-3">
+              <span class="badge px-3 py-2" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); font-size: 0.85rem;">
+                {{ image.meal_type|title }}
+              </span>
             </div>
             {% endif %}
           </div>
-          <div class="card-body">
-            <h5 class="card-title">{{ image.title }}</h5>
+          <div class="card-body p-4">
+            <h5 class="card-title fw-bold mb-2">{{ image.title }}</h5>
             {% if image.description %}
-            <p class="card-text text-muted">{{ image.description|truncatechars:100 }}</p>
+            <p class="card-text text-muted mb-0">{{ image.description|truncatechars:100 }}</p>
             {% endif %}
           </div>
         </div>
@@ -339,20 +704,31 @@
 {% endif %}
 
 <!-- Visitor Payment & Feedback (No login required) -->
- {% if not user.is_authenticated %}
-<section class="py-5 bg-light">
+{% if not user.is_authenticated %}
+<section class="py-5">
   <div class="container">
-    <div class="row align-items-center g-4">
+    <div class="text-center mb-5 fade-in-up">
+      <h2 class="section-title">👋 Visitors Welcome!</h2>
+      <p class="section-subtitle">Pay for a single meal or share your feedback with us</p>
+    </div>
+    <div class="row g-4">
       <div class="col-lg-6">
-        <div class="card shadow-sm">
-          <div class="card-body p-4">
-            <h4 class="fw-bold mb-3">Pay for a Meal (Visitors)</h4>
-            <p class="text-muted">Scan the QR or upload your payment screenshot with details.</p>
-            <div class="mb-3">
-              {% if paycfg and paycfg.gpay_qr %}
-                <img src="{{ paycfg.gpay_qr.url }}" alt="Payment QR" class="img-fluid rounded border" style="max-width: 260px;">
-              {% endif %}
+        <div class="visitor-form-card fade-in-up">
+          <div class="text-center mb-4">
+            <div class="feature-icon mx-auto mb-3" style="width: 70px; height: 70px; background: linear-gradient(135deg, #28a745 0%, #20c997 100%);">
+              <i class="bi bi-wallet2" style="font-size: 2rem;"></i>
             </div>
+            <h4 class="fw-bold mb-2">Pay for a Meal</h4>
+            <p class="text-muted mb-0">Quick payment for visitors and guests</p>
+          </div>
+          <p class="text-muted text-center mb-4">Scan the QR code or upload your payment screenshot</p>
+          <div class="text-center mb-4">
+            {% if paycfg and paycfg.gpay_qr %}
+            <div class="d-inline-block p-3" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 15px;">
+              <img src="{{ paycfg.gpay_qr.url }}" alt="Payment QR" class="img-fluid rounded" style="max-width: 220px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+            </div>
+            {% endif %}
+          </div>
             <form method="post" action="/visitor/payment/" enctype="multipart/form-data">
               {% csrf_token %}
               <div class="row g-3">
@@ -384,18 +760,24 @@
                   <label class="form-label">Note</label>
                   <input type="text" class="form-control" name="note" placeholder="Optional">
                 </div>
-                <div class="col-12 text-end">
-                  <button class="btn btn-success" type="submit">Submit Payment</button>
+                <div class="col-12 text-center">
+                  <button class="btn btn-success px-5" type="submit" style="border-radius: 50px; font-weight: 600;">
+                    <i class="bi bi-check-circle me-2"></i>Submit Payment
+                  </button>
                 </div>
               </div>
             </form>
-          </div>
         </div>
       </div>
       <div class="col-lg-6">
-        <div class="card shadow-sm">
-          <div class="card-body p-4">
-            <h4 class="fw-bold mb-3">Meal Feedback (Visitors)</h4>
+        <div class="visitor-form-card fade-in-up">
+          <div class="text-center mb-4">
+            <div class="feature-icon mx-auto mb-3" style="width: 70px; height: 70px; background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);">
+              <i class="bi bi-chat-heart" style="font-size: 2rem;"></i>
+            </div>
+            <h4 class="fw-bold mb-2">Share Your Feedback</h4>
+            <p class="text-muted mb-0">Help us improve by sharing your experience</p>
+          </div>
             <form id="visitorFeedbackForm" method="post">
               {% csrf_token %}
               <div class="row g-3">
@@ -423,12 +805,13 @@
                   <label class="form-label">Comments</label>
                   <textarea class="form-control" rows="3" name="comments"></textarea>
                 </div>
-                <div class="col-12 text-end">
-                  <button class="btn btn-primary" type="submit">Submit Feedback</button>
+                <div class="col-12 text-center">
+                  <button class="btn btn-primary px-5" type="submit" style="border-radius: 50px; font-weight: 600;">
+                    <i class="bi bi-send me-2"></i>Submit Feedback
+                  </button>
                 </div>
               </div>
             </form>
-          </div>
         </div>
       </div>
     </div>
@@ -651,5 +1034,30 @@ function showAlert(type, message) {
     modal.show();
   }, 1000);
 })();
+
+// Scroll animations for fade-in-up elements
+setTimeout(() => {
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+  };
+  
+  const observer = new IntersectionObserver(function(entries) {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, observerOptions);
+  
+  // Observe all fade-in-up elements
+  document.querySelectorAll('.fade-in-up').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(30px)';
+    el.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+    observer.observe(el);
+  });
+}, 100);
 </script>
 {% endblock %}
