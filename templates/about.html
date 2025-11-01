@@ -1,9 +1,86 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="row justify-content-center">
-  <div class="col-lg-8">
-    <h3>About Tanya's Kitchen</h3>
-    <p class="text-muted">Tanya's Kitchen is a mess/kitchen subscription and attendance system designed to simplify meal management for hostels and teams. Users subscribe to flexible plans, mark meal attendance, and upload payment proofs. Admins manage menus, plans, and approvals.</p>
+<div class="container">
+  <div class="row justify-content-center mb-5">
+    <div class="col-lg-10">
+      <div class="text-center mb-5">
+        <h2 class="fw-bold mb-3">About Tanya's Kitchen</h2>
+        <p class="text-muted lead">Tanya's Kitchen is a mess/kitchen subscription and attendance system designed to simplify meal management for hostels and teams. Users subscribe to flexible plans, mark meal attendance, and upload payment proofs. Admins manage menus, plans, and approvals.</p>
+      </div>
+    </div>
   </div>
+
+  <!-- Owner Section -->
+  {% if owners %}
+  <div class="row justify-content-center mb-5">
+    <div class="col-lg-10">
+      <h3 class="text-center mb-4 fw-bold">Meet Our Owner</h3>
+      <div class="row g-4 justify-content-center">
+        {% for owner in owners %}
+        <div class="col-lg-6 col-md-8">
+          <div class="card shadow-sm border-0 h-100">
+            <div class="card-body text-center p-4">
+              {% if owner.image %}
+              <div class="mb-3">
+                <img src="{{ owner.image.url }}" alt="{{ owner.name }}" class="rounded-circle" style="width: 200px; height: 200px; object-fit: cover; border: 4px solid #007bff;">
+              </div>
+              {% endif %}
+              <h4 class="fw-bold mb-2">{{ owner.name }}</h4>
+              <p class="text-primary mb-3">{{ owner.title }}</p>
+              {% if owner.description %}
+              <p class="text-muted">{{ owner.description }}</p>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- Staff Section -->
+  {% if staff_members %}
+  <div class="row justify-content-center mb-5">
+    <div class="col-lg-10">
+      <h3 class="text-center mb-4 fw-bold">Our Team</h3>
+      <div class="row g-4">
+        {% for staff in staff_members %}
+        <div class="col-lg-4 col-md-6">
+          <div class="card shadow-sm border-0 h-100">
+            <div class="card-body text-center p-4">
+              {% if staff.image %}
+              <div class="mb-3">
+                <img src="{{ staff.image.url }}" alt="{{ staff.name }}" class="rounded-circle" style="width: 150px; height: 150px; object-fit: cover; border: 3px solid #28a745;">
+              </div>
+              {% endif %}
+              <h5 class="fw-bold mb-2">{{ staff.name }}</h5>
+              {% if staff.role %}
+              <p class="text-success mb-3">{{ staff.role }}</p>
+              {% endif %}
+              {% if staff.description %}
+              <p class="text-muted small">{{ staff.description|truncatewords:20 }}</p>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- Call to Action -->
+  {% if not owners and not staff_members %}
+  <div class="row justify-content-center">
+    <div class="col-lg-8 text-center">
+      <div class="alert alert-info">
+        <i class="bi bi-info-circle me-2"></i>
+        <strong>Staff and Owner information will be displayed here.</strong>
+        <p class="mb-0 mt-2">Admin can add staff and owner images from the dashboard.</p>
+      </div>
+    </div>
+  </div>
+  {% endif %}
 </div>
 {% endblock %}

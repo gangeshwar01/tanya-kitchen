@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
-from .models import User, SubscriptionPlan, UserSubscription, PaymentProof, Attendance, MonthlyMenu, Notification, PaymentConfig, Feedback, CarouselImage, FoodImage, PopupNotice
+from .models import User, SubscriptionPlan, UserSubscription, PaymentProof, Attendance, MonthlyMenu, Notification, PaymentConfig, Feedback, CarouselImage, FoodImage, PopupNotice, StaffImage, OwnerImage
 
 
 @admin.register(User)
@@ -149,5 +149,37 @@ class PopupNoticeAdmin(admin.ModelAdmin):
         if not change:  # Only set created_by on creation
             obj.created_by = request.user
         super().save_model(request, obj, form, change)
+
+
+@admin.register(StaffImage)
+class StaffImageAdmin(admin.ModelAdmin):
+    list_display = ("name", "role", "is_active", "order", "created_at")
+    list_filter = ("is_active", "created_at")
+    search_fields = ("name", "role", "description")
+    list_editable = ("is_active", "order")
+    fieldsets = (
+        ("Staff Information", {
+            'fields': ('name', 'role', 'image', 'description')
+        }),
+        ("Settings", {
+            'fields': ('is_active', 'order')
+        }),
+    )
+
+
+@admin.register(OwnerImage)
+class OwnerImageAdmin(admin.ModelAdmin):
+    list_display = ("name", "title", "is_active", "created_at")
+    list_filter = ("is_active", "created_at")
+    search_fields = ("name", "title", "description")
+    list_editable = ("is_active",)
+    fieldsets = (
+        ("Owner Information", {
+            'fields': ('name', 'title', 'image', 'description')
+        }),
+        ("Settings", {
+            'fields': ('is_active',)
+        }),
+    )
 
 # Register your models here.

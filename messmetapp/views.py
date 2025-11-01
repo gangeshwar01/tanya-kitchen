@@ -9,7 +9,7 @@ from django.db.models import Count, Max, Q
 from django.utils import timezone
 import csv
 from datetime import timedelta, datetime
-from .models import SubscriptionPlan, User, UserSubscription, Attendance, MonthlyMenu, PaymentProof, MealFeedback, VisitorPayment, VisitorFeedback, PopupNotice
+from .models import SubscriptionPlan, User, UserSubscription, Attendance, MonthlyMenu, PaymentProof, MealFeedback, VisitorPayment, VisitorFeedback, PopupNotice, StaffImage, OwnerImage
 from .meal_feedback_views import meal_feedback_view, api_meal_feedback, api_meal_feedback_list
 from .forms import RegisterForm, ProfileForm, MonthlyMenuForm, CarouselImageForm, MealFeedbackForm, VisitorPaymentForm, VisitorFeedbackForm
 from rest_framework.decorators import api_view, permission_classes
@@ -141,7 +141,12 @@ def visitor_feedback_api(request):
 
 
 def about_view(request):
-    return render(request, 'about.html')
+    staff_members = StaffImage.objects.filter(is_active=True).order_by('-order', '-created_at')
+    owners = OwnerImage.objects.filter(is_active=True).order_by('-created_at')
+    return render(request, 'about.html', {
+        'staff_members': staff_members,
+        'owners': owners
+    })
 
 
 
@@ -833,6 +838,172 @@ def api_notice_delete(request, notice_id):
         return Response({'success': True, 'message': 'Notice deleted successfully'})
     except PopupNotice.DoesNotExist:
         return Response({'success': False, 'message': 'Notice not found'}, status=404)
+    except Exception as e:
+        return Response({'success': False, 'message': str(e)}, status=400)
+
+
+# Staff & Owner API Endpoints
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def api_staff_list(request):
+    """Get all staff members for admin dashboard"""
+    if not request.user.is_staff:
+        return Response({'success': False, 'message': 'Permission denied'}, status=403)
+    
+    staff = StaffImage.objects.all().order_by('-order', '-created_at')
+    staff_data = []
+    for s in staff:
+        staff_data.append({
+            'id': s.id,
+            'name': s.name,
+            'role': s.role,
+            'description': s.description,
+            'image': s.image.url if s.image else None,
+            'is_active': s.is_active,
+            'order': s.order,
+        })
+    return Response(staff_data)
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def api_staff_create(request):
+    """Create a new staff member"""
+    if not request.user.is_staff:
+        return Response({'success': False, 'message': 'Permission denied'}, status=403)
+    
+    try:
+        staff = StaffImage.objects.create(
+            name=request.POST.get('name'),
+            role=request.POST.get('role', ''),
+            description=request.POST.get('description', ''),
+            image=request.FILES.get('image'),
+            order=int(request.POST.get('order', 0)),
+            is_active=request.POST.get('is_active') == 'true'
+        )
+        return Response({'success': True, 'id': staff.id, 'message': 'Staff added successfully'})
+    except Exception as e:
+        return Response({'success': False, 'message': str(e)}, status=400)
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def api_staff_update(request, staff_id):
+    """Update an existing staff member"""
+    if not request.user.is_staff:
+        return Response({'success': False, 'message': 'Permission denied'}, status=403)
+    
+    try:
+        staff = StaffImage.objects.get(id=staff_id)
+        staff.name = request.POST.get('name', staff.name)
+        staff.role = request.POST.get('role', staff.role)
+        staff.description = request.POST.get('description', staff.description)
+        staff.order = int(request.POST.get('order', staff.order))
+        staff.is_active = request.POST.get('is_active') == 'true'
+        if request.FILES.get('image'):
+            staff.image = request.FILES.get('image')
+        staff.save()
+        return Response({'success': True, 'message': 'Staff updated successfully'})
+    except StaffImage.DoesNotExist:
+        return Response({'success': False, 'message': 'Staff not found'}, status=404)
+    except Exception as e:
+        return Response({'success': False, 'message': str(e)}, status=400)
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def api_staff_delete(request, staff_id):
+    """Delete a staff member"""
+    if not request.user.is_staff:
+        return Response({'success': False, 'message': 'Permission denied'}, status=403)
+    
+    try:
+        staff = StaffImage.objects.get(id=staff_id)
+        staff.delete()
+        return Response({'success': True, 'message': 'Staff deleted successfully'})
+    except StaffImage.DoesNotExist:
+        return Response({'success': False, 'message': 'Staff not found'}, status=404)
+    except Exception as e:
+        return Response({'success': False, 'message': str(e)}, status=400)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def api_owner_list(request):
+    """Get all owner information for admin dashboard"""
+    if not request.user.is_staff:
+        return Response({'success': False, 'message': 'Permission denied'}, status=403)
+    
+    owners = OwnerImage.objects.all().order_by('-created_at')
+    owner_data = []
+    for o in owners:
+        owner_data.append({
+            'id': o.id,
+            'name': o.name,
+            'title': o.title,
+            'description': o.description,
+            'image': o.image.url if o.image else None,
+            'is_active': o.is_active,
+        })
+    return Response(owner_data)
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def api_owner_create(request):
+    """Create owner information"""
+    if not request.user.is_staff:
+        return Response({'success': False, 'message': 'Permission denied'}, status=403)
+    
+    try:
+        owner = OwnerImage.objects.create(
+            name=request.POST.get('name'),
+            title=request.POST.get('title', 'Owner'),
+            description=request.POST.get('description', ''),
+            image=request.FILES.get('image'),
+            is_active=request.POST.get('is_active') == 'true'
+        )
+        return Response({'success': True, 'id': owner.id, 'message': 'Owner added successfully'})
+    except Exception as e:
+        return Response({'success': False, 'message': str(e)}, status=400)
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def api_owner_update(request, owner_id):
+    """Update owner information"""
+    if not request.user.is_staff:
+        return Response({'success': False, 'message': 'Permission denied'}, status=403)
+    
+    try:
+        owner = OwnerImage.objects.get(id=owner_id)
+        owner.name = request.POST.get('name', owner.name)
+        owner.title = request.POST.get('title', owner.title)
+        owner.description = request.POST.get('description', owner.description)
+        owner.is_active = request.POST.get('is_active') == 'true'
+        if request.FILES.get('image'):
+            owner.image = request.FILES.get('image')
+        owner.save()
+        return Response({'success': True, 'message': 'Owner updated successfully'})
+    except OwnerImage.DoesNotExist:
+        return Response({'success': False, 'message': 'Owner not found'}, status=404)
+    except Exception as e:
+        return Response({'success': False, 'message': str(e)}, status=400)
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def api_owner_delete(request, owner_id):
+    """Delete owner information"""
+    if not request.user.is_staff:
+        return Response({'success': False, 'message': 'Permission denied'}, status=403)
+    
+    try:
+        owner = OwnerImage.objects.get(id=owner_id)
+        owner.delete()
+        return Response({'success': True, 'message': 'Owner deleted successfully'})
+    except OwnerImage.DoesNotExist:
+        return Response({'success': False, 'message': 'Owner not found'}, status=404)
     except Exception as e:
         return Response({'success': False, 'message': str(e)}, status=400)
 

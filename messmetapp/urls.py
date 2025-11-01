@@ -31,6 +31,15 @@ urlpatterns = [
     path('api/notices/create/', views.api_notice_create, name='api_notice_create'),
     path('api/notices/update/<int:notice_id>/', views.api_notice_update, name='api_notice_update'),
     path('api/notices/delete/<int:notice_id>/', views.api_notice_delete, name='api_notice_delete'),
+    # Staff & Owner APIs
+    path('api/staff/list/', views.api_staff_list, name='api_staff_list'),
+    path('api/staff/create/', views.api_staff_create, name='api_staff_create'),
+    path('api/staff/update/<int:staff_id>/', views.api_staff_update, name='api_staff_update'),
+    path('api/staff/delete/<int:staff_id>/', views.api_staff_delete, name='api_staff_delete'),
+    path('api/owner/list/', views.api_owner_list, name='api_owner_list'),
+    path('api/owner/create/', views.api_owner_create, name='api_owner_create'),
+    path('api/owner/update/<int:owner_id>/', views.api_owner_update, name='api_owner_update'),
+    path('api/owner/delete/<int:owner_id>/', views.api_owner_delete, name='api_owner_delete'),
     # Admin APIs
     path('api/admin/mark-attendance/', views.admin_mark_attendance, name='admin_mark_attendance'),
     path('api/admin/mark-attendance', views.admin_mark_attendance, name='admin_mark_attendance_no_slash'),

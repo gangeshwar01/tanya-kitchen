@@ -332,3 +332,46 @@ class PopupNotice(models.Model):
         """Check if notice should be displayed now"""
         now = timezone.now()
         return self.is_active and self.start_datetime <= now <= self.end_datetime
+
+
+class StaffImage(models.Model):
+    """
+    Images of kitchen staff members to display on about page
+    """
+    name = models.CharField(max_length=150, help_text="Staff member name")
+    role = models.CharField(max_length=100, help_text="Staff role/position", blank=True)
+    image = models.ImageField(upload_to='staff/')
+    description = models.TextField(blank=True, help_text="Brief description about the staff member")
+    is_active = models.BooleanField(default=True)
+    order = models.PositiveIntegerField(default=0, help_text="Display order (higher numbers first)")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-order', '-created_at']
+        verbose_name = "Staff Image"
+        verbose_name_plural = "Staff Images"
+
+    def __str__(self) -> str:
+        return f"{self.name} ({self.role or 'Staff'})"
+
+
+class OwnerImage(models.Model):
+    """
+    Owner/Kitchen owner's image and information to display on about page
+    """
+    name = models.CharField(max_length=150, help_text="Owner name")
+    title = models.CharField(max_length=100, default="Owner", help_text="Title/Position")
+    image = models.ImageField(upload_to='owner/')
+    description = models.TextField(blank=True, help_text="Brief description about the owner")
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = "Owner Image"
+        verbose_name_plural = "Owner Images"
+
+    def __str__(self) -> str:
+        return f"{self.name} - {self.title}"

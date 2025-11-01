@@ -70,6 +70,10 @@
           <i class="bi bi-megaphone me-2"></i>
           <span class="fw-medium">Popup Notices</span>
         </a>
+        <a class="nav-link text-dark py-2 px-3 mb-1 rounded-2" href="#staff-owner" data-section="staff-owner" style="transition: all 0.2s ease;">
+          <i class="bi bi-people-fill me-2"></i>
+          <span class="fw-medium">Staff & Owner</span>
+        </a>
         
         <!-- Divider -->
         <hr class="my-3">
@@ -1386,6 +1390,97 @@
         </div>
       </div>
 
+      <!-- Staff & Owner Section -->
+      <div id="staff-owner-section" class="dashboard-section" style="display: none;">
+        <div class="row g-4">
+          <!-- Staff Management -->
+          <div class="col-lg-6">
+            <div class="card shadow-sm">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                  <h5 class="card-title mb-0">
+                    <i class="bi bi-people me-2"></i>Staff Members
+                  </h5>
+                  <div class="d-flex gap-2">
+                    <button class="btn btn-success btn-sm" onclick="showAddStaffModal()">
+                      <i class="bi bi-plus-circle me-1"></i>Add Staff
+                    </button>
+                    <button class="btn btn-outline-primary btn-sm" onclick="refreshStaff()">
+                      <i class="bi bi-arrow-clockwise me-1"></i>Refresh
+                    </button>
+                  </div>
+                </div>
+                <div class="table-responsive">
+                  <table class="table table-hover table-sm">
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody id="staffTableBody">
+                      <tr>
+                        <td colspan="4" class="text-center">
+                          <div class="spinner-border spinner-border-sm text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                          </div>
+                          Loading staff...
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Owner Management -->
+          <div class="col-lg-6">
+            <div class="card shadow-sm">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                  <h5 class="card-title mb-0">
+                    <i class="bi bi-person-badge me-2"></i>Owner
+                  </h5>
+                  <div class="d-flex gap-2">
+                    <button class="btn btn-success btn-sm" onclick="showAddOwnerModal()">
+                      <i class="bi bi-plus-circle me-1"></i>Add Owner
+                    </button>
+                    <button class="btn btn-outline-primary btn-sm" onclick="refreshOwner()">
+                      <i class="bi bi-arrow-clockwise me-1"></i>Refresh
+                    </button>
+                  </div>
+                </div>
+                <div class="table-responsive">
+                  <table class="table table-hover table-sm">
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Title</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody id="ownerTableBody">
+                      <tr>
+                        <td colspan="4" class="text-center">
+                          <div class="spinner-border spinner-border-sm text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                          </div>
+                          Loading owner...
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- User Management Section -->
       <div id="user-management-section" class="dashboard-section" style="display: none;">
   <div class="card shadow-sm">
@@ -1758,6 +1853,113 @@
   </div>
 </div>
 
+<!-- Add/Edit Staff Modal -->
+<div class="modal fade" id="staffModal" tabindex="-1" aria-labelledby="staffModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="staffModalLabel">
+          <i class="bi bi-people me-2"></i><span id="staffModalTitle">Add Staff</span>
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="staffForm">
+          <input type="hidden" id="staffId">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label for="staffName" class="form-label">Name *</label>
+              <input type="text" class="form-control" id="staffName" required maxlength="150">
+            </div>
+            <div class="col-md-6">
+              <label for="staffRole" class="form-label">Role/Position</label>
+              <input type="text" class="form-control" id="staffRole" maxlength="100" placeholder="e.g., Chef, Manager">
+            </div>
+            <div class="col-12">
+              <label for="staffImage" class="form-label">Image *</label>
+              <input type="file" class="form-control" id="staffImage" accept="image/*">
+              <small class="text-muted">Upload a photo of the staff member</small>
+              <div id="staffImagePreview" class="mt-2"></div>
+            </div>
+            <div class="col-12">
+              <label for="staffDescription" class="form-label">Description</label>
+              <textarea class="form-control" id="staffDescription" rows="3"></textarea>
+            </div>
+            <div class="col-md-6">
+              <label for="staffOrder" class="form-label">Display Order</label>
+              <input type="number" class="form-control" id="staffOrder" value="0" min="0">
+              <small class="text-muted">Higher numbers show first</small>
+            </div>
+            <div class="col-md-6">
+              <div class="form-check form-switch mt-4 pt-3">
+                <input class="form-check-input" type="checkbox" id="staffIsActive" checked>
+                <label class="form-check-label" for="staffIsActive">Active (Show on about page)</label>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" onclick="saveStaff()">
+          <i class="bi bi-save me-1"></i>Save Staff
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add/Edit Owner Modal -->
+<div class="modal fade" id="ownerModal" tabindex="-1" aria-labelledby="ownerModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="ownerModalLabel">
+          <i class="bi bi-person-badge me-2"></i><span id="ownerModalTitle">Add Owner</span>
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="ownerForm">
+          <input type="hidden" id="ownerId">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label for="ownerName" class="form-label">Name *</label>
+              <input type="text" class="form-control" id="ownerName" required maxlength="150">
+            </div>
+            <div class="col-md-6">
+              <label for="ownerTitle" class="form-label">Title/Position</label>
+              <input type="text" class="form-control" id="ownerTitle" maxlength="100" value="Owner">
+            </div>
+            <div class="col-12">
+              <label for="ownerImage" class="form-label">Image *</label>
+              <input type="file" class="form-control" id="ownerImage" accept="image/*">
+              <small class="text-muted">Upload a photo of the owner</small>
+              <div id="ownerImagePreview" class="mt-2"></div>
+            </div>
+            <div class="col-12">
+              <label for="ownerDescription" class="form-label">Description</label>
+              <textarea class="form-control" id="ownerDescription" rows="3"></textarea>
+            </div>
+            <div class="col-12">
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="ownerIsActive" checked>
+                <label class="form-check-label" for="ownerIsActive">Active (Show on about page)</label>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" onclick="saveOwner()">
+          <i class="bi bi-save me-1"></i>Save Owner
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Add/Edit Notice Modal -->
 <div class="modal fade" id="noticeModal" tabindex="-1" aria-labelledby="noticeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
@@ -1890,6 +2092,10 @@
           <i class="bi bi-megaphone me-2"></i>
           <span class="fw-medium">Popup Notices</span>
         </a>
+        <a class="nav-link text-dark py-2 px-3 mb-1 rounded-2" href="#staff-owner" data-section="staff-owner" style="transition: all 0.2s ease;">
+          <i class="bi bi-people-fill me-2"></i>
+          <span class="fw-medium">Staff & Owner</span>
+        </a>
         
         <!-- Divider -->
         <hr class="my-3">
@@ -1988,7 +2194,8 @@ document.addEventListener('DOMContentLoaded', function() {
     'lms': 'Attendance Management System',
     'user-management': 'User Management',
     'meal-feedback': 'Meal Feedback Management',
-    'popup-notices': 'Popup Notice Management'
+    'popup-notices': 'Popup Notice Management',
+    'staff-owner': 'Staff & Owner Management'
   };
   
   // Handle navigation clicks
@@ -3440,7 +3647,363 @@ document.addEventListener('DOMContentLoaded', function() {
       setTimeout(loadNotices, 100);
     });
   }
+  
+  const staffOwnerLink = document.querySelector('a[data-section="staff-owner"]');
+  if (staffOwnerLink) {
+    staffOwnerLink.addEventListener('click', function() {
+      setTimeout(() => {
+        loadStaff();
+        loadOwner();
+      }, 100);
+    });
+  }
+  
+  // Image preview handlers (only if modals exist)
+  const staffImageInput = document.getElementById('staffImage');
+  const ownerImageInput = document.getElementById('ownerImage');
+  if (staffImageInput) {
+    staffImageInput.addEventListener('change', function(e) {
+      previewImage(e.target, 'staffImagePreview');
+    });
+  }
+  if (ownerImageInput) {
+    ownerImageInput.addEventListener('change', function(e) {
+      previewImage(e.target, 'ownerImagePreview');
+    });
+  }
 });
+
+// Staff & Owner Management Functions
+let allStaff = [];
+let allOwner = [];
+
+function previewImage(input, previewId) {
+  const preview = document.getElementById(previewId);
+  if (input.files && input.files[0]) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      preview.innerHTML = `<img src="${e.target.result}" class="img-thumbnail" style="max-width: 200px; max-height: 200px;">`;
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+function refreshStaff() {
+  loadStaff();
+}
+
+function refreshOwner() {
+  loadOwner();
+}
+
+function loadStaff() {
+  const tbody = document.getElementById('staffTableBody');
+  tbody.innerHTML = '<tr><td colspan="4" class="text-center"><div class="spinner-border spinner-border-sm text-primary" role="status"><span class="visually-hidden">Loading...</span></div> Loading staff...</td></tr>';
+  
+  fetch('/api/staff/list/')
+    .then(response => response.json())
+    .then(data => {
+      allStaff = data;
+      displayStaff(data);
+    })
+    .catch(error => {
+      console.error('Error loading staff:', error);
+      tbody.innerHTML = '<tr><td colspan="4" class="text-center text-danger">Error loading staff</td></tr>';
+    });
+}
+
+function displayStaff(staffList) {
+  const tbody = document.getElementById('staffTableBody');
+  
+  if (!staffList || staffList.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted">No staff members found</td></tr>';
+    return;
+  }
+  
+  tbody.innerHTML = staffList.map(staff => {
+    return `
+      <tr>
+        <td><strong>${staff.name}</strong></td>
+        <td>${staff.role || '-'}</td>
+        <td>${staff.is_active ? '<span class="badge bg-success">Active</span>' : '<span class="badge bg-secondary">Inactive</span>'}</td>
+        <td>
+          <button class="btn btn-sm btn-outline-primary" onclick="editStaff(${staff.id})" title="Edit">
+            <i class="bi bi-pencil"></i>
+          </button>
+          <button class="btn btn-sm btn-outline-danger" onclick="deleteStaff(${staff.id})" title="Delete">
+            <i class="bi bi-trash"></i>
+          </button>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function loadOwner() {
+  const tbody = document.getElementById('ownerTableBody');
+  tbody.innerHTML = '<tr><td colspan="4" class="text-center"><div class="spinner-border spinner-border-sm text-primary" role="status"><span class="visually-hidden">Loading...</span></div> Loading owner...</td></tr>';
+  
+  fetch('/api/owner/list/')
+    .then(response => response.json())
+    .then(data => {
+      allOwner = data;
+      displayOwner(data);
+    })
+    .catch(error => {
+      console.error('Error loading owner:', error);
+      tbody.innerHTML = '<tr><td colspan="4" class="text-center text-danger">Error loading owner</td></tr>';
+    });
+}
+
+function displayOwner(ownerList) {
+  const tbody = document.getElementById('ownerTableBody');
+  
+  if (!ownerList || ownerList.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted">No owner information found</td></tr>';
+    return;
+  }
+  
+  tbody.innerHTML = ownerList.map(owner => {
+    return `
+      <tr>
+        <td><strong>${owner.name}</strong></td>
+        <td>${owner.title || 'Owner'}</td>
+        <td>${owner.is_active ? '<span class="badge bg-success">Active</span>' : '<span class="badge bg-secondary">Inactive</span>'}</td>
+        <td>
+          <button class="btn btn-sm btn-outline-primary" onclick="editOwner(${owner.id})" title="Edit">
+            <i class="bi bi-pencil"></i>
+          </button>
+          <button class="btn btn-sm btn-outline-danger" onclick="deleteOwner(${owner.id})" title="Delete">
+            <i class="bi bi-trash"></i>
+          </button>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function showAddStaffModal() {
+  document.getElementById('staffModalTitle').textContent = 'Add Staff';
+  document.getElementById('staffForm').reset();
+  document.getElementById('staffId').value = '';
+  document.getElementById('staffIsActive').checked = true;
+  document.getElementById('staffOrder').value = '0';
+  document.getElementById('staffImagePreview').innerHTML = '';
+  
+  const modal = new bootstrap.Modal(document.getElementById('staffModal'));
+  modal.show();
+}
+
+function editStaff(id) {
+  const staff = allStaff.find(s => s.id === id);
+  if (!staff) return;
+  
+  document.getElementById('staffModalTitle').textContent = 'Edit Staff';
+  document.getElementById('staffId').value = staff.id;
+  document.getElementById('staffName').value = staff.name;
+  document.getElementById('staffRole').value = staff.role || '';
+  document.getElementById('staffDescription').value = staff.description || '';
+  document.getElementById('staffOrder').value = staff.order || 0;
+  document.getElementById('staffIsActive').checked = staff.is_active;
+  
+  // Show existing image
+  if (staff.image) {
+    document.getElementById('staffImagePreview').innerHTML = `<img src="${staff.image}" class="img-thumbnail" style="max-width: 200px; max-height: 200px;">`;
+  }
+  
+  const modal = new bootstrap.Modal(document.getElementById('staffModal'));
+  modal.show();
+}
+
+function saveStaff() {
+  const id = document.getElementById('staffId').value;
+  const name = document.getElementById('staffName').value.trim();
+  const role = document.getElementById('staffRole').value.trim();
+  const description = document.getElementById('staffDescription').value.trim();
+  const order = parseInt(document.getElementById('staffOrder').value) || 0;
+  const isActive = document.getElementById('staffIsActive').checked;
+  const imageFile = document.getElementById('staffImage').files[0];
+  
+  if (!name) {
+    alert('Please fill in the name');
+    return;
+  }
+  
+  if (!id && !imageFile) {
+    alert('Please upload an image');
+    return;
+  }
+  
+  const formData = new FormData();
+  formData.append('name', name);
+  if (role) formData.append('role', role);
+  if (description) formData.append('description', description);
+  formData.append('order', order);
+  formData.append('is_active', isActive);
+  if (imageFile) formData.append('image', imageFile);
+  
+  const url = id ? `/api/staff/update/${id}/` : '/api/staff/create/';
+  
+  fetch(url, {
+    method: 'POST',
+    headers: {
+      'X-CSRFToken': getCsrfToken()
+    },
+    body: formData
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      const modal = bootstrap.Modal.getInstance(document.getElementById('staffModal'));
+      if (modal) modal.hide();
+      showAlert('success', id ? 'Staff updated successfully' : 'Staff added successfully');
+      setTimeout(() => loadStaff(), 500);
+    } else {
+      showAlert('danger', data.message || 'Error saving staff');
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    showAlert('danger', 'Error saving staff: ' + error.message);
+  });
+}
+
+function deleteStaff(id) {
+  if (!confirm('Are you sure you want to delete this staff member?')) {
+    return;
+  }
+  
+  fetch(`/api/staff/delete/${id}/`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': getCsrfToken()
+    }
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      showAlert('success', 'Staff deleted successfully');
+      loadStaff();
+    } else {
+      showAlert('danger', data.message || 'Error deleting staff');
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    showAlert('danger', 'Error deleting staff');
+  });
+}
+
+function showAddOwnerModal() {
+  document.getElementById('ownerModalTitle').textContent = 'Add Owner';
+  document.getElementById('ownerForm').reset();
+  document.getElementById('ownerId').value = '';
+  document.getElementById('ownerIsActive').checked = true;
+  document.getElementById('ownerTitle').value = 'Owner';
+  document.getElementById('ownerImagePreview').innerHTML = '';
+  
+  const modal = new bootstrap.Modal(document.getElementById('ownerModal'));
+  modal.show();
+}
+
+function editOwner(id) {
+  const owner = allOwner.find(o => o.id === id);
+  if (!owner) return;
+  
+  document.getElementById('ownerModalTitle').textContent = 'Edit Owner';
+  document.getElementById('ownerId').value = owner.id;
+  document.getElementById('ownerName').value = owner.name;
+  document.getElementById('ownerTitle').value = owner.title || 'Owner';
+  document.getElementById('ownerDescription').value = owner.description || '';
+  document.getElementById('ownerIsActive').checked = owner.is_active;
+  
+  // Show existing image
+  if (owner.image) {
+    document.getElementById('ownerImagePreview').innerHTML = `<img src="${owner.image}" class="img-thumbnail" style="max-width: 200px; max-height: 200px;">`;
+  }
+  
+  const modal = new bootstrap.Modal(document.getElementById('ownerModal'));
+  modal.show();
+}
+
+function saveOwner() {
+  const id = document.getElementById('ownerId').value;
+  const name = document.getElementById('ownerName').value.trim();
+  const title = document.getElementById('ownerTitle').value.trim();
+  const description = document.getElementById('ownerDescription').value.trim();
+  const isActive = document.getElementById('ownerIsActive').checked;
+  const imageFile = document.getElementById('ownerImage').files[0];
+  
+  if (!name) {
+    alert('Please fill in the name');
+    return;
+  }
+  
+  if (!id && !imageFile) {
+    alert('Please upload an image');
+    return;
+  }
+  
+  const formData = new FormData();
+  formData.append('name', name);
+  if (title) formData.append('title', title);
+  if (description) formData.append('description', description);
+  formData.append('is_active', isActive);
+  if (imageFile) formData.append('image', imageFile);
+  
+  const url = id ? `/api/owner/update/${id}/` : '/api/owner/create/';
+  
+  fetch(url, {
+    method: 'POST',
+    headers: {
+      'X-CSRFToken': getCsrfToken()
+    },
+    body: formData
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      const modal = bootstrap.Modal.getInstance(document.getElementById('ownerModal'));
+      if (modal) modal.hide();
+      showAlert('success', id ? 'Owner updated successfully' : 'Owner added successfully');
+      setTimeout(() => loadOwner(), 500);
+    } else {
+      showAlert('danger', data.message || 'Error saving owner');
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    showAlert('danger', 'Error saving owner: ' + error.message);
+  });
+}
+
+function deleteOwner(id) {
+  if (!confirm('Are you sure you want to delete this owner information?')) {
+    return;
+  }
+  
+  fetch(`/api/owner/delete/${id}/`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': getCsrfToken()
+    }
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      showAlert('success', 'Owner deleted successfully');
+      loadOwner();
+    } else {
+      showAlert('danger', data.message || 'Error deleting owner');
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    showAlert('danger', 'Error deleting owner');
+  });
+}
 </script>
 
 {% endblock %}
