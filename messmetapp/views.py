@@ -453,7 +453,8 @@ def dashboard(request):
         all_users_qs = all_users_qs.filter(hostel_status=hostel_status)
 
     all_users = all_users_qs.annotate(
-        total_attendance_count=Count('attendances'),
+        # Count distinct dates attended, not total meal records
+        total_attendance_count=Count('attendances__date', distinct=True),
         last_attendance=Max('attendances__marked_at')
     ).order_by('username')
     
@@ -1218,7 +1219,8 @@ def student_details(request, user_id):
         # Get the user with attendance count annotation
         from django.db.models import Count, Max
         user = User.objects.filter(id=user_id, is_staff=False).annotate(
-            total_attendance_count=Count('attendances'),
+            # Count distinct dates attended, not total meal records
+            total_attendance_count=Count('attendances__date', distinct=True),
             last_attendance=Max('attendances__marked_at')
         ).first()
         
@@ -1330,7 +1332,8 @@ def user_details(request, user_id):
     try:
         # Get the user with attendance count annotation
         user = User.objects.filter(id=user_id).annotate(
-            total_attendance_count=Count('attendances'),
+            # Count distinct dates attended, not total meal records
+            total_attendance_count=Count('attendances__date', distinct=True),
             last_attendance=Max('attendances__marked_at')
         ).first()
         
@@ -1513,7 +1516,8 @@ def export_users_csv(request):
         
         # Get users with attendance data and subscription info
         users = User.objects.annotate(
-            total_attendance_count=Count('attendances'),
+            # Count distinct dates attended, not total meal records
+            total_attendance_count=Count('attendances__date', distinct=True),
             last_attendance_date=Max('attendances__date')
         ).prefetch_related('subscriptions').order_by('username')
         
