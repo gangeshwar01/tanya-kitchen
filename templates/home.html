@@ -415,21 +415,114 @@
   background: #333;
   position: absolute;
   bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  transform-origin: top center;
 }
 
 .star-wire::before {
   content: '';
   position: absolute;
   top: 0;
-  left: 50%;
-  transform: translateX(-50%);
   width: 4px;
   height: 4px;
   background: #333;
   border-radius: 50%;
+}
+
+/* Left side wires - each connects from different point to its star */
+.stars-left .star-with-wire:nth-child(1) .star-wire {
+  left: 5%;
+  height: 100px;
+}
+.stars-left .star-with-wire:nth-child(1) .star-wire::before {
+  left: 0;
+}
+
+.stars-left .star-with-wire:nth-child(2) .star-wire {
+  left: 15%;
+  height: 200px;
+}
+.stars-left .star-with-wire:nth-child(2) .star-wire::before {
+  left: 0;
+}
+
+.stars-left .star-with-wire:nth-child(3) .star-wire {
+  left: 8%;
+  height: 320px;
+}
+.stars-left .star-with-wire:nth-child(3) .star-wire::before {
+  left: 0;
+}
+
+.stars-left .star-with-wire:nth-child(4) .star-wire {
+  left: 18%;
+  height: 460px;
+}
+.stars-left .star-with-wire:nth-child(4) .star-wire::before {
+  left: 0;
+}
+
+.stars-left .star-with-wire:nth-child(5) .star-wire {
+  left: 3%;
+  height: 600px;
+}
+.stars-left .star-with-wire:nth-child(5) .star-wire::before {
+  left: 0;
+}
+
+.stars-left .star-with-wire:nth-child(6) .star-wire {
+  left: 12%;
+  height: 740px;
+}
+.stars-left .star-with-wire:nth-child(6) .star-wire::before {
+  left: 0;
+}
+
+/* Right side wires - each connects from different point to its star */
+.stars-right .star-with-wire:nth-child(1) .star-wire {
+  right: 8%;
+  height: 120px;
+}
+.stars-right .star-with-wire:nth-child(1) .star-wire::before {
+  right: 0;
+}
+
+.stars-right .star-with-wire:nth-child(2) .star-wire {
+  right: 3%;
+  height: 240px;
+}
+.stars-right .star-with-wire:nth-child(2) .star-wire::before {
+  right: 0;
+}
+
+.stars-right .star-with-wire:nth-child(3) .star-wire {
+  right: 15%;
+  height: 360px;
+}
+.stars-right .star-with-wire:nth-child(3) .star-wire::before {
+  right: 0;
+}
+
+.stars-right .star-with-wire:nth-child(4) .star-wire {
+  right: 5%;
+  height: 500px;
+}
+.stars-right .star-with-wire:nth-child(4) .star-wire::before {
+  right: 0;
+}
+
+.stars-right .star-with-wire:nth-child(5) .star-wire {
+  right: 12%;
+  height: 640px;
+}
+.stars-right .star-with-wire:nth-child(5) .star-wire::before {
+  right: 0;
+}
+
+.stars-right .star-with-wire:nth-child(6) .star-wire {
+  right: 7%;
+  height: 780px;
+}
+.stars-right .star-with-wire:nth-child(6) .star-wire::before {
+  right: 0;
 }
 
 .sparkle-star {
@@ -441,87 +534,43 @@
   filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6));
 }
 
-/* Left side stars with hanging wires - much more spread out horizontally (10 stars) */
-.stars-left .star-with-wire:nth-child(1) { top: 120px; left: 5px; }
-.stars-left .star-with-wire:nth-child(1) .star-wire { height: 120px; }
+/* Left side stars - each hanging from different points along navbar */
+.stars-left .star-with-wire:nth-child(1) { top: 100px; left: 5%; }
 .stars-left .star-with-wire:nth-child(1) .sparkle-star { font-size: 2rem; animation-delay: 0s; }
 
-.stars-left .star-with-wire:nth-child(2) { top: 280px; left: 65px; }
-.stars-left .star-with-wire:nth-child(2) .star-wire { height: 280px; }
+.stars-left .star-with-wire:nth-child(2) { top: 200px; left: 15%; }
 .stars-left .star-with-wire:nth-child(2) .sparkle-star { font-size: 2.4rem; animation-delay: 0.4s; }
 
-.stars-left .star-with-wire:nth-child(3) { top: 420px; left: 12px; }
-.stars-left .star-with-wire:nth-child(3) .star-wire { height: 420px; }
+.stars-left .star-with-wire:nth-child(3) { top: 320px; left: 8%; }
 .stars-left .star-with-wire:nth-child(3) .sparkle-star { font-size: 1.8rem; animation-delay: 0.8s; }
 
-.stars-left .star-with-wire:nth-child(4) { top: 560px; left: 55px; }
-.stars-left .star-with-wire:nth-child(4) .star-wire { height: 560px; }
+.stars-left .star-with-wire:nth-child(4) { top: 460px; left: 18%; }
 .stars-left .star-with-wire:nth-child(4) .sparkle-star { font-size: 2.1rem; animation-delay: 1.2s; }
 
-.stars-left .star-with-wire:nth-child(5) { top: 700px; left: 8px; }
-.stars-left .star-with-wire:nth-child(5) .star-wire { height: 700px; }
+.stars-left .star-with-wire:nth-child(5) { top: 600px; left: 3%; }
 .stars-left .star-with-wire:nth-child(5) .sparkle-star { font-size: 1.7rem; animation-delay: 1.6s; }
 
-.stars-left .star-with-wire:nth-child(6) { top: 840px; left: 62px; }
-.stars-left .star-with-wire:nth-child(6) .star-wire { height: 840px; }
+.stars-left .star-with-wire:nth-child(6) { top: 740px; left: 12%; }
 .stars-left .star-with-wire:nth-child(6) .sparkle-star { font-size: 2rem; animation-delay: 2s; }
 
-.stars-left .star-with-wire:nth-child(7) { top: 980px; left: 18px; }
-.stars-left .star-with-wire:nth-child(7) .star-wire { height: 980px; }
-.stars-left .star-with-wire:nth-child(7) .sparkle-star { font-size: 2.2rem; animation-delay: 2.4s; }
-
-.stars-left .star-with-wire:nth-child(8) { top: 1120px; left: 48px; }
-.stars-left .star-with-wire:nth-child(8) .star-wire { height: 1120px; }
-.stars-left .star-with-wire:nth-child(8) .sparkle-star { font-size: 1.9rem; animation-delay: 2.8s; }
-
-.stars-left .star-with-wire:nth-child(9) { top: 1260px; left: 25px; }
-.stars-left .star-with-wire:nth-child(9) .star-wire { height: 1260px; }
-.stars-left .star-with-wire:nth-child(9) .sparkle-star { font-size: 2.3rem; animation-delay: 3.2s; }
-
-.stars-left .star-with-wire:nth-child(10) { top: 1400px; left: 58px; }
-.stars-left .star-with-wire:nth-child(10) .star-wire { height: 1400px; }
-.stars-left .star-with-wire:nth-child(10) .sparkle-star { font-size: 2rem; animation-delay: 3.6s; }
-
-/* Right side stars with hanging wires - much more spread out horizontally (10 stars) */
-.stars-right .star-with-wire:nth-child(1) { top: 150px; right: 8px; }
-.stars-right .star-with-wire:nth-child(1) .star-wire { height: 150px; }
+/* Right side stars - each hanging from different points along navbar */
+.stars-right .star-with-wire:nth-child(1) { top: 120px; right: 8%; }
 .stars-right .star-with-wire:nth-child(1) .sparkle-star { font-size: 2.1rem; animation-delay: 0.2s; }
 
-.stars-right .star-with-wire:nth-child(2) { top: 310px; right: 62px; }
-.stars-right .star-with-wire:nth-child(2) .star-wire { height: 310px; }
+.stars-right .star-with-wire:nth-child(2) { top: 240px; right: 3%; }
 .stars-right .star-with-wire:nth-child(2) .sparkle-star { font-size: 2.5rem; animation-delay: 0.6s; }
 
-.stars-right .star-with-wire:nth-child(3) { top: 450px; right: 15px; }
-.stars-right .star-with-wire:nth-child(3) .star-wire { height: 450px; }
+.stars-right .star-with-wire:nth-child(3) { top: 360px; right: 15%; }
 .stars-right .star-with-wire:nth-child(3) .sparkle-star { font-size: 1.7rem; animation-delay: 1s; }
 
-.stars-right .star-with-wire:nth-child(4) { top: 590px; right: 52px; }
-.stars-right .star-with-wire:nth-child(4) .star-wire { height: 590px; }
+.stars-right .star-with-wire:nth-child(4) { top: 500px; right: 5%; }
 .stars-right .star-with-wire:nth-child(4) .sparkle-star { font-size: 2rem; animation-delay: 1.4s; }
 
-.stars-right .star-with-wire:nth-child(5) { top: 730px; right: 22px; }
-.stars-right .star-with-wire:nth-child(5) .star-wire { height: 730px; }
+.stars-right .star-with-wire:nth-child(5) { top: 640px; right: 12%; }
 .stars-right .star-with-wire:nth-child(5) .sparkle-star { font-size: 1.9rem; animation-delay: 1.8s; }
 
-.stars-right .star-with-wire:nth-child(6) { top: 870px; right: 68px; }
-.stars-right .star-with-wire:nth-child(6) .star-wire { height: 870px; }
+.stars-right .star-with-wire:nth-child(6) { top: 780px; right: 7%; }
 .stars-right .star-with-wire:nth-child(6) .sparkle-star { font-size: 1.8rem; animation-delay: 2.2s; }
-
-.stars-right .star-with-wire:nth-child(7) { top: 1010px; right: 12px; }
-.stars-right .star-with-wire:nth-child(7) .star-wire { height: 1010px; }
-.stars-right .star-with-wire:nth-child(7) .sparkle-star { font-size: 2.2rem; animation-delay: 2.6s; }
-
-.stars-right .star-with-wire:nth-child(8) { top: 1150px; right: 45px; }
-.stars-right .star-with-wire:nth-child(8) .star-wire { height: 1150px; }
-.stars-right .star-with-wire:nth-child(8) .sparkle-star { font-size: 2.1rem; animation-delay: 3s; }
-
-.stars-right .star-with-wire:nth-child(9) { top: 1290px; right: 28px; }
-.stars-right .star-with-wire:nth-child(9) .star-wire { height: 1290px; }
-.stars-right .star-with-wire:nth-child(9) .sparkle-star { font-size: 1.9rem; animation-delay: 3.4s; }
-
-.stars-right .star-with-wire:nth-child(10) { top: 1430px; right: 60px; }
-.stars-right .star-with-wire:nth-child(10) .star-wire { height: 1430px; }
-.stars-right .star-with-wire:nth-child(10) .sparkle-star { font-size: 2.3rem; animation-delay: 3.8s; }
 
 @keyframes sparkle {
   0%, 100% {
@@ -542,64 +591,97 @@
   }
 }
 
-/* Floating animation for hanging effect - bi-directional with left-right and up-down movement */
-@keyframes float-up {
+/* Bi-directional floating animations */
+@keyframes float-left {
   0%, 100% {
     transform: translateY(0) translateX(0) rotate(0deg);
   }
   25% {
-    transform: translateY(-20px) translateX(-15px) rotate(5deg);
+    transform: translateY(-15px) translateX(-20px) rotate(8deg);
   }
   50% {
-    transform: translateY(-25px) translateX(0) rotate(0deg);
+    transform: translateY(-25px) translateX(-10px) rotate(0deg);
   }
   75% {
-    transform: translateY(-20px) translateX(15px) rotate(-5deg);
+    transform: translateY(-15px) translateX(-25px) rotate(-8deg);
   }
 }
 
-@keyframes float-down {
+@keyframes float-right {
   0%, 100% {
     transform: translateY(0) translateX(0) rotate(0deg);
   }
   25% {
-    transform: translateY(20px) translateX(15px) rotate(-5deg);
+    transform: translateY(-15px) translateX(20px) rotate(-8deg);
   }
   50% {
-    transform: translateY(25px) translateX(0) rotate(0deg);
+    transform: translateY(-25px) translateX(10px) rotate(0deg);
   }
   75% {
-    transform: translateY(20px) translateX(-15px) rotate(5deg);
+    transform: translateY(-15px) translateX(25px) rotate(8deg);
   }
 }
 
-/* Base sparkle animation - will be combined with float in specific rules */
-
-/* Bi-directional float animations - only animate the star, not the wire (10 stars each side) */
-.stars-left .star-with-wire:nth-child(1) .sparkle-star,
-.stars-left .star-with-wire:nth-child(3) .sparkle-star,
-.stars-left .star-with-wire:nth-child(5) .sparkle-star,
-.stars-left .star-with-wire:nth-child(7) .sparkle-star,
-.stars-left .star-with-wire:nth-child(9) .sparkle-star,
-.stars-right .star-with-wire:nth-child(2) .sparkle-star,
-.stars-right .star-with-wire:nth-child(4) .sparkle-star,
-.stars-right .star-with-wire:nth-child(6) .sparkle-star,
-.stars-right .star-with-wire:nth-child(8) .sparkle-star,
-.stars-right .star-with-wire:nth-child(10) .sparkle-star {
-  animation: sparkle 3s infinite ease-in-out, float-up 4s infinite ease-in-out;
+@keyframes float-up-down {
+  0%, 100% {
+    transform: translateY(0) translateX(0) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-20px) translateX(15px) rotate(5deg);
+  }
+  50% {
+    transform: translateY(-30px) translateX(0) rotate(0deg);
+  }
+  75% {
+    transform: translateY(-20px) translateX(-15px) rotate(-5deg);
+  }
 }
 
-.stars-left .star-with-wire:nth-child(2) .sparkle-star,
-.stars-left .star-with-wire:nth-child(4) .sparkle-star,
-.stars-left .star-with-wire:nth-child(6) .sparkle-star,
-.stars-left .star-with-wire:nth-child(8) .sparkle-star,
-.stars-left .star-with-wire:nth-child(10) .sparkle-star,
-.stars-right .star-with-wire:nth-child(1) .sparkle-star,
-.stars-right .star-with-wire:nth-child(3) .sparkle-star,
-.stars-right .star-with-wire:nth-child(5) .sparkle-star,
-.stars-right .star-with-wire:nth-child(7) .sparkle-star,
-.stars-right .star-with-wire:nth-child(9) .sparkle-star {
-  animation: sparkle 3s infinite ease-in-out, float-down 4.5s infinite ease-in-out;
+@keyframes float-down-up {
+  0%, 100% {
+    transform: translateY(0) translateX(0) rotate(0deg);
+  }
+  25% {
+    transform: translateY(10px) translateX(-15px) rotate(-5deg);
+  }
+  50% {
+    transform: translateY(20px) translateX(0) rotate(0deg);
+  }
+  75% {
+    transform: translateY(10px) translateX(15px) rotate(5deg);
+  }
+}
+
+/* Combine sparkle and bi-directional float animations */
+.stars-left .sparkle-star,
+.stars-right .sparkle-star {
+  animation: sparkle 3s infinite ease-in-out;
+}
+
+/* Left side - alternating directions */
+.stars-left .star-with-wire:nth-child(1),
+.stars-left .star-with-wire:nth-child(3),
+.stars-left .star-with-wire:nth-child(5) {
+  animation: float-left 5s infinite ease-in-out;
+}
+
+.stars-left .star-with-wire:nth-child(2),
+.stars-left .star-with-wire:nth-child(4),
+.stars-left .star-with-wire:nth-child(6) {
+  animation: float-right 6s infinite ease-in-out;
+}
+
+/* Right side - alternating directions */
+.stars-right .star-with-wire:nth-child(1),
+.stars-right .star-with-wire:nth-child(3),
+.stars-right .star-with-wire:nth-child(5) {
+  animation: float-right 5.5s infinite ease-in-out;
+}
+
+.stars-right .star-with-wire:nth-child(2),
+.stars-right .star-with-wire:nth-child(4),
+.stars-right .star-with-wire:nth-child(6) {
+  animation: float-left 6.5s infinite ease-in-out;
 }
 
 @media (max-width: 992px) {
@@ -708,40 +790,8 @@
         <div class="star-wire"></div>
         <div class="sparkle-star">✨</div>
       </div>
-      <div class="star-with-wire">
-        <div class="star-wire"></div>
-        <div class="sparkle-star">⭐</div>
-      </div>
-      <div class="star-with-wire">
-        <div class="star-wire"></div>
-        <div class="sparkle-star">✨</div>
-      </div>
-      <div class="star-with-wire">
-        <div class="star-wire"></div>
-        <div class="sparkle-star">⭐</div>
-      </div>
-      <div class="star-with-wire">
-        <div class="star-wire"></div>
-        <div class="sparkle-star">✨</div>
-      </div>
     </div>
     <div class="stars-right">
-      <div class="star-with-wire">
-        <div class="star-wire"></div>
-        <div class="sparkle-star">⭐</div>
-      </div>
-      <div class="star-with-wire">
-        <div class="star-wire"></div>
-        <div class="sparkle-star">✨</div>
-      </div>
-      <div class="star-with-wire">
-        <div class="star-wire"></div>
-        <div class="sparkle-star">⭐</div>
-      </div>
-      <div class="star-with-wire">
-        <div class="star-wire"></div>
-        <div class="sparkle-star">✨</div>
-      </div>
       <div class="star-with-wire">
         <div class="star-wire"></div>
         <div class="sparkle-star">⭐</div>
