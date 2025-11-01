@@ -1,5 +1,22 @@
 {% extends 'base.html' %}
+{% load plan_filters %}
 {% block content %}
+<style>
+  .plan-features {
+    white-space: pre-line;
+    line-height: 1.8;
+    word-wrap: break-word;
+  }
+  
+  /* Responsive adjustments for mobile */
+  @media (max-width: 768px) {
+    .plan-features {
+      line-height: 1.6;
+      font-size: 0.85rem;
+    }
+  }
+</style>
+
 <div class="d-flex justify-content-between align-items-center mb-4">
   <h3 class="mb-0">Available Plans</h3>
   {% if user.is_staff %}
@@ -16,7 +33,7 @@
       <div class="card-body d-flex flex-column">
         <h5 class="card-title">{{ p.title }}</h5>
         <div class="mb-2">₹{{ p.price }} / {{ p.billing_period|title }}</div>
-        {% if p.features %}<div class="text-muted small mb-3">{{ p.features }}</div>{% endif %}
+        {% if p.features %}<div class="text-muted small mb-3 plan-features">{{ p.features|format_features }}</div>{% endif %}
         <div class="small mb-3">Includes: {{ p.included_meals|join:", "|title }}</div>
         <div class="d-flex gap-2 mt-auto">
           {% if active_sub and active_sub.plan.id == p.id %}
