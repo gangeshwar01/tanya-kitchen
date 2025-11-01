@@ -574,7 +574,7 @@ def register_view(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            messages.success(request, "Welcome to MessMate!")
+            messages.success(request, "Welcome to Tanya's Kitchen!")
             return redirect('home')
         else:
             messages.error(request, "Please correct the errors below.")
