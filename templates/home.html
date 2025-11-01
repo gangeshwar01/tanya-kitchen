@@ -381,29 +381,73 @@
   bottom: 0;
   overflow: visible;
   pointer-events: none;
-  z-index: 0;
+  z-index: 10;
 }
 
 .stars-left,
 .stars-right {
   position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  height: calc(100% + 4rem);
-  width: 150px;
+  top: 0;
+  height: 100%;
+  width: 80px;
   pointer-events: none;
 }
 
 .stars-left {
-  left: -20px;
+  left: 20px;
 }
 
 .stars-right {
-  right: -20px;
+  right: 20px;
+}
+
+/* Hanging wire/string for stars */
+.star-hanger {
+  position: absolute;
+  top: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, rgba(102, 126, 234, 0.4), rgba(118, 75, 162, 0.6));
+  pointer-events: none;
+}
+
+.star-hanger::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -3px;
+  width: 8px;
+  height: 8px;
+  background: radial-gradient(circle, rgba(102, 126, 234, 0.8), transparent);
+  border-radius: 50%;
+}
+
+.star-with-wire {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.star-wire {
+  width: 2px;
+  background: linear-gradient(to bottom, rgba(102, 126, 234, 0.5), rgba(118, 75, 162, 0.7));
+  margin-bottom: 5px;
+  position: relative;
+}
+
+.star-wire::before {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: -2px;
+  width: 6px;
+  height: 6px;
+  background: rgba(102, 126, 234, 0.6);
+  border-radius: 50%;
+  box-shadow: 0 0 5px rgba(102, 126, 234, 0.5);
 }
 
 .sparkle-star {
-  position: absolute;
   color: #667eea;
   font-size: 1.8rem;
   animation: sparkle 3s infinite ease-in-out;
@@ -412,21 +456,55 @@
   filter: drop-shadow(0 0 8px rgba(102, 126, 234, 0.5));
 }
 
-/* Left side stars - hanging outside in white space */
-.stars-left .sparkle-star:nth-child(1) { top: 10%; left: 40%; animation-delay: 0s; font-size: 2rem; }
-.stars-left .sparkle-star:nth-child(2) { top: 25%; left: 60%; animation-delay: 0.4s; font-size: 2.4rem; }
-.stars-left .sparkle-star:nth-child(3) { top: 40%; left: 35%; animation-delay: 0.8s; font-size: 1.8rem; }
-.stars-left .sparkle-star:nth-child(4) { top: 55%; left: 55%; animation-delay: 1.2s; font-size: 2.1rem; }
-.stars-left .sparkle-star:nth-child(5) { top: 70%; left: 40%; animation-delay: 1.6s; font-size: 1.7rem; }
-.stars-left .sparkle-star:nth-child(6) { top: 85%; left: 65%; animation-delay: 2s; font-size: 2rem; }
+/* Left side stars with hanging wires */
+.stars-left .star-with-wire:nth-child(1) { top: 8%; left: 50%; }
+.stars-left .star-with-wire:nth-child(1) .star-wire { height: 40px; }
+.stars-left .star-with-wire:nth-child(1) .sparkle-star { font-size: 2rem; animation-delay: 0s; }
 
-/* Right side stars - hanging outside in white space */
-.stars-right .sparkle-star:nth-child(1) { top: 12%; right: 45%; animation-delay: 0.2s; font-size: 2.1rem; }
-.stars-right .sparkle-star:nth-child(2) { top: 28%; right: 30%; animation-delay: 0.6s; font-size: 2.5rem; }
-.stars-right .sparkle-star:nth-child(3) { top: 42%; right: 60%; animation-delay: 1s; font-size: 1.7rem; }
-.stars-right .sparkle-star:nth-child(4) { top: 58%; right: 35%; animation-delay: 1.4s; font-size: 2rem; }
-.stars-right .sparkle-star:nth-child(5) { top: 72%; right: 55%; animation-delay: 1.8s; font-size: 1.9rem; }
-.stars-right .sparkle-star:nth-child(6) { top: 88%; right: 40%; animation-delay: 2.2s; font-size: 1.8rem; }
+.stars-left .star-with-wire:nth-child(2) { top: 22%; left: 65%; }
+.stars-left .star-with-wire:nth-child(2) .star-wire { height: 50px; }
+.stars-left .star-with-wire:nth-child(2) .sparkle-star { font-size: 2.4rem; animation-delay: 0.4s; }
+
+.stars-left .star-with-wire:nth-child(3) { top: 38%; left: 45%; }
+.stars-left .star-with-wire:nth-child(3) .star-wire { height: 45px; }
+.stars-left .star-with-wire:nth-child(3) .sparkle-star { font-size: 1.8rem; animation-delay: 0.8s; }
+
+.stars-left .star-with-wire:nth-child(4) { top: 52%; left: 60%; }
+.stars-left .star-with-wire:nth-child(4) .star-wire { height: 55px; }
+.stars-left .star-with-wire:nth-child(4) .sparkle-star { font-size: 2.1rem; animation-delay: 1.2s; }
+
+.stars-left .star-with-wire:nth-child(5) { top: 68%; left: 50%; }
+.stars-left .star-with-wire:nth-child(5) .star-wire { height: 42px; }
+.stars-left .star-with-wire:nth-child(5) .sparkle-star { font-size: 1.7rem; animation-delay: 1.6s; }
+
+.stars-left .star-with-wire:nth-child(6) { top: 82%; left: 70%; }
+.stars-left .star-with-wire:nth-child(6) .star-wire { height: 48px; }
+.stars-left .star-with-wire:nth-child(6) .sparkle-star { font-size: 2rem; animation-delay: 2s; }
+
+/* Right side stars with hanging wires */
+.stars-right .star-with-wire:nth-child(1) { top: 10%; right: 55%; }
+.stars-right .star-with-wire:nth-child(1) .star-wire { height: 45px; }
+.stars-right .star-with-wire:nth-child(1) .sparkle-star { font-size: 2.1rem; animation-delay: 0.2s; }
+
+.stars-right .star-with-wire:nth-child(2) { top: 26%; right: 40%; }
+.stars-right .star-with-wire:nth-child(2) .star-wire { height: 52px; }
+.stars-right .star-with-wire:nth-child(2) .sparkle-star { font-size: 2.5rem; animation-delay: 0.6s; }
+
+.stars-right .star-with-wire:nth-child(3) { top: 40%; right: 65%; }
+.stars-right .star-with-wire:nth-child(3) .star-wire { height: 43px; }
+.stars-right .star-with-wire:nth-child(3) .sparkle-star { font-size: 1.7rem; animation-delay: 1s; }
+
+.stars-right .star-with-wire:nth-child(4) { top: 56%; right: 45%; }
+.stars-right .star-with-wire:nth-child(4) .star-wire { height: 50px; }
+.stars-right .star-with-wire:nth-child(4) .sparkle-star { font-size: 2rem; animation-delay: 1.4s; }
+
+.stars-right .star-with-wire:nth-child(5) { top: 70%; right: 60%; }
+.stars-right .star-with-wire:nth-child(5) .star-wire { height: 46px; }
+.stars-right .star-with-wire:nth-child(5) .sparkle-star { font-size: 1.9rem; animation-delay: 1.8s; }
+
+.stars-right .star-with-wire:nth-child(6) { top: 86%; right: 50%; }
+.stars-right .star-with-wire:nth-child(6) .star-wire { height: 44px; }
+.stars-right .star-with-wire:nth-child(6) .sparkle-star { font-size: 1.8rem; animation-delay: 2.2s; }
 
 @keyframes sparkle {
   0%, 100% {
@@ -460,7 +538,26 @@
 /* Combine sparkle and float animations */
 .stars-left .sparkle-star,
 .stars-right .sparkle-star {
-  animation: sparkle 3s infinite ease-in-out, float 4s infinite ease-in-out;
+  animation: sparkle 3s infinite ease-in-out;
+}
+
+.stars-left .star-with-wire,
+.stars-right .star-with-wire {
+  animation: float 4s infinite ease-in-out;
+}
+
+@media (max-width: 992px) {
+  .hero-section {
+    margin: 0 80px !important;
+  }
+  
+  .stars-left {
+    left: 10px;
+  }
+  
+  .stars-right {
+    right: 10px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -468,56 +565,99 @@
     padding: 1rem 0;
   }
   
+  .hero-section {
+    margin: 0 50px !important;
+  }
+  
   .stars-left,
   .stars-right {
-    width: 80px;
-    height: calc(100% + 2rem);
+    width: 50px;
   }
   
   .stars-left {
-    left: -10px;
+    left: 5px;
   }
   
   .stars-right {
-    right: -10px;
+    right: 5px;
   }
   
-  .stars-left .sparkle-star:nth-child(n),
-  .stars-right .sparkle-star:nth-child(n) {
-    font-size: 1.4rem !important;
+  .stars-left .star-with-wire .sparkle-star,
+  .stars-right .star-with-wire .sparkle-star {
+    font-size: 1.2rem !important;
+  }
+  
+  .star-wire {
+    height: 30px !important;
   }
 }
 </style>
 <!-- Hero Section -->
 {% if not user.is_staff %}
 <div class="stars-wrapper">
-  <!-- Sparkling Stars - Outside hero -->
+  <!-- Sparkling Stars - Hanging with wires outside hero -->
   <div class="stars-container">
     <div class="stars-left">
-      <div class="sparkle-star">⭐</div>
-      <div class="sparkle-star">✨</div>
-      <div class="sparkle-star">⭐</div>
-      <div class="sparkle-star">✨</div>
-      <div class="sparkle-star">⭐</div>
-      <div class="sparkle-star">✨</div>
+      <div class="star-with-wire">
+        <div class="star-wire"></div>
+        <div class="sparkle-star">⭐</div>
+      </div>
+      <div class="star-with-wire">
+        <div class="star-wire"></div>
+        <div class="sparkle-star">✨</div>
+      </div>
+      <div class="star-with-wire">
+        <div class="star-wire"></div>
+        <div class="sparkle-star">⭐</div>
+      </div>
+      <div class="star-with-wire">
+        <div class="star-wire"></div>
+        <div class="sparkle-star">✨</div>
+      </div>
+      <div class="star-with-wire">
+        <div class="star-wire"></div>
+        <div class="sparkle-star">⭐</div>
+      </div>
+      <div class="star-with-wire">
+        <div class="star-wire"></div>
+        <div class="sparkle-star">✨</div>
+      </div>
     </div>
     <div class="stars-right">
-      <div class="sparkle-star">⭐</div>
-      <div class="sparkle-star">✨</div>
-      <div class="sparkle-star">⭐</div>
-      <div class="sparkle-star">✨</div>
-      <div class="sparkle-star">⭐</div>
-      <div class="sparkle-star">✨</div>
+      <div class="star-with-wire">
+        <div class="star-wire"></div>
+        <div class="sparkle-star">⭐</div>
+      </div>
+      <div class="star-with-wire">
+        <div class="star-wire"></div>
+        <div class="sparkle-star">✨</div>
+      </div>
+      <div class="star-with-wire">
+        <div class="star-wire"></div>
+        <div class="sparkle-star">⭐</div>
+      </div>
+      <div class="star-with-wire">
+        <div class="star-wire"></div>
+        <div class="sparkle-star">✨</div>
+      </div>
+      <div class="star-with-wire">
+        <div class="star-wire"></div>
+        <div class="sparkle-star">⭐</div>
+      </div>
+      <div class="star-with-wire">
+        <div class="star-wire"></div>
+        <div class="sparkle-star">✨</div>
+      </div>
     </div>
   </div>
   
-  <section class="hero-section fade-in-up" style="position: relative; z-index: 1;">
+  <section class="hero-section fade-in-up" style="position: relative; z-index: 1; margin: 0 100px;">
   <div class="container">
     <div class="row align-items-center">
       <div class="col-lg-6 hero-content">
         <h1 class="hero-title">🍽️ Fresh, Healthy Meals Delivered Daily</h1>
         <p class="hero-subtitle">Experience the best of home-style cooking with flexible meal plans. Join Tanya's Kitchen for nutritious breakfast, lunch, and dinner that fits your lifestyle.</p>
-        {% if not user.is_authenticated %}
+      {% if not user.is_authenticated %}
         <div class="d-flex gap-3 flex-wrap">
           <a class="btn btn-light btn-lg px-4" href="/register/">
             <i class="bi bi-rocket-takeoff me-2"></i>Get Started
@@ -526,9 +666,9 @@
             <i class="bi bi-box-arrow-in-right me-2"></i>Login
           </a>
         </div>
-        {% endif %}
-      </div>
-      <div class="col-lg-6">
+      {% endif %}
+    </div>
+    <div class="col-lg-6">
         <div class="swiper">
         <div class="swiper-wrapper">
           {% if carousel_images %}
@@ -570,7 +710,7 @@
       </div>
     </div>
   </div>
-  </section>
+</section>
 </div>
 {% else %}
 <section class="py-5">
@@ -591,7 +731,7 @@
 <!-- Features Section -->
 <section class="py-5">
   <div class="container">
-    {% if user.is_staff %}
+      {% if user.is_staff %}
     <div class="row g-4">
       <div class="col-md-4">
         <div class="feature-card">
@@ -619,9 +759,9 @@
           <h5 class="fw-bold mb-3">Analytics & Reports</h5>
           <p class="text-muted">Track attendance patterns and generate detailed reports for better decision making.</p>
         </div>
+        </div>
       </div>
-    </div>
-    {% else %}
+      {% else %}
     <div class="text-center mb-5">
       <h2 class="section-title">Why Choose Tanya's Kitchen?</h2>
       <p class="section-subtitle">Experience convenience, quality, and taste in every meal</p>
@@ -649,11 +789,11 @@
         <div class="feature-card">
           <div class="feature-icon">
             <i class="bi bi-wallet2"></i>
-          </div>
+        </div>
           <h5 class="fw-bold mb-3">Simple Payments</h5>
           <p class="text-muted">Upload proof, get admin approval, and auto-activate your plan. Quick and hassle-free.</p>
-        </div>
       </div>
+    </div>
     </div>
     {% endif %}
   </div>
@@ -669,11 +809,11 @@
           <div class="text-center mb-4">
             <h2 class="fw-bold mb-2">📅 Quick Attendance</h2>
             <p class="mb-0 opacity-90">Mark your attendance for today's meals in one click</p>
-          </div>
-          <div class="row justify-content-center">
+    </div>
+    <div class="row justify-content-center">
             <div class="col-lg-10">
               <div class="card border-0" style="background: rgba(255,255,255,0.95);">
-                <div class="card-body p-4">
+          <div class="card-body p-4">
             {% if attendance_data %}
               {% if attendance_data.active_sub %}
                 <div class="row g-3">
@@ -746,7 +886,7 @@
       {% for plan in plans %}
       <div class="col-lg-4 col-md-6 fade-in-up">
         <div class="plan-card">
-          <div class="text-center mb-4">
+            <div class="text-center mb-4">
             <div class="mb-3">
               {% if forloop.counter == 1 %}
                 <i class="bi bi-cup-hot" style="font-size: 3rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></i>
@@ -758,15 +898,15 @@
             </div>
             <h4 class="fw-bold mb-2">{{ plan.title }}</h4>
             <div class="plan-price mb-1">₹{{ plan.price }}</div>
-            <small class="text-muted">{{ plan.billing_period|title }}</small>
-          </div>
+              <small class="text-muted">{{ plan.billing_period|title }}</small>
+            </div>
             
-          <div class="mb-4">
+            <div class="mb-4">
             <h6 class="fw-bold mb-3">
               <i class="bi bi-check-circle text-success me-2"></i>Included Meals:
             </h6>
             <div class="d-flex flex-wrap gap-2 justify-content-center">
-              {% for meal in plan.included_meals %}
+                {% for meal in plan.included_meals %}
               <span class="badge" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 0.5rem 1rem; font-size: 0.85rem;">
                 {% if meal == 'breakfast' %}
                   <i class="bi bi-sunrise me-1"></i>{{ meal|title }}
@@ -776,35 +916,35 @@
                   <i class="bi bi-moon me-1"></i>{{ meal|title }}
                 {% endif %}
               </span>
-              {% endfor %}
+                {% endfor %}
+              </div>
             </div>
-          </div>
-          
-          {% if plan.features %}
-          <div class="mb-4">
+            
+            {% if plan.features %}
+            <div class="mb-4">
             <h6 class="fw-bold mb-3">
               <i class="bi bi-star text-warning me-2"></i>Features:
             </h6>
-            <div class="small text-muted">
-              {{ plan.features|linebreaks }}
+              <div class="small text-muted">
+                {{ plan.features|linebreaks }}
+              </div>
             </div>
-          </div>
-          {% endif %}
-          
+            {% endif %}
+            
           <div class="text-center mt-auto pt-3">
-            {% if attendance_data and attendance_data.active_sub and attendance_data.active_sub.plan.id == plan.id %}
+              {% if attendance_data and attendance_data.active_sub and attendance_data.active_sub.plan.id == plan.id %}
               <span class="stats-badge">
                 <i class="bi bi-check-circle me-1"></i>Current Plan
               </span>
-            {% elif attendance_data and attendance_data.active_sub %}
+              {% elif attendance_data and attendance_data.active_sub %}
               <a href="/plans/{{ plan.id }}/buy/" class="btn btn-warning w-100" style="border-radius: 50px; font-weight: 600;">
                 <i class="bi bi-arrow-up-circle me-2"></i>Upgrade Plan
-              </a>
-            {% else %}
-              <a href="/plans/{{ plan.id }}/buy/" class="btn btn-primary w-100">
+                </a>
+              {% else %}
+                <a href="/plans/{{ plan.id }}/buy/" class="btn btn-primary w-100">
                 <i class="bi bi-cart-plus me-2"></i>Get Started
-              </a>
-            {% endif %}
+                </a>
+              {% endif %}
           </div>
         </div>
       </div>
@@ -861,7 +1001,7 @@
 {% endif %}
 
 <!-- Visitor Payment & Feedback (No login required) -->
-{% if not user.is_authenticated %}
+ {% if not user.is_authenticated %}
 <section class="py-5">
   <div class="container">
     <div class="text-center mb-5 fade-in-up">
@@ -880,12 +1020,12 @@
           </div>
           <p class="text-muted text-center mb-4">Scan the QR code or upload your payment screenshot</p>
           <div class="text-center mb-4">
-            {% if paycfg and paycfg.gpay_qr %}
+              {% if paycfg and paycfg.gpay_qr %}
             <div class="d-inline-block p-3" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 15px;">
               <img src="{{ paycfg.gpay_qr.url }}" alt="Payment QR" class="img-fluid rounded" style="max-width: 220px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
             </div>
-            {% endif %}
-          </div>
+              {% endif %}
+            </div>
             <form method="post" action="/visitor/payment/" enctype="multipart/form-data">
               {% csrf_token %}
               <div class="row g-3">
