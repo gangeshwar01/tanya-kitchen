@@ -23,12 +23,12 @@ from messmetapp import views
 from messmetapp.sitemap import StaticViewSitemap
 
 sitemaps = {
-    'static': StaticViewSitemap,
+    'static': StaticViewSitemap(),
 }
 
 urlpatterns = [
     # Sitemap (must be early to avoid conflicts)
-    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django_sitemap'),
     # Export URLs (must be before admin URLs to avoid conflicts)
     path('admin/export/attendance.csv', views.lms_export_attendance_csv, name='lms_export_attendance_csv'),
     path('admin/export/users.csv', views.export_users_csv, name='export_users_csv'),
