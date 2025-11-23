@@ -15,10 +15,16 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.contrib.sitemaps.views import sitemap
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from messmetapp import views
+from messmetapp.sitemap import StaticViewSitemap
+
+sitemaps = {
+    'static': StaticViewSitemap,
+}
 
 urlpatterns = [
     # Export URLs (must be before admin URLs to avoid conflicts)
@@ -27,6 +33,8 @@ urlpatterns = [
     path('admin/export/meal-feedback.csv', views.export_meal_feedback_csv, name='export_meal_feedback_csv'),
     # Admin URLs
     path('admin/', admin.site.urls),
+    # Sitemap
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     # App URLs
     path('', include('messmetapp.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
