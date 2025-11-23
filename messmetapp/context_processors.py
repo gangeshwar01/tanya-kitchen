@@ -17,30 +17,30 @@ def seo_context(request):
     default_description = "Your trusted partner for nutritious, home-style meals. We deliver fresh, healthy breakfast, lunch, and dinner options with flexible subscription plans that fit your lifestyle and budget."
     default_keywords = "mess food, meal subscription, home-cooked meals, Dehradun, Uttarakhand, breakfast, lunch, dinner, meal plans, food delivery"
     
-    # Page-specific SEO data
+    # Page-specific SEO data with unique brand-focused titles
     seo_data = {
         'home': {
-            'title': "Tanya's Kitchen - Fresh Home-Cooked Meals | Meal Subscription Service",
-            'description': default_description,
-            'keywords': default_keywords,
+            'title': "Tanya's Kitchen | Dehradun's #1 Home-Cooked Meal Subscription Service | Fresh Daily Meals",
+            'description': "Tanya's Kitchen is Dehradun's premier meal subscription service, delivering fresh, nutritious home-cooked meals daily. Choose from flexible breakfast, lunch, and dinner plans. Experience authentic Indian cuisine with Tanya's Kitchen - your trusted partner for healthy, affordable meals in Uttarakhand.",
+            'keywords': "Tanya's Kitchen, Tanya Kitchen Dehradun, meal subscription Dehradun, home-cooked meals Uttarakhand, mess food service Dehradun, daily meal delivery, breakfast lunch dinner plans, affordable meal subscription, Indian food Dehradun, healthy meals Dehradun",
             'og_type': 'website',
         },
         'about': {
-            'title': "About Us - Tanya's Kitchen | Our Story & Mission",
-            'description': "Learn about Tanya's Kitchen - your trusted partner for fresh, nutritious meals in Dehradun. Discover our mission, values, and commitment to quality home-cooked food.",
-            'keywords': "about tanya kitchen, mess food service, meal provider Dehradun, our story",
+            'title': "About Tanya's Kitchen | Dehradun's Trusted Meal Provider Since 2024",
+            'description': "Discover Tanya's Kitchen - Dehradun's leading meal subscription service. Learn about our mission to deliver fresh, nutritious home-cooked meals. Located in Imperial Heights, Dehradun, we serve authentic Indian cuisine with flexible meal plans for breakfast, lunch, and dinner.",
+            'keywords': "about Tanya's Kitchen, Tanya Kitchen story, meal provider Dehradun, mess food service Uttarakhand, our mission, food service Dehradun",
             'og_type': 'website',
         },
         'menu': {
-            'title': "Monthly Menu - Tanya's Kitchen | View Our Meal Plans",
-            'description': "Browse our monthly menu featuring delicious breakfast, lunch, and dinner options. Fresh, nutritious meals prepared daily with love and care.",
-            'keywords': "monthly menu, meal menu, food menu, breakfast menu, lunch menu, dinner menu",
+            'title': "Tanya's Kitchen Monthly Menu | Fresh Breakfast, Lunch & Dinner Plans | Dehradun",
+            'description': "Explore Tanya's Kitchen monthly menu featuring diverse, nutritious meals. Our menu includes traditional Indian breakfast, wholesome lunch, and delicious dinner options. All meals are prepared fresh daily with locally sourced ingredients in Dehradun.",
+            'keywords': "Tanya's Kitchen menu, monthly menu Dehradun, breakfast menu, lunch menu, dinner menu, meal plans menu, food menu Dehradun",
             'og_type': 'website',
         },
         'plans': {
-            'title': "Subscription Plans - Tanya's Kitchen | Flexible Meal Plans",
-            'description': "Choose from our flexible meal subscription plans - monthly, quarterly, or yearly. Affordable pricing for breakfast, lunch, and dinner options.",
-            'keywords': "meal subscription plans, food plans, pricing, meal packages, subscription service",
+            'title': "Tanya's Kitchen Subscription Plans | Affordable Meal Plans in Dehradun | Monthly, Quarterly & Yearly",
+            'description': "Choose from Tanya's Kitchen flexible meal subscription plans. Affordable monthly, quarterly, and yearly options for breakfast, lunch, and dinner. Start your meal subscription today and enjoy fresh, home-cooked meals delivered daily in Dehradun.",
+            'keywords': "Tanya's Kitchen plans, meal subscription plans Dehradun, affordable meal plans, monthly meal subscription, quarterly plans, yearly meal plans, breakfast lunch dinner plans",
             'og_type': 'website',
         },
         'login': {

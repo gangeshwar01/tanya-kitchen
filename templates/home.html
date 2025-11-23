@@ -889,7 +889,7 @@
           {% if carousel_images %}
             {% for image in carousel_images %}
             <div class="swiper-slide position-relative">
-              <img src="{{ image.image.url }}" alt="{{ image.title }}" class="w-100 h-100" style="object-fit: cover;">
+              <img src="{{ image.image.url }}" alt="{{ image.title }} - Tanya's Kitchen" class="w-100 h-100" style="object-fit: cover;" loading="lazy">
               <div class="position-absolute bottom-0 start-0 end-0 bg-dark bg-opacity-75 text-white p-3">
                 <h5 class="mb-1">{{ image.title }}</h5>
                 {% if image.description %}
@@ -927,6 +927,74 @@
   </div>
 </section>
 </div>
+
+<!-- SEO-Rich Content Section: About Tanya's Kitchen -->
+<section class="py-5 bg-light">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 mx-auto">
+        <div class="card border-0 shadow-sm">
+          <div class="card-body p-5">
+            <h2 class="h3 fw-bold mb-4 text-center">Welcome to Tanya's Kitchen - Dehradun's Premier Meal Subscription Service</h2>
+            
+            <p class="lead mb-4">
+              <strong>Tanya's Kitchen</strong> is Dehradun's most trusted meal subscription service, delivering fresh, nutritious home-cooked meals directly to your doorstep. Located in Imperial Heights, Dehradun, Uttarakhand, we specialize in providing authentic Indian cuisine with flexible meal plans that fit your lifestyle and budget.
+            </p>
+            
+            <h3 class="h5 fw-bold mt-4 mb-3">Why Choose Tanya's Kitchen for Your Daily Meals?</h3>
+            <p class="mb-3">
+              When you search for "meal subscription Dehradun" or "home-cooked meals Uttarakhand," <strong>Tanya's Kitchen</strong> stands out as the leading choice. Our commitment to quality, freshness, and customer satisfaction has made us the preferred meal provider for hundreds of satisfied customers across Dehradun.
+            </p>
+            
+            <h3 class="h5 fw-bold mt-4 mb-3">Fresh Daily Meals - Breakfast, Lunch & Dinner</h3>
+            <p class="mb-3">
+              At <strong>Tanya's Kitchen</strong>, we understand that every meal matters. That's why we prepare all our dishes fresh daily using locally sourced ingredients. Whether you're looking for a nutritious breakfast to start your day, a wholesome lunch to fuel your afternoon, or a delicious dinner to end your day perfectly, our diverse <a href="/menu/" class="text-primary fw-semibold">monthly menu</a> has something for everyone.
+            </p>
+            
+            <h3 class="h5 fw-bold mt-4 mb-3">Flexible Meal Subscription Plans</h3>
+            <p class="mb-3">
+              One of the key advantages of choosing <strong>Tanya's Kitchen</strong> is our flexible subscription options. We offer monthly, quarterly, and yearly meal plans that can be customized to include breakfast, lunch, dinner, or any combination. Our affordable pricing makes it easy for students, professionals, and families in Dehradun to enjoy quality home-cooked meals without breaking the bank. <a href="/plans/" class="text-primary fw-semibold">Explore our meal plans</a> to find the perfect fit for your needs.
+            </p>
+            
+            <h3 class="h5 fw-bold mt-4 mb-3">Convenient Attendance Tracking</h3>
+            <p class="mb-3">
+              Managing your meal attendance has never been easier. With <strong>Tanya's Kitchen</strong> intuitive attendance system, you can mark your meal attendance with a single click. Our system prevents duplicate entries and provides a complete history of your meal consumption. This feature is especially valuable for tracking your subscription usage and ensuring you get the most value from your meal plan.
+            </p>
+            
+            <h3 class="h5 fw-bold mt-4 mb-3">Simple Payment Process</h3>
+            <p class="mb-3">
+              We've streamlined the payment process to make it as convenient as possible. Simply upload your payment proof through our secure platform, and our team will review and approve it quickly. Once approved, your subscription activates automatically, and you can start enjoying fresh meals from <strong>Tanya's Kitchen</strong> immediately.
+            </p>
+            
+            <h3 class="h5 fw-bold mt-4 mb-3">Serving Dehradun with Excellence</h3>
+            <p class="mb-3">
+              <strong>Tanya's Kitchen</strong> is proud to serve the Dehradun community with excellence. Our location in Imperial Heights makes us easily accessible, and our commitment to quality has earned us a reputation as one of the best meal subscription services in Uttarakhand. We're not just a food service; we're your partner in maintaining a healthy, balanced diet with delicious, home-style cooking.
+            </p>
+            
+            <div class="mt-4 p-4 bg-primary bg-opacity-10 rounded">
+              <h4 class="h6 fw-bold mb-3">Ready to Experience Tanya's Kitchen?</h4>
+              <p class="mb-3">
+                Join hundreds of satisfied customers who have made <strong>Tanya's Kitchen</strong> their trusted meal provider. Whether you're a student looking for affordable meal options, a professional seeking convenience, or a family wanting quality home-cooked food, we have the perfect meal plan for you.
+              </p>
+              <div class="d-flex flex-wrap gap-2 justify-content-center">
+                <a href="/plans/" class="btn btn-primary">
+                  <i class="bi bi-credit-card me-2"></i>View Meal Plans
+                </a>
+                <a href="/register/" class="btn btn-outline-primary">
+                  <i class="bi bi-person-plus me-2"></i>Create Account
+                </a>
+                <a href="/about/" class="btn btn-outline-secondary">
+                  <i class="bi bi-info-circle me-2"></i>Learn More About Us
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 {% else %}
 <section class="py-5">
   <div class="container">
@@ -1192,7 +1260,7 @@
       <div class="col-lg-4 col-md-6 fade-in-up">
         <div class="gallery-card card border-0 h-100">
           <div class="position-relative overflow-hidden">
-            <img src="{{ image.image.url }}" class="card-img-top w-100" alt="{{ image.title }}" style="height: 280px; object-fit: cover;">
+            <img src="{{ image.image.url }}" class="card-img-top w-100" alt="{{ image.title }} - Tanya's Kitchen" style="height: 280px; object-fit: cover;" loading="lazy">
             {% if image.meal_type %}
             <div class="position-absolute top-0 end-0 m-3">
               <span class="badge px-3 py-2" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); font-size: 0.85rem;">
