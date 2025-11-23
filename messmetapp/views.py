@@ -1590,3 +1590,48 @@ def export_meal_feedback_csv(request):
         
     except Exception as e:
         return JsonResponse({'success': False, 'message': f'Export failed: {str(e)}'}, status=500)
+
+
+def robots_txt(request):
+    """
+    Generate robots.txt file for SEO and crawl efficiency
+    """
+    from django.conf import settings
+    
+    robots_content = """User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /dashboard/
+Disallow: /profile/
+Disallow: /attendance/
+Disallow: /logout/
+Disallow: /plans/*/buy/
+Disallow: /admin/export/
+
+# Allow sitemap
+Allow: /sitemap.xml
+
+# Sitemap location
+Sitemap: https://www.tanya-kitchen.casa/sitemap.xml
+
+# Crawl-delay for respectful crawling
+Crawl-delay: 1
+
+# Specific bot rules
+User-agent: Googlebot
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /dashboard/
+Disallow: /profile/
+
+User-agent: Bingbot
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /dashboard/
+Disallow: /profile/
+"""
+    
+    return HttpResponse(robots_content, content_type='text/plain')

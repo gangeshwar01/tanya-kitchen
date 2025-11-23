@@ -1,37 +1,332 @@
 {% extends 'base.html' %}
+{% block title %}Login - Tanya's Kitchen{% endblock %}
+
 {% block content %}
-<div class="row justify-content-center py-4">
-  <div class="col-lg-5">
-    <div class="card border-0 shadow" style="background: linear-gradient(135deg,#e0f2ff,#f0f7ff);">
-      <div class="card-body p-4">
-        <div class="text-center mb-3">
-          <div class="rounded-circle d-inline-flex align-items-center justify-content-center" style="width:56px;height:56px;background:#0d6efd1a;color:#0d6efd;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16"><path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path fill-rule="evenodd" d="M14 14s-1-1.5-6-1.5S2 14 2 14s1-4 6-4 6 4 6 4z"/></svg>
-          </div>
-          <h4 class="mt-2 mb-0">Welcome back</h4>
-          <div class="text-muted">Sign in to continue to Tanya's Kitchen</div>
-        </div>
-        <form method="post" class="needs-validation" novalidate>{% csrf_token %}
-          <div class="mb-3">
-            <label class="form-label">Username</label>
-            <input class="form-control" name="username" placeholder="Enter your username" required>
-          </div>
-          <div class="mb-2">
-            <label class="form-label">Password</label>
-            <input type="password" class="form-control" name="password" placeholder="Enter your password" required>
-          </div>
-          <div class="d-flex justify-content-between align-items-center mb-3">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" id="remember">
-              <label class="form-check-label" for="remember">Remember me</label>
+<style>
+  .login-container {
+    min-height: calc(100vh - 200px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 0;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .login-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid" width="100" height="100" patternUnits="userSpaceOnUse"><path d="M 100 0 L 0 0 0 100" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+    opacity: 0.3;
+  }
+  
+  .login-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+    animation: slideUp 0.5s ease-out;
+  }
+  
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .login-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 2.5rem 2rem;
+    text-align: center;
+    color: white;
+    position: relative;
+  }
+  
+  .login-header::after {
+    content: '';
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    border-top: 20px solid #667eea;
+  }
+  
+  .login-icon {
+    width: 80px;
+    height: 80px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    animation: pulse 2s infinite;
+  }
+  
+  @keyframes pulse {
+    0%, 100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+  }
+  
+  .login-icon i {
+    font-size: 2.5rem;
+  }
+  
+  .login-body {
+    padding: 3rem 2.5rem;
+  }
+  
+  .form-group {
+    position: relative;
+    margin-bottom: 1.5rem;
+  }
+  
+  .form-group label {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+  
+  .form-control {
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 0.75rem 1rem 0.75rem 3rem;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+  }
+  
+  .form-control:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    outline: none;
+  }
+  
+  .input-icon {
+    position: absolute;
+    left: 1rem;
+    top: 2.5rem;
+    color: #999;
+    font-size: 1.1rem;
+  }
+  
+  .btn-login {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    border-radius: 10px;
+    padding: 0.875rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  }
+  
+  .btn-login:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+  }
+  
+  .btn-login:active {
+    transform: translateY(0);
+  }
+  
+  .form-check-input:checked {
+    background-color: #667eea;
+    border-color: #667eea;
+  }
+  
+  .forgot-link {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+  }
+  
+  .forgot-link:hover {
+    color: #764ba2;
+    text-decoration: underline;
+  }
+  
+  .register-link {
+    color: #667eea;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  
+  .register-link:hover {
+    color: #764ba2;
+    text-decoration: underline;
+  }
+  
+  .divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 1.5rem 0;
+    color: #999;
+  }
+  
+  .divider::before,
+  .divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  
+  .divider span {
+    padding: 0 1rem;
+  }
+  
+  @media (max-width: 768px) {
+    .login-body {
+      padding: 2rem 1.5rem;
+    }
+    
+    .login-header {
+      padding: 2rem 1.5rem;
+    }
+  }
+</style>
+
+<div class="login-container">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-5 col-md-7">
+        <div class="login-card">
+          <div class="login-header">
+            <div class="login-icon">
+              <i class="bi bi-person-circle"></i>
             </div>
-            <a class="small" href="#">Forgot password?</a>
+            <h2 class="mb-2 fw-bold">Welcome Back!</h2>
+            <p class="mb-0 opacity-75">Sign in to continue to Tanya's Kitchen</p>
           </div>
-          <button class="btn btn-primary w-100" type="submit" style="background:#0d6efd;border-color:#0d6efd;">Login</button>
-        </form>
-        <div class="text-center mt-3 small">Don't have an account? <a href="/register/">Register</a></div>
+          
+          <div class="login-body">
+            {% if messages %}
+              {% for message in messages %}
+                <div class="alert alert-{{ message.tags|default:'danger' }} alert-dismissible fade show" role="alert">
+                  <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ message }}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+              {% endfor %}
+            {% endif %}
+            
+            <form method="post" class="needs-validation" novalidate>
+              {% csrf_token %}
+              
+              <div class="form-group">
+                <label for="username">
+                  <i class="bi bi-person me-2"></i>Username
+                </label>
+                <div class="position-relative">
+                  <i class="bi bi-person input-icon"></i>
+                  <input 
+                    type="text" 
+                    class="form-control" 
+                    id="username" 
+                    name="username" 
+                    placeholder="Enter your username" 
+                    required
+                    autofocus
+                  >
+                </div>
+                <div class="invalid-feedback">
+                  Please enter your username.
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <label for="password">
+                  <i class="bi bi-lock me-2"></i>Password
+                </label>
+                <div class="position-relative">
+                  <i class="bi bi-lock-fill input-icon"></i>
+                  <input 
+                    type="password" 
+                    class="form-control" 
+                    id="password" 
+                    name="password" 
+                    placeholder="Enter your password" 
+                    required
+                  >
+                </div>
+                <div class="invalid-feedback">
+                  Please enter your password.
+                </div>
+              </div>
+              
+              <div class="d-flex justify-content-between align-items-center mb-4">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="remember" name="remember">
+                  <label class="form-check-label" for="remember">
+                    Remember me
+                  </label>
+                </div>
+                <a href="#" class="forgot-link small">Forgot password?</a>
+              </div>
+              
+              <button class="btn btn-login w-100 text-white mb-3" type="submit">
+                <i class="bi bi-box-arrow-in-right me-2"></i>Sign In
+              </button>
+            </form>
+            
+            <div class="divider">
+              <span>OR</span>
+            </div>
+            
+            <div class="text-center">
+              <p class="mb-0 text-muted">
+                Don't have an account? 
+                <a href="/register/" class="register-link">Create Account</a>
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </div>
+
+<script>
+  // Form validation
+  (function() {
+    'use strict';
+    const form = document.querySelector('.needs-validation');
+    if (form) {
+      form.addEventListener('submit', function(event) {
+        if (!form.checkValidity()) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    }
+  })();
+</script>
 {% endblock %}

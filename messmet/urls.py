@@ -27,7 +27,8 @@ sitemaps = {
 }
 
 urlpatterns = [
-    # Sitemap (must be early to avoid conflicts)
+    # SEO URLs (must be early to avoid conflicts)
+    path('robots.txt', views.robots_txt, name='robots_txt'),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django_sitemap'),
     # Export URLs (must be before admin URLs to avoid conflicts)
     path('admin/export/attendance.csv', views.lms_export_attendance_csv, name='lms_export_attendance_csv'),
