@@ -27,14 +27,14 @@ sitemaps = {
 }
 
 urlpatterns = [
+    # Sitemap (must be early to avoid conflicts)
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     # Export URLs (must be before admin URLs to avoid conflicts)
     path('admin/export/attendance.csv', views.lms_export_attendance_csv, name='lms_export_attendance_csv'),
     path('admin/export/users.csv', views.export_users_csv, name='export_users_csv'),
     path('admin/export/meal-feedback.csv', views.export_meal_feedback_csv, name='export_meal_feedback_csv'),
     # Admin URLs
     path('admin/', admin.site.urls),
-    # Sitemap
-    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     # App URLs
     path('', include('messmetapp.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
